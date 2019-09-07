@@ -1,0 +1,20 @@
+.container {
+  width: 100%;
+  display: grid;
+  grid-template-rows:
+    [header-start]
+    10vh
+    [header-end content-start]
+    minmax(min-content, 85vh)
+    [content-end footer-start]
+    5vh
+    [footer-end];
+  grid-template-columns:
+    [full-start]
+    1fr
+    [content-start]
+    repeat(8, [col-start] minmax(min-content, 1fr) [col-end])
+    [content-end]
+    1fr
+    [full-end];
+}

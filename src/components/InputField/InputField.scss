@@ -1,0 +1,17 @@
+.inputField {
+  background-color: transparent;
+
+  & > input {
+    border: none;
+    border-bottom: 1px solid #000;
+    text-align: center;
+    color: var(--color-primary);
+    outline: none;
+
+    //透過純色蓋住預設色彩
+    &:-webkit-autofill {
+      box-shadow: 0 0 0 1000px white inset;
+      -webkit-text-fill-color: #000;
+    }
+  }
+}
