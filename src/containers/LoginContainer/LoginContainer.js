@@ -22,13 +22,16 @@ const LoginContainer = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     const { username, password } = state;
+    const data = { 
+        username: username, 
+        password: password 
+    }; 
 
     fetch(LOGINAPIURL, {
       method: 'POST',
-      username: username,
-      passwd: password,
+      body:JSON.stringify(data),  
       //不確定這行用意
-      header: {
+      headers: {
         'Content-Type': 'application/json;charset=UTF-8',
       }
     }).then(res => {
