@@ -1,0 +1,12 @@
+{
+  "account": {
+    "username": "admin",
+    "passwd": "password",
+    "browser": "chrome"
+  },
+  "user": {
+    "username": "admin",
+    "id": "1",
+    "token": "asb1231"
+  }
+}

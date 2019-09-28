@@ -1,55 +1,37 @@
 import React, { useState } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
-import Sidebar from '../components/Sidebar';
-import Footer from '../components/Footer';
-
+import UserContext from '../components/utils/UserContext';
+import PrivateRoute from '../components/utils/PrivateRoute';
+import Header from '../layouts/Header';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
+import RegisterPage from '../pages/RegisterPage';
 import SearchFoodPage from '../pages/SearchFood';
 
-import '../_base.scss';
-
 const Router = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const signin = () => {
-    setIsAuthenticated(true);
-  };
-
-  const signout = () => {
-    setIsAuthenticated(false)
-  }
-
-  const PrivateRoute = ({ component: Component, ...rest }) => (
-    <Route {...rest} render={(props) => (
-      isAuthenticated === true
-        ? <Component {...props} />
-        : <Redirect to='/login' />
-    )} />
-  )
+  const [user, setUser] = useState(null);
 
   return (
-    <div className="container">
+    <UserContext.Provider value={{ user, setUser }}>
       <BrowserRouter>
-        <Sidebar
-          isAuthenticated={isAuthenticated}
-          signout={signout}
-        />
+        <Header />
         <Route
           exact
           path='/'
           component={HomePage}
         />
-        {/* TODO: 權限控管 */}
         <PrivateRoute path='/search' component={SearchFoodPage} />
         <Route
           path='/login'
-          render={(props) => <LoginPage signin={signin} {...props} />}
+          component={LoginPage}
         />
-        <Footer />
+        <Route
+          path='/register'
+          component={RegisterPage}
+        />
       </BrowserRouter>
-    </div>
+    </UserContext.Provider>
   );
 };
 
