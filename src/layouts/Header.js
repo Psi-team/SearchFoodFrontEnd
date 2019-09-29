@@ -2,13 +2,17 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
-import { AccountCircle, Menu as MenuIcon } from '@material-ui/icons';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
+import Drawer from './Drawer';
 import { useUserContext } from '../components/utils/UserContext';
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1,
+  },
+  appBar: {
+    backgroundColor: '#ffb5b5'
   },
   menuButton: {
     marginRight: theme.spacing(2),
@@ -18,7 +22,8 @@ const useStyles = makeStyles(theme => ({
   },
   a: {
     textDecoration: 'none',
-    color: ' #fff'
+    color: '#fff',
+    display: 'block'
   },
   userBox: {
     display: 'flex',
@@ -47,11 +52,9 @@ export default function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static">
+      <AppBar position="static" className={classes.appBar}>
         <Toolbar>
-          <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-            <MenuIcon />
-          </IconButton>
+          <Drawer />
           <Typography variant="h6" className={classes.title}>
             <Link
               className={classes.a}
@@ -60,16 +63,16 @@ export default function Header() {
             </Link>
           </Typography>
           {
-            !user
-              ?
-              <Button color="inherit">
-                <Link
-                  className={classes.a}
-                  to='/login'>
+            !user ?
+              <Link
+                className={classes.a}
+                to='/login'>
+                <Button color="inherit">
                   Login
-                </Link>
-              </Button>
-              : <Box className={classes.userBox}>
+                </Button>
+              </Link>
+              :
+              <Box className={classes.userBox}>
                 <Typography>{user}</Typography>
                 <IconButton
                   aria-label="account of current user"

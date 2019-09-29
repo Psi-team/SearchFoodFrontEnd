@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Route } from 'react-router-dom';
+import { CssBaseline } from '@material-ui/core';
 
 import UserContext from '../components/utils/UserContext';
 import PrivateRoute from '../components/utils/PrivateRoute';
@@ -14,6 +15,7 @@ const Router = () => {
 
   return (
     <UserContext.Provider value={{ user, setUser }}>
+      <CssBaseline />
       <BrowserRouter>
         <Header />
         <Route

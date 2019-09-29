@@ -1,8 +1,8 @@
 import React, { useReducer } from 'react';
-import { Box, TextField, Button, Typography } from '@material-ui/core';
+import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useUser from './useUser';
+import useUser from '../../User/useUser';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -20,6 +20,9 @@ const useStyles = makeStyles(theme => ({
   },
   button: {
     margin: theme.spacing(1),
+  },
+  progress: {
+    margin: theme.spacing(2),
   },
 }));
 
@@ -86,26 +89,27 @@ const LoginPage = (props) => {
         state.error &&
         <Typography variant='h6' color='error'>{state.error}</Typography>
       }
-      <Box>
-        {
-          fetchState.loading
-            ? <Typography>載入中</Typography>
-            : <Button
+      {
+        fetchState.loading
+          ?
+          <CircularProgress className={classes.progress} />
+          :
+          <Box>
+            <Button
               variant="contained"
               className={classes.button}
               type='submit'>
               登入
-              </Button>
-        }
-        <Button
-          variant="contained"
-          className={classes.button}
-          type='button'
-          onClick={() => props.history.push('/register')}
-        >
-          註冊
-      </Button>
-      </Box>
+            </Button>
+            <Button
+              variant="contained"
+              className={classes.button}
+              type='button'
+              onClick={() => props.history.push('/register')}>
+              註冊
+            </Button>
+          </Box>
+      }
     </form>
   );
 };

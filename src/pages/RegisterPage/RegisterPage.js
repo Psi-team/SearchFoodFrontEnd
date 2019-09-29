@@ -1,8 +1,8 @@
-import React, { useReducer } from 'react';
-import { Box, TextField, Button, Typography } from '@material-ui/core';
+import React, { useRef, useState, useEffect, useReducer } from 'react';
+import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useUser from '../LoginPage/useUser';
+import useUser from '../../User/useUser';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -21,12 +21,21 @@ const useStyles = makeStyles(theme => ({
   button: {
     margin: theme.spacing(1),
   },
+  formControl: {
+    margin: theme.spacing(1),
+    minWidth: 120,
+  },
+  selectEmpty: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 const initState = {
   email: '',
   passwd1: '',
   passwd2: '',
+  birthYear: (new Date().getFullYear() - 1),
+  sex: 0,
   error: ''
 }
 
@@ -35,10 +44,26 @@ const reducer = (prevState, updatePrev) => ({
   ...updatePrev
 });
 
+const yearOptions = () => {
+  const nowYear = new Date().getFullYear();
+  const arr = [];
+  for (let i = nowYear - 100; i < nowYear; i++)
+    arr.push(<option key={i.toString()} value={i}>{i}</option>);
+
+  return arr;
+}
+
 const RegisterPage = (props) => {
   const classes = useStyles();
   const [state, setState] = useReducer(reducer, initState);
   const { register, fetchState } = useUser(props.history);
+
+  const inputLabel = useRef(null);
+  const [labelWidth, setLabelWidth] = useState(0);
+  useEffect(() => {
+    setLabelWidth(inputLabel.current.offsetWidth);
+  }, []);
+
   const handleChange = e => setState({ [e.target.name]: e.target.value });
 
   const handleSubmit = e => {
@@ -47,10 +72,10 @@ const RegisterPage = (props) => {
       setState({ error: '帳號或密碼不得空' });
     } else if (state.email.indexOf('@') === -1) {
       setState({ error: '帳號格式不對，請再次確認' });
-    } else if (state.passwd1 != state.passwd2) {
+    } else if (state.passwd1 !== state.passwd2) {
       setState({ error: '兩次密碼不一致，請再次確認' });
     } else {
-      register(state.email, state.passwd1);
+      register(state);
     }
   }
   return (
@@ -75,40 +100,81 @@ const RegisterPage = (props) => {
         required
       />
       <TextField
-        id="filled-password-input"
+        id="filled-password1-input"
         label="password"
         type='password'
         className={classes.textField}
-        value={state.passwd}
+        value={state.passwd1}
         onChange={handleChange}
         margin="normal"
         variant="filled"
         name='passwd1'
       />
       <TextField
-        id="filled-password-input"
+        id="filled-password2-input"
         label="password"
         type='password'
         className={classes.textField}
-        value={state.passwd}
+        value={state.passwd2}
         onChange={handleChange}
         margin="normal"
         variant="filled"
         name='passwd2'
       />
+
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel ref={inputLabel} htmlFor="outlined-birthYear-native-simple">
+          BirthYear
+        </InputLabel>
+        <Select
+          native
+          value={state.birthYear}
+          onChange={handleChange}
+          labelWidth={labelWidth}
+          inputProps={{
+            name: 'birthYear',
+            id: 'outlined-birthYear-native-simple',
+          }}
+        >
+          {yearOptions()}
+        </Select>
+      </FormControl>
+      <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel ref={inputLabel} htmlFor="outlined-sex-native-simple">
+          Sex
+        </InputLabel>
+        <Select
+          native
+          value={state.sex}
+          onChange={handleChange}
+          labelWidth={labelWidth}
+          inputProps={{
+            name: 'sex',
+            id: 'outlined-sex-native-simple',
+          }}
+        >
+          <option value={0}>man</option>
+          <option value={1}>woman</option>
+        </Select>
+      </FormControl>
       {
         state.error &&
         <Typography variant='h6' color='error'>{state.error}</Typography>
       }
-      <Box>
-        <Button
-          variant="contained"
-          className={classes.button}
-          type='submit'
-        >
-          註冊
-      </Button>
-      </Box>
+      {
+        fetchState.loading
+          ?
+          <CircularProgress className={classes.progress} />
+          :
+          <Box>
+            <Button
+              variant="contained"
+              className={classes.button}
+              type='submit'>
+              註冊
+            </Button>
+          </Box>
+      }
     </form>
   );
 };
