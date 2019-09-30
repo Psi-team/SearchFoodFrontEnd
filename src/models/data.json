@@ -9,5 +9,13 @@
     "id": "1",
     "token": "asb1231"
   },
-  "signup": []
+  "signup": [
+    {
+      "username": "ad@xn--xqa797u",
+      "passwd": "1",
+      "birthyear": "2018",
+      "sex": 0,
+      "id": 1
+    }
+  ]
 }

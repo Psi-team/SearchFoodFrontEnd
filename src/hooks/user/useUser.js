@@ -1,10 +1,11 @@
-import { useUserContext } from '../components/utils/UserContext';
+import { useState } from 'react';
 
-import { apiLogin, apiSignup } from '../components/apis';
-import useApiCall from '../components/utils/useApiCall';
+import { useUserContext } from '../../utils/UserContext';
+import { apiLogin, apiSignup } from '../../apis';
 
 const useUser = (history) => {
-  const { fetchState, setFetchState } = useApiCall();
+  const [fetchState, setFetchState] = useState({ loading: false, error: '' });
+
   const { setUser } = useUserContext();
   const login = (email, password) => {
     setFetchState({
@@ -34,7 +35,7 @@ const useUser = (history) => {
     apiSignup(data)
       .then(res => {
         console.log(res);
-        setUser(email.split('@')[0]);
+        setUser(res.username.split('@')[0]);
         history.push('/');
       });
   };

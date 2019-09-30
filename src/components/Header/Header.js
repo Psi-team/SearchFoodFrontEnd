@@ -4,8 +4,8 @@ import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
-import Drawer from './Drawer';
-import { useUserContext } from '../components/utils/UserContext';
+import Drawer from '../Drawer';
+import { useUserContext } from '../../utils/UserContext';
 
 const useStyles = makeStyles(theme => ({
   root: {

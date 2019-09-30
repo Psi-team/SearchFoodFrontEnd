@@ -2,7 +2,7 @@ import React, { useReducer } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useUser from '../../User/useUser';
+import useUser from '../../hooks/user/useUser';
 
 const useStyles = makeStyles(theme => ({
   container: {
