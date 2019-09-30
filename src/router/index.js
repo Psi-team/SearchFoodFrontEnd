@@ -3,11 +3,12 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { CssBaseline } from '@material-ui/core';
 
 import UserContext from '../utils/UserContext';
-// import PrivateRoute from '../components/utils/PrivateRoute';
+import PrivateRoute from '../utils/PrivateRoute';
 import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
+import SearchPage from '../pages/SearchPage';
 
 const Router = () => {
   const [user, setUser] = useState(null);
@@ -29,6 +30,10 @@ const Router = () => {
         <Route
           path='/register'
           component={RegisterPage}
+        />
+        <PrivateRoute
+          path='/search'
+          component={SearchPage}
         />
       </BrowserRouter>
     </UserContext.Provider>

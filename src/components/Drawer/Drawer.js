@@ -1,15 +1,20 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, IconButton } from '@material-ui/core';
-import { MoveToInbox as InboxIcon, Mail as MailIcon, Menu as MenuIcon } from '@material-ui/icons';
+import { SwipeableDrawer, List, ListItem, ListItemIcon, ListItemText, IconButton, Divider } from '@material-ui/core';
+import { Search as SearchIcon, Menu as MenuIcon } from '@material-ui/icons/';
 
 const useStyles = makeStyles({
   list: {
-    width: 250,
+    width: 250
   },
   fullList: {
     width: 'auto',
   },
+  a: {
+    textDecoration: 'none',
+    color: '#666'
+  }
 });
 
 export default function SwipeableTemporaryDrawer() {
@@ -37,12 +42,13 @@ export default function SwipeableTemporaryDrawer() {
       onKeyDown={toggleDrawer(side, false)}
     >
       <List>
-        {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
+        <Link to='/search' className={classes.a}>
+          <ListItem button key='Search Food'>
+            <ListItemIcon><SearchIcon /></ListItemIcon>
+            <ListItemText primary='Search Food' />
           </ListItem>
-        ))}
+          <Divider />
+        </Link>
       </List>
     </div>
   );

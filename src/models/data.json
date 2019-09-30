@@ -4,18 +4,28 @@
     "passwd": "password",
     "browser": "chrome"
   },
-  "user": {
+  "login": {
     "username": "admin",
     "id": "1",
     "token": "asb1231"
   },
   "signup": [
     {
-      "username": "ad@xn--xqa797u",
+      "username": "asd@123",
       "passwd": "1",
       "birthyear": "2018",
       "sex": 0,
       "id": 1
+    },
+    {
+      "username": "1232@",
+      "passwd": "1",
+      "birthyear": "2018",
+      "sex": 0,
+      "id": 2
     }
-  ]
+  ],
+  "logout": {
+    "status": "200"
+  }
 }

@@ -6,6 +6,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Drawer from '../Drawer';
 import { useUserContext } from '../../utils/UserContext';
+import useUser from '../../hooks/user/useUser';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -33,7 +34,8 @@ const useStyles = makeStyles(theme => ({
 
 export default function Header() {
   const classes = useStyles();
-  const { user, setUser } = useUserContext();
+  const { user } = useUserContext();
+  const { logout } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -45,9 +47,9 @@ export default function Header() {
     setAnchorEl(null);
   };
 
-  const logout = () => {
+  const handleClick = () => {
     handleClose();
-    setUser(null);
+    logout();
   };
 
   return (
@@ -73,7 +75,7 @@ export default function Header() {
               </Link>
               :
               <Box className={classes.userBox}>
-                <Typography>{user}</Typography>
+                <Typography>{user.username}</Typography>
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="primary-search-account-menu"
@@ -99,7 +101,7 @@ export default function Header() {
             open={open}
             onClose={handleClose}
           >
-            <MenuItem onClick={logout}>LogOut</MenuItem>
+            <MenuItem onClick={handleClick}>LogOut</MenuItem>
             <MenuItem onClick={handleClose}>My account</MenuItem>
           </Menu>
         </Toolbar>

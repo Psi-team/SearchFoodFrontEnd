@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -26,21 +26,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const initState = {
-  email: '',
-  passwd: '',
-  error: ''
-}
-
-const reducer = (prevState, updatePrev) => ({
-  ...prevState,
-  ...updatePrev
-});
-
 const LoginPage = (props) => {
   const classes = useStyles();
-  const [state, setState] = useReducer(reducer, initState);
-  const { login, fetchState } = useUser(props.history);
+  const {
+    loginState: state,
+    setLoginState: setState,
+    login,
+    loading } = useUser(props.history);
   const handleChange = e => setState({ [e.target.name]: e.target.value });
 
   const handleSubmit = e => {
@@ -53,6 +45,7 @@ const LoginPage = (props) => {
       login(state.email, state.passwd);
     }
   }
+
   return (
     <form
       className={classes.container}
@@ -90,7 +83,7 @@ const LoginPage = (props) => {
         <Typography variant='h6' color='error'>{state.error}</Typography>
       }
       {
-        fetchState.loading
+        loading
           ?
           <CircularProgress className={classes.progress} />
           :

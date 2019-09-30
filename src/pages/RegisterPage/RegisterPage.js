@@ -1,4 +1,4 @@
-import React, { useRef, useState, useEffect, useReducer } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
@@ -30,20 +30,6 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const initState = {
-  email: '',
-  passwd1: '',
-  passwd2: '',
-  birthYear: (new Date().getFullYear() - 1),
-  sex: 0,
-  error: ''
-}
-
-const reducer = (prevState, updatePrev) => ({
-  ...prevState,
-  ...updatePrev
-});
-
 const yearOptions = () => {
   const nowYear = new Date().getFullYear();
   const arr = [];
@@ -55,8 +41,11 @@ const yearOptions = () => {
 
 const RegisterPage = (props) => {
   const classes = useStyles();
-  const [state, setState] = useReducer(reducer, initState);
-  const { register, fetchState } = useUser(props.history);
+  const {
+    registerState: state,
+    setRegisterState: setState,
+    register,
+    loading } = useUser(props.history);
 
   const inputLabel = useRef(null);
   const [labelWidth, setLabelWidth] = useState(0);
@@ -78,6 +67,7 @@ const RegisterPage = (props) => {
       register(state);
     }
   }
+
   return (
     <form
       className={classes.container}
@@ -162,7 +152,7 @@ const RegisterPage = (props) => {
         <Typography variant='h6' color='error'>{state.error}</Typography>
       }
       {
-        fetchState.loading
+        loading
           ?
           <CircularProgress className={classes.progress} />
           :
