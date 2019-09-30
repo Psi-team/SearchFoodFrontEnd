@@ -23,7 +23,7 @@ const useStyles = makeStyles(theme => ({
   a: {
     textDecoration: 'none',
     color: '#fff',
-    display: 'block'
+    display: 'inline-block'
   },
   userBox: {
     display: 'flex',
