@@ -57,7 +57,7 @@ const useUser = (history) => {
     const browserName = getUserBrowser();
     const data = {
       username: loginState.email,
-      passwd: loginState.password,
+      passwd: loginState.passwd,
       browser: browserName
     };
     apiLogin(data)

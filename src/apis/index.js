@@ -1,7 +1,7 @@
 import req from './https';
 
 // login method should be post
-export const apiLogin = () => req('get', 'login');
+export const apiLogin = data => req('post', 'login', data);
 
 export const apiSignup = data => req('post', 'signup', data);
 
