@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import { connect } from 'react-redux';
 
-import useUser from '../../hooks/user/useUser';
+import { loginRequest } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -27,25 +28,17 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const LoginPage = (props) => {
+  const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
-  const {
-    loginState: state,
-    setLoginState: setState,
-    login,
-    loading } = useUser(props.history);
-  const handleChange = e => setState({ [e.target.name]: e.target.value });
-
+  const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
+  console.log(props);
   const handleSubmit = e => {
     e.preventDefault();
-    if (state.email === '' || state.passwd === '') {
-      setState({ error: '帳號或密碼不得空' });
-    } else if (state.email.indexOf('@') === -1) {
-      setState({ error: '帳號格式不對，請再次確認' });
-    } else {
-      login(state.email, state.passwd);
-    }
+    props.login();
+    console.log(e)
   }
-
+  // TODO: redux state pass loading
+  let loading = false;
   return (
     <form
       className={classes.container}
@@ -78,10 +71,10 @@ const LoginPage = (props) => {
         variant="filled"
         name='passwd'
       />
-      {
+      {/* {
         state.error &&
         <Typography variant='h6' color='error'>{state.error}</Typography>
-      }
+      } */}
       {
         loading
           ?
@@ -107,4 +100,13 @@ const LoginPage = (props) => {
   );
 };
 
-export default LoginPage;
+function mapStateToProps(state) {
+  // const { loggingIn } = state.authentication;
+  return { loggingIn: state.loggingIn }
+}
+
+function mapDispatchToProps(dispatch) {
+  return { login: () => dispatch(loginRequest) }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
