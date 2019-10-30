@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
-import { loginRequest } from '../../actions';
+import { userActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -31,10 +32,10 @@ const LoginPage = (props) => {
   const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
   const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
-  console.log(props);
+
   const handleSubmit = e => {
     e.preventDefault();
-    props.login();
+    props.login(state.email, state.passwd);
     console.log(e)
   }
   // TODO: redux state pass loading
@@ -105,8 +106,8 @@ function mapStateToProps(state) {
   return { loggingIn: state.loggingIn }
 }
 
-function mapDispatchToProps(dispatch) {
-  return { login: () => dispatch(loginRequest) }
-}
+const actionCreators = {
+  login: userActions.login,
+};
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoginPage);
+export default connect(mapStateToProps, actionCreators)(LoginPage);

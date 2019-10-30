@@ -1,12 +1,22 @@
 import React from 'react';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import thunkMiddleware from 'redux-thunk';
+import { createLogger } from 'redux-logger';
 
-import reducer from './reducers';
+import rootReducer from './reducers';
 import Router from './router';
 
 const App = () => {
-  const store = createStore(reducer);
+  const loggerMiddleware = createLogger();
+
+  const store = createStore(
+    rootReducer,
+    applyMiddleware(
+      thunkMiddleware,
+      loggerMiddleware
+    )
+  );
 
   return (
     <Provider store={store}>
