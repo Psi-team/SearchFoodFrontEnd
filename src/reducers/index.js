@@ -3,7 +3,6 @@ const user = JSON.parse(localStorage.getItem('user'));
 const initState = user ? { loggedIn: true, user: user } : {};
 
 export default function authentication(state = initState, action) {
-  console.log(state, action);
   switch (action.type) {
     case 'LOGIN_REQUEST':
       return {

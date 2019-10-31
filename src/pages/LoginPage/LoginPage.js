@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
 
 import { userActions } from '../../actions';
 
@@ -36,7 +35,6 @@ const LoginPage = (props) => {
   const handleSubmit = e => {
     e.preventDefault();
     props.login(state.email, state.passwd);
-    console.log(e)
   }
   // TODO: redux state pass loading
   let loading = false;
@@ -102,7 +100,6 @@ const LoginPage = (props) => {
 };
 
 function mapStateToProps(state) {
-  // const { loggingIn } = state.authentication;
   return { loggingIn: state.loggingIn }
 }
 

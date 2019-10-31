@@ -3,10 +3,10 @@ import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import { connect } from 'react-redux';
 
 import Drawer from '../Drawer';
-import { useUserContext } from '../../utils/UserContext';
-import useUser from '../../hooks/user/useUser';
+import { userActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -32,10 +32,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Header() {
+const Header = (props) => {
   const classes = useStyles();
-  const { user } = useUserContext();
-  const { logout } = useUser();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
@@ -49,7 +47,7 @@ export default function Header() {
 
   const handleClick = () => {
     handleClose();
-    logout();
+    props.logout();
   };
 
   return (
@@ -65,7 +63,7 @@ export default function Header() {
             </Link>
           </Typography>
           {
-            !user ?
+            !props.user ?
               <Link
                 className={classes.a}
                 to='/login'>
@@ -75,7 +73,7 @@ export default function Header() {
               </Link>
               :
               <Box className={classes.userBox}>
-                <Typography>{user.username}</Typography>
+                <Typography>{props.user.username}</Typography>
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="primary-search-account-menu"
@@ -108,4 +106,14 @@ export default function Header() {
       </AppBar>
     </div>
   );
+};
+
+function mapStateToProp(state) {
+  return { user: state.user };
 }
+
+const actionCreators = {
+  logout: userActions.logout,
+};
+
+export default connect(mapStateToProp, actionCreators)(Header);
