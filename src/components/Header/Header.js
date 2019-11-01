@@ -109,7 +109,7 @@ const Header = (props) => {
 };
 
 function mapStateToProp(state) {
-  return { user: state.user };
+  return { user: state.authentication.user };
 }
 
 const actionCreators = {

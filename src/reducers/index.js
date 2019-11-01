@@ -1,23 +1,9 @@
-const user = JSON.parse(localStorage.getItem('user'));
+import { combineReducers } from 'redux';
 
-const initState = user ? { loggedIn: true, user: user } : {};
+import { authentication } from './user.reducer';
 
-export default function authentication(state = initState, action) {
-  switch (action.type) {
-    case 'LOGIN_REQUEST':
-      return {
-        loggingIn: true,
-        user: action.user
-      };
-    case 'LOGIN_SUCCESS':
-      return {
-        logginIn: true,
-        user: action.user
-      };
-    case 'LOGIN_FAILURE':
-    case 'LOGOUT':
-      return {};
-    default:
-      return state;
-  }
-}
+const rootReducer = combineReducers({
+  authentication
+});
+
+export default rootReducer;

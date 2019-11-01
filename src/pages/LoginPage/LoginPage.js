@@ -36,8 +36,7 @@ const LoginPage = (props) => {
     e.preventDefault();
     props.login(state.email, state.passwd);
   }
-  // TODO: redux state pass loading
-  let loading = false;
+
   return (
     <form
       className={classes.container}
@@ -70,12 +69,12 @@ const LoginPage = (props) => {
         variant="filled"
         name='passwd'
       />
-      {/* {
-        state.error &&
-        <Typography variant='h6' color='error'>{state.error}</Typography>
-      } */}
       {
-        loading
+        props.error &&
+        <Typography variant='h6' color='error'>{props.error}</Typography>
+      }
+      {
+        props.loading
           ?
           <CircularProgress className={classes.progress} />
           :
@@ -100,7 +99,8 @@ const LoginPage = (props) => {
 };
 
 function mapStateToProps(state) {
-  return { loggingIn: state.loggingIn }
+  const { loggingIn, loading, error } = state.authentication;
+  return { loggingIn, loading, error };
 }
 
 const actionCreators = {

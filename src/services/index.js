@@ -29,12 +29,17 @@ function login(username, passwd) {
     header: { 'Content-Type': 'application/json;charset=UTF-8' },
     body: JSON.stringify({ username, passwd, browser })
   };
-  console.log(process.env.REACT_APP_ENV)
+
   if (process.env.REACT_APP_ENV) {
     return new Promise((resolve, reject) => {
-      const user = { username: 'test', token: 'adawrq31312eda' };
-      localStorage.setItem('user', JSON.stringify(user));
-      return resolve(user);
+      setTimeout(() => {
+        const user = { username: 'test', token: 'adawrq31312eda' };
+        localStorage.setItem('user', JSON.stringify(user));
+        if (username !== 'admin' || passwd !== 'admin')
+          return reject('username or password is wrong');
+
+        return resolve(user);
+      }, 2000);
     });
   } else
     return fetch(`${process.env.REACT_APP_API_URL}login`, requestOptions)
