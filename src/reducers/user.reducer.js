@@ -9,12 +9,17 @@ export const authentication = (state = initState, action) => {
         loggingIn: true,
         loading: true
       };
-    case 'LOGIN_SUCCESS':
+    case 'REGISTER_REQUEST':
       return {
-        user: action.user,
-        loading: false
+        loading: true
+      }
+    case 'LOGIN_SUCCESS':
+    case 'REGISTER_SUCCESS':
+      return {
+        user: action.user
       };
     case 'LOGIN_FAILURE':
+    case 'REGISTER_FAILURE':
       return {
         error: action.error
       }

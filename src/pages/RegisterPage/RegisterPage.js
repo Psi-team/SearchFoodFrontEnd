@@ -2,7 +2,9 @@ import React, { useRef, useState, useEffect } from 'react';
 import { Box, TextField, Button, Typography, FormControl, InputLabel, Select, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
-import useUser from '../../hooks/user/useUser';
+import { connect } from 'react-redux';
+
+import { userActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -41,30 +43,33 @@ const yearOptions = () => {
 
 const RegisterPage = (props) => {
   const classes = useStyles();
-  const {
-    registerState: state,
-    setRegisterState: setState,
-    register,
-    loading } = useUser(props.history);
-
   const inputLabel = useRef(null);
+  const [state, setState] = useState({
+    email: '',
+    passwd1: '',
+    passwd2: '',
+    birthYear: '',
+    sexual: '',
+    error: ''
+  });
   const [labelWidth, setLabelWidth] = useState(0);
   useEffect(() => {
     setLabelWidth(inputLabel.current.offsetWidth);
   }, []);
 
-  const handleChange = e => setState({ [e.target.name]: e.target.value });
+  const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
 
   const handleSubmit = e => {
     e.preventDefault();
-    if (state.email === '' || state.passwd1 === '' || state.passwd2 === '') {
-      setState({ error: '帳號或密碼不得空' });
-    } else if (state.email.indexOf('@') === -1) {
-      setState({ error: '帳號格式不對，請再次確認' });
-    } else if (state.passwd1 !== state.passwd2) {
-      setState({ error: '兩次密碼不一致，請再次確認' });
+    const { email, passwd1, passwd2, birthYear, sexual } = state;
+    if (email === '' || passwd1 === '' || passwd2 === '') {
+      setState({ ...state, error: '帳號或密碼不得空' });
+    } else if (email.indexOf('@') === -1) {
+      setState({ ...state, error: '帳號格式不對，請再次確認' });
+    } else if (passwd1 !== passwd2) {
+      setState({ ...state, error: '兩次密碼不一致，請再次確認' });
     } else {
-      register(state);
+      props.register(email, passwd1, birthYear, sexual);
     }
   }
 
@@ -135,11 +140,11 @@ const RegisterPage = (props) => {
         </InputLabel>
         <Select
           native
-          value={state.sex}
+          value={state.sexual}
           onChange={handleChange}
           labelWidth={labelWidth}
           inputProps={{
-            name: 'sex',
+            name: 'sexual',
             id: 'outlined-sex-native-simple',
           }}
         >
@@ -148,11 +153,11 @@ const RegisterPage = (props) => {
         </Select>
       </FormControl>
       {
-        state.error &&
+        props.error &&
         <Typography variant='h6' color='error'>{state.error}</Typography>
       }
       {
-        loading
+        props.loading
           ?
           <CircularProgress className={classes.progress} />
           :
@@ -169,4 +174,13 @@ const RegisterPage = (props) => {
   );
 };
 
-export default RegisterPage;
+function mapStateToProp(state) {
+  const { loading, error } = state.authentication;
+  return { loading, error };
+}
+
+const actionCreators = {
+  register: userActions.register,
+};
+
+export default connect(mapStateToProp, actionCreators)(RegisterPage);

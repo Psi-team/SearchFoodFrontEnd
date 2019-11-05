@@ -1,10 +1,9 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
 
-import { useUserContext } from '../utils/UserContext';
-
-const PrivateRoute = ({ component: Component, ...rest }) => {
-  const { user } = useUserContext();
+const PrivateRoute = ({ component: Component, user, ...rest }) => {
+  console.log(user);
   return (
     <Route {...rest} render={(props) => (
       user ? <Component {...props} /> : <Redirect to='/login' />
@@ -12,4 +11,9 @@ const PrivateRoute = ({ component: Component, ...rest }) => {
   );
 }
 
-export default PrivateRoute;
+function mapStateToProp(state) {
+  return {
+    user: state.authentication.user
+  }
+}
+export default connect(mapStateToProp)(PrivateRoute);
