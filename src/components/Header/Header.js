@@ -63,7 +63,7 @@ const Header = (props) => {
             </Link>
           </Typography>
           {
-            !props.user ?
+            !props.username ?
               <Link
                 className={classes.a}
                 to='/login'>
@@ -73,7 +73,7 @@ const Header = (props) => {
               </Link>
               :
               <Box className={classes.userBox}>
-                <Typography>{props.user.username}</Typography>
+                <Typography>{props.username}</Typography>
                 <IconButton
                   aria-label="account of current user"
                   aria-controls="primary-search-account-menu"
@@ -109,7 +109,7 @@ const Header = (props) => {
 };
 
 function mapStateToProp(state) {
-  return { user: state.authentication.user };
+  return { username: state.user.username };
 }
 
 const actionCreators = {

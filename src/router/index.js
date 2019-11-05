@@ -8,29 +8,28 @@ import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/LoginPage';
 import RegisterPage from '../pages/RegisterPage';
 import SearchPage from '../pages/SearchPage';
+import CreateStorePage from '../pages/CreateStorePage';
 
 const Router = () => {
   return (
     <BrowserRouter>
       <CssBaseline />
       <Header />
-      <Route
-        exact
-        path='/'
-        component={HomePage}
-      />
-      <Route
-        path='/login'
-        component={LoginPage}
-      />
-      <Route
-        path='/register'
-        component={RegisterPage}
-      />
-      <PrivateRoute
-        path='/search'
-        component={SearchPage}
-      />
+      <Route exact path='/'>
+        <HomePage />
+      </Route>
+      <Route path='/login'>
+        <LoginPage />
+      </Route>
+      <Route path='/register'>
+        <RegisterPage />
+      </Route>
+      <PrivateRoute path='/search'>
+        <SearchPage />
+      </PrivateRoute>
+      <PrivateRoute path='/createStore'>
+        <CreateStorePage />
+      </PrivateRoute>
     </BrowserRouter>
   );
 };

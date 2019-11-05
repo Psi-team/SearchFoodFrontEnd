@@ -47,8 +47,15 @@ export default function SwipeableTemporaryDrawer() {
             <ListItemIcon><SearchIcon /></ListItemIcon>
             <ListItemText primary='Search Food' />
           </ListItem>
-          <Divider />
         </Link>
+        <Divider />
+        <Link to='/createStore' className={classes.a}>
+          <ListItem button key='Create Store'>
+            <ListItemIcon><SearchIcon /></ListItemIcon>
+            <ListItemText primary='新增店家' />
+          </ListItem>
+        </Link>
+        <Divider />
       </List>
     </div>
   );

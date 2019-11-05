@@ -175,7 +175,7 @@ const RegisterPage = (props) => {
 };
 
 function mapStateToProp(state) {
-  const { loading, error } = state.authentication;
+  const { loading, error } = state.register;
   return { loading, error };
 }
 

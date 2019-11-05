@@ -99,7 +99,7 @@ const LoginPage = (props) => {
 };
 
 function mapStateToProps(state) {
-  const { loggingIn, loading, error } = state.authentication;
+  const { loggingIn, loading, error } = state.user;
   return { loggingIn, loading, error };
 }
 
