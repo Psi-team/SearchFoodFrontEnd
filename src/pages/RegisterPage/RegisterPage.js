@@ -50,7 +50,6 @@ const RegisterPage = (props) => {
     passwd2: '',
     birthYear: '',
     sexual: '',
-    error: ''
   });
   const [labelWidth, setLabelWidth] = useState(0);
   useEffect(() => {
@@ -61,18 +60,9 @@ const RegisterPage = (props) => {
 
   const handleSubmit = e => {
     e.preventDefault();
-    const { email, passwd1, passwd2, birthYear, sexual } = state;
-    if (email === '' || passwd1 === '' || passwd2 === '') {
-      setState({ ...state, error: '帳號或密碼不得空' });
-    } else if (email.indexOf('@') === -1) {
-      setState({ ...state, error: '帳號格式不對，請再次確認' });
-    } else if (passwd1 !== passwd2) {
-      setState({ ...state, error: '兩次密碼不一致，請再次確認' });
-    } else {
-      props.register(email, passwd1, birthYear, sexual);
-    }
+    props.register({ ...state });
   }
-
+  console.log(props.error);
   return (
     <form
       className={classes.container}
@@ -154,13 +144,11 @@ const RegisterPage = (props) => {
       </FormControl>
       {
         props.error &&
-        <Typography variant='h6' color='error'>{state.error}</Typography>
+        <Typography variant='h6' color='error'>{props.error}</Typography>
       }
       {
-        props.loading
-          ?
-          <CircularProgress className={classes.progress} />
-          :
+        props.loading ?
+          <CircularProgress className={classes.progress} /> :
           <Box>
             <Button
               variant="contained"

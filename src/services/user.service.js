@@ -14,7 +14,7 @@ function login(username, passwd) {
         const user = { username: 'test', token: 'adawrq31312eda' };
         localStorage.setItem('user', JSON.stringify(user));
         if (username !== 'admin' || passwd !== 'admin')
-          return reject('username or password is wrong');
+          return reject('帳號或密碼錯誤');
 
         return resolve(user);
       }, 2000);

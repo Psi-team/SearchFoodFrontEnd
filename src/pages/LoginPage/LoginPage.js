@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, CircularProgress } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
-
+import { useHistory } from 'react-router';
 import { userActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
@@ -30,6 +30,7 @@ const useStyles = makeStyles(theme => ({
 const LoginPage = (props) => {
   const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
+  const history = useHistory();
   const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
 
   const handleSubmit = e => {
@@ -89,7 +90,7 @@ const LoginPage = (props) => {
               variant="contained"
               className={classes.button}
               type='button'
-              onClick={() => props.history.push('/register')}>
+              onClick={() => history.push('/register')}>
               註冊
             </Button>
           </Box>
