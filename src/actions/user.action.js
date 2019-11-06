@@ -34,7 +34,6 @@ function login(username, password) {
   catch ({ message }) {
     return { type: LOGIN_FAILURE, error: message }
   }
-
 }
 
 function logout() {
