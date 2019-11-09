@@ -64,6 +64,7 @@ const CreateStorePage = ({ county, district, error, getCountry, getDistrict, get
 
   function hadnleSubmit(e) {
     e.preventDefault();
+    getLatLong(state.city + state.district + state.address);
   }
 
   return (

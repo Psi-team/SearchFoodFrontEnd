@@ -21,7 +21,8 @@ export const county = (state = initState, action) => {
       }
     case 'GET_LAT_LONG_SUCCESS':
       return {
-        test: 'hello'
+        ...state,
+        latLong: action.latLong
       }
     default:
       return state;

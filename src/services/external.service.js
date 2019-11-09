@@ -21,8 +21,13 @@ function getDistrict(cityID) {
     .then(data => data);
 }
 
-function addressToLatLong() {
-  Geocode.setApiKey('XXXXXXXXXXXXXXXXXXXXXXXXX');
+function addressToLatLong(adddress) {
+  // development using fake latitude longtitude.
+  if (!process.env.REACT_APP_API_KEY) {
+    return Promise.resolve(({ lat: 25, lng: 121 }));
+  }
+
+  Geocode.setApiKey(process.env.REACT_APP_API_KEY);
   // set response language. Defaults to english.
   Geocode.setLanguage("en");
 
@@ -33,9 +38,9 @@ function addressToLatLong() {
   // Enable or disable logs. Its optional.
   Geocode.enableDebug();
 
-  Geocode.fromAddress("桃園市桃園區新埔八街15號")
+  return Geocode.fromAddress("桃園市桃園區新埔八街15號")
     .then(response => {
       const { lat, lng } = response.results[0].geometry.location;
-      console.log(lat, lng);
+      return { lat, lng };
     });
 }
