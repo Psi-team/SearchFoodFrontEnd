@@ -13,34 +13,30 @@ afterEach(() => cleanup);
 
 const MyComponent = ({ content }) => (<div>{content}</div>);
 
-const renderWithRedux = (ui, initState) => {
+const renderWithRedux = initState => {
   const store = createStore(reducer, initState);
   const history = createMemoryHistory();
   history.push('/test');
 
   return {
     ...render(
-      <Router history={history}>
-        <Route path='/login'>
-          <MyComponent content='loginPage' />
-        </Route>
-        <Provider store={store}>
-          {ui}
-        </Provider>
-      </Router>
+      <Provider store={store}>
+        <Router history={history}>
+          <Route path='/login'>
+            <MyComponent content='loginPage' />
+          </Route>
+          <PrivateRoute path='/test'>
+            <MyComponent content='testPage' />
+          </PrivateRoute>,
+        </Router>
+      </Provider>
     ),
     store
   }
 };
 
-
 test('when username is undefined, it will redirect to login page', () => {
-  const { container, store } = renderWithRedux(
-    <PrivateRoute to='/test'>
-      <MyComponent content='testPage' />
-    </PrivateRoute>,
-    {}
-  );
+  const { container, store } = renderWithRedux({});
 
   expect(getByText(container, /loginPage/).innerHTML).toBe('loginPage');
   expect(() => getByText(container, /testPage/)).toThrow();
@@ -48,12 +44,7 @@ test('when username is undefined, it will redirect to login page', () => {
 });
 
 test('when username is defined, it will render the target page', () => {
-  const { container, store } = renderWithRedux(
-    <PrivateRoute path='/test'>
-      <MyComponent content='testPage' />
-    </PrivateRoute>,
-    { user: { username: 'Tom' } }
-  );
+  const { container, store } = renderWithRedux({ user: { username: 'Tom' } });
 
   expect(getByText(container, /testPage/).innerHTML).toBe('testPage');
   expect(() => getByText(container, /loginPage/)).toThrow();
