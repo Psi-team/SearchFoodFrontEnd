@@ -28,3 +28,18 @@ export const county = (state = initState, action) => {
       return state;
   }
 }
+
+export const storeType = (state = {}, action) => {
+  switch (action.type) {
+    case 'GET_STORE_TYPE_SUCCESS':
+      return {
+        ...action.storeType
+      }
+    case 'GET_STORE_TYPE_FAILURE':
+      return {
+        error: action.error
+      }
+    default:
+      return state;
+  }
+}

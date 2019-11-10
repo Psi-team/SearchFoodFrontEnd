@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dialog, DialogTitle, DialogActions } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogActions, Button } from '@material-ui/core';
 
 
 const DialogComponent = (props) => {

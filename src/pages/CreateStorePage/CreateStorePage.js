@@ -7,6 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
 
 import { shopActions } from '../../actions';
+import Dialog from '../../components/Dialog';
 
 const useStyles = makeStyles(theme => ({
   container: {
@@ -32,7 +33,15 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreateStorePage = ({ county, district, error, getCountry, getDistrict, getLatLong }) => {
+const CreateStorePage = ({
+  county,
+  district,
+  error,
+  storeType,
+  getCountry,
+  getDistrict,
+  getLatLong,
+  getStoreType }) => {
   const classes = useStyles();
   const [state, setState] = useState({
     storename: '',
@@ -47,7 +56,8 @@ const CreateStorePage = ({ county, district, error, getCountry, getDistrict, get
 
   useEffect(() => {
     getCountry();
-  }, [getCountry]);
+    getStoreType();
+  }, [getCountry, getStoreType]);
 
   useEffect(() => {
     if (state.city) {
@@ -65,6 +75,14 @@ const CreateStorePage = ({ county, district, error, getCountry, getDistrict, get
   function hadnleSubmit(e) {
     e.preventDefault();
     getLatLong(state.city + state.district + state.address);
+  }
+
+  function openTypeDialog() {
+    setOpen(true);
+  }
+
+  function closeTypeDialog() {
+    setOpen(false);
   }
 
   return (
@@ -85,6 +103,17 @@ const CreateStorePage = ({ county, district, error, getCountry, getDistrict, get
         margin="normal"
         variant="filled"
         required />
+      <FormControl variant="outlined" className={classes.formControl} disabled>
+        <InputLabel htmlFor="outlined-city-native-simple">
+          店家類別
+        </InputLabel>
+        <Select
+          labelId="demo-simple-select-disabled-label"
+          id="demo-simple-select-disabled"
+          onClick={openTypeDialog}
+        >
+        </Select>
+      </FormControl>
       <TextField
         id="filled-tel-input"
         label="店家電話"
@@ -163,20 +192,41 @@ const CreateStorePage = ({ county, district, error, getCountry, getDistrict, get
           新增
         </Button>
       </Box>
+      <Dialog
+        open={open}
+        title='類別種類'
+        onCancel={closeTypeDialog}
+        onSubmit={closeTypeDialog}
+      >
+        {
+          Object.keys(storeType).map(key => (
+            <div key={key.toString()}>
+              <Typography>{key}</Typography>
+              {
+                storeType[key].map(type => (
+                  <Typography key={type.toString()}>{type}</Typography>
+                ))
+              }
+            </div>
+          ))
+        }
+      </Dialog>
     </form>
   );
 }
 
 function mapStateToProp(state) {
   return {
-    ...state.county
+    ...state.county,
+    storeType: state.storeType
   }
 }
 
 const actionCreators = {
   getCountry: shopActions.getCountry,
   getDistrict: shopActions.getDistrict,
-  getLatLong: shopActions.addressToLatLong
+  getLatLong: shopActions.addressToLatLong,
+  getStoreType: shopActions.getStoreType
 };
 
 export default connect(mapStateToProp, actionCreators)(CreateStorePage);
