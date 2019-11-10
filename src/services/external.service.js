@@ -21,9 +21,9 @@ function getDistrict(cityID) {
     .then(data => data);
 }
 
-function addressToLatLong(adddress) {
+function addressToLatLong(address) {
   // development using fake latitude longtitude.
-  if (!process.env.REACT_APP_API_KEY) {
+  if (process.env.REACT_APP_ENV || !process.env.REACT_APP_API_KEY) {
     return Promise.resolve(({ lat: 25, lng: 121 }));
   }
 
@@ -38,7 +38,7 @@ function addressToLatLong(adddress) {
   // Enable or disable logs. Its optional.
   Geocode.enableDebug();
 
-  return Geocode.fromAddress("桃園市桃園區新埔八街15號")
+  return Geocode.fromAddress(address)
     .then(response => {
       const { lat, lng } = response.results[0].geometry.location;
       return { lat, lng };
