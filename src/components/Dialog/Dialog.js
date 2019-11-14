@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Dialog, DialogTitle, DialogActions, Button } from '@material-ui/core';
 
-
 const DialogComponent = (props) => {
   const { open, title, children, onCancel, onSubmit } = props;
 
@@ -10,7 +9,7 @@ const DialogComponent = (props) => {
     <Dialog
       disableBackdropClick
       disableEscapeKeyDown
-      maxWidth="xs"
+      // maxWidth="xs"
       aria-labelledby="confirmation-dialog-title"
       open={open}
     >

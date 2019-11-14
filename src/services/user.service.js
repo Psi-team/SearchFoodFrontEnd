@@ -1,12 +1,9 @@
+import { apiLogin, apiSignup, apiLogout } from '../apis';
+
 export const userService = { login, logout, register };
 
 function login(username, passwd) {
   const browser = getUserBrowser();
-  const requestOptions = {
-    method: 'POST',
-    header: { 'Content-Type': 'application/json;charset=UTF-8' },
-    body: JSON.stringify({ username, passwd, browser })
-  };
 
   if (process.env.REACT_APP_ENV) {
     return new Promise((resolve, reject) => {
@@ -20,77 +17,15 @@ function login(username, passwd) {
       }, 2000);
     });
   } else
-    return fetch(`${process.env.REACT_APP_API_URL}login`, requestOptions)
-      .then(handleResponse)
-      .then(user => {
-        localStorage.setItem('user', JSON.stringify(user));
-        return user;
-      });
+    return apiLogin({ username, passwd, browser });
 }
 
 function logout() {
-  const requestOptions = {
-    method: 'POST',
-    header: {
-      'Content-Type': 'application/json;charset=UTF-8',
-      'Authorization': " Token " + localStorage.getItem('Token')
-    }
-  };
-  if (!process.env.REACT_APP_ENV) {
-    return fetch(`${process.env.REACT_APP_API_URL}logout`, requestOptions)
-      .then(res => {
-        return res;
-      });
-  }
-  // remove user from local storage to log user out
-  localStorage.removeItem('user');
-
+  return apiLogout();
 }
 
 function register(username, passwd, birthyear, sexual) {
-  const requestOptions = {
-    method: 'POST',
-    header: { 'Content-Type': 'application/json;charset=UTF-8' },
-    body: JSON.stringify({ username, passwd, birthyear, sexual })
-  };
-
-  if (process.env.REACT_APP_ENV) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const user = { username, token: 'adawrq31312eda' };
-        localStorage.setItem('user', JSON.stringify(user));
-        if (username === 'admin')
-          return reject('此用戶已註冊過');
-
-        return resolve(user);
-      }, 2000);
-    });
-  } else
-    return fetch(`${process.env.REACT_APP_API_URL}signup`, requestOptions)
-      .then(handleResponse)
-      .then(user => {
-        localStorage.setItem('user', JSON.stringify(user));
-        return user;
-      });
-
-}
-
-function handleResponse(response) {
-  return response.text().then(text => {
-    const data = text && JSON.parse(text);
-    if (!response.ok) {
-      if (response.status === 401) {
-        // auto logout if 401 response returned from api
-        logout();
-        window.location.reload(true);
-      }
-
-      const error = (data && data.message) || response.statusText;
-      return Promise.reject(error);
-    }
-
-    return data;
-  });
+  return apiSignup({ username, passwd, birthyear, sexual });
 }
 
 function getUserBrowser() {

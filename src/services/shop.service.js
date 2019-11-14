@@ -1,6 +1,7 @@
+import { apiGetStoreType } from '../apis';
+
 export const shopService = { getStoreType };
 
 function getStoreType() {
-  return fetch('http://localhost:3001/storeType')
-    .then(res => res.json());
+  return apiGetStoreType();
 }

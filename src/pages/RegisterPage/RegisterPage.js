@@ -49,7 +49,7 @@ const RegisterPage = (props) => {
     passwd1: '',
     passwd2: '',
     birthYear: '',
-    sexual: '',
+    sexual: 0,
   });
   const [labelWidth, setLabelWidth] = useState(0);
   useEffect(() => {
@@ -62,7 +62,7 @@ const RegisterPage = (props) => {
     e.preventDefault();
     props.register({ ...state });
   }
-  console.log(props.error);
+
   return (
     <form
       className={classes.container}
@@ -121,6 +121,8 @@ const RegisterPage = (props) => {
             id: 'outlined-birthYear-native-simple',
           }}
         >
+          <option value="" disabled>
+          </option>
           {yearOptions()}
         </Select>
       </FormControl>

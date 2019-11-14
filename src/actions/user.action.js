@@ -23,6 +23,7 @@ function login(username, password) {
         .then(
           user => {
             window.location.assign('/');
+            localStorage.setItem('user', JSON.stringify(user));
             dispatch({ type: LOGIN_SUCCESS, user });
           },
           error => {
@@ -40,6 +41,7 @@ function logout() {
   return dispatch => {
     dispatch(() => ({ type: LOGOUT }));
     userService.logout();
+    localStorage.removeItem('user');
     window.location.assign('/');
   }
 }
@@ -53,8 +55,14 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
       userService.register(email, passwd1, birthYear, sexual)
         .then(
           user => {
+            if (process.env.REACT_APP_ENV) {
+              localStorage.setItem('user', JSON.stringify({ username: email, token: '1232asddsfsvfa' }));
+              dispatch({ type: REGISTER_SUCCESS, user: { username: email, token: '1232asddsfsvfa' } });
+            } else {
+              localStorage.setItem('user', JSON.stringify(user));
+              dispatch({ type: REGISTER_SUCCESS, user });
+            }
             window.location.assign('/');
-            dispatch({ type: REGISTER_SUCCESS, user });
           },
           error => {
             dispatch({ type: REGISTER_FAILURE, error });

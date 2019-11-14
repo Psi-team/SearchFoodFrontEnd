@@ -11,18 +11,11 @@
   },
   "signup": [
     {
-      "username": "asd@123",
-      "passwd": "1",
-      "birthyear": "2018",
-      "sex": 0,
+      "username": "admin@gmail.com",
+      "passwd": "admin",
+      "birthyear": "1934",
+      "sexual": 0,
       "id": 1
-    },
-    {
-      "username": "1232@",
-      "passwd": "1",
-      "birthyear": "2018",
-      "sex": 0,
-      "id": 2
     }
   ],
   "logout": {
@@ -34,7 +27,6 @@
       "燴飯",
       "滷肉飯",
       "豬排飯",
-      "爌肉飯",
       "三寶飯"
     ],
     "麵食": [

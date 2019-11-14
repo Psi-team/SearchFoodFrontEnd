@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, TextField, Button, Typography, FormControl, InputLabel,
-  Select, MenuItem, CircularProgress
+  Select, MenuItem, Checkbox, Divider, CircularProgress
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -30,30 +30,32 @@ const useStyles = makeStyles(theme => ({
   addressWrap: {
     display: 'flex',
     alignItems: 'center'
+  },
+  storeTypeContainer: {
+    width: 500,
+    display: 'flex',
+    flexWrap: 'wrap',
+    margin: 20,
+    '& > div': {
+      margin: 10,
+    }
+  },
+  storeTypeName: {
+    userSelect: 'none',
+    textDecoration: 'underline',
+    cursor: 'pointer'
   }
 }));
 
-const CreateStorePage = ({
-  county,
-  district,
-  error,
-  storeType,
-  getCountry,
-  getDistrict,
-  getLatLong,
-  getStoreType }) => {
+const CreateStorePage = ({ county, district, error, storeType,
+  getCountry, getDistrict, getLatLong, getStoreType }) => {
   const classes = useStyles();
   const [state, setState] = useState({
-    storename: '',
-    tel: '',
-    businessTime: '',
-    city: '',
-    district: '',
-    address: '',
-    type: {}
+    storename: '', tel: '', businessTime: '',
+    city: '', district: '', address: '', type: {}
   });
   const [open, setOpen] = useState(false);
-
+  const [childrenType, setChildrenType] = useState([]);
   useEffect(() => {
     getCountry();
     getStoreType();
@@ -85,6 +87,10 @@ const CreateStorePage = ({
     setOpen(false);
   }
 
+  function updateChildren(parent) {
+    setChildrenType(storeType[parent]);
+  }
+
   return (
     <form
       className={classes.container}
@@ -104,14 +110,15 @@ const CreateStorePage = ({
         variant="filled"
         required />
       <FormControl variant="outlined" className={classes.formControl} disabled>
-        <InputLabel htmlFor="outlined-city-native-simple">
+        <InputLabel htmlFor="select-store-type">
           店家類別
         </InputLabel>
         <Select
-          labelId="demo-simple-select-disabled-label"
           id="demo-simple-select-disabled"
           onClick={openTypeDialog}
-        >
+          value={state.type}
+          inputProps={{ name: 'type', id: 'select-store-type' }}>
+          >
         </Select>
       </FormControl>
       <TextField
@@ -197,19 +204,49 @@ const CreateStorePage = ({
         title='類別種類'
         onCancel={closeTypeDialog}
         onSubmit={closeTypeDialog}
+        styles={{
+          width: 500
+        }}
       >
-        {
-          Object.keys(storeType).map(key => (
-            <div key={key.toString()}>
-              <Typography>{key}</Typography>
-              {
-                storeType[key].map(type => (
-                  <Typography key={type.toString()}>{type}</Typography>
-                ))
-              }
-            </div>
-          ))
-        }
+        <Typography variant="subtitle1">
+          大類
+          </Typography>
+        <div className={classes.storeTypeContainer}>
+          {
+            Object.keys(storeType).map(key => (
+              <div key={key.toString()}>
+                <Checkbox
+                  color="primary"
+                />
+                <Typography
+                  variant="body1"
+                  component="span"
+                  className={classes.storeTypeName}
+                  onClick={() => updateChildren(key)}>
+                  {key}
+                </Typography>
+              </div>
+            ))
+          }
+        </div>
+        <Divider />
+        <Typography variant="subtitle1">
+          細項
+          </Typography>
+        <div className={classes.storeTypeContainer}>
+          {
+            childrenType.map((child, idx) => (
+              <div key={idx}>
+                <Checkbox
+                  color="primary"
+                />
+                <Typography variant="body1" component="span">
+                  {child}
+                </Typography>
+              </div>
+            ))
+          }
+        </div>
       </Dialog>
     </form>
   );

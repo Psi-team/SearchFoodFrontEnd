@@ -30,16 +30,16 @@ const errorHandle = (status, msg) => {
   }
 }
 
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
+axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 /**
  * 新增axios實例
  */
-const instance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
-  headers: {
-    'Content-Type': 'application/json;charset=UTF-8',
-    // 'Authorization': " Token " + localStorage.getItem('Token')
-  }
-})
+const instance = axios.create();
+
+const { token } = localStorage.getItem('user') || {};
+if (token)
+  instance.defaults.headers.common['Authorization'] = ` Token ${token}`;
 
 //  request攔截器
 instance.interceptors.request.use((config) => {

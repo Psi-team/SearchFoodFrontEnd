@@ -47,7 +47,7 @@ function getStoreType() {
   return dispatch => {
     shopService.getStoreType()
       .then(
-        data => dispatch({ type: GET_STORE_TYPE_SUCCESS, storeType: data }),
+        data => dispatch({ type: GET_STORE_TYPE_SUCCESS, storeType: data.data }),
         error => dispatch({ type: GET_STORE_TYPE_FAILURE, error })
       )
   }
