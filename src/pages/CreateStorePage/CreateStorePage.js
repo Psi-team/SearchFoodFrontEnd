@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import {
   Box, TextField, Button, Typography, FormControl, InputLabel,
-  Select, MenuItem, Checkbox, Divider, CircularProgress
+  Select, MenuItem, FormControlLabel, Checkbox, Divider, CircularProgress
 } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import { connect } from 'react-redux';
@@ -26,6 +26,7 @@ const useStyles = makeStyles(theme => ({
   formControl: {
     margin: theme.spacing(1),
     minWidth: 120,
+    maxWidth: 300
   },
   addressWrap: {
     display: 'flex',
@@ -48,7 +49,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CreateStorePage = ({ county, district, error, storeType,
-  getCountry, getDistrict, getLatLong, getStoreType }) => {
+  getCountry, getDistrict, getLatLong, getStoreType, createStore }) => {
   const classes = useStyles();
   const [state, setState] = useState({
     storename: '', tel: '', businessTime: '',
@@ -56,6 +57,7 @@ const CreateStorePage = ({ county, district, error, storeType,
   });
   const [open, setOpen] = useState(false);
   const [childrenType, setChildrenType] = useState([]);
+  const [storeTypeCheck, setStoreTypeCheck] = useState({});
   useEffect(() => {
     getCountry();
     getStoreType();
@@ -63,34 +65,86 @@ const CreateStorePage = ({ county, district, error, storeType,
 
   useEffect(() => {
     if (state.city) {
-      getDistrict(state.city);
+      getDistrict(state.city.split('-')[0]);
     }
   }, [state.city, getDistrict]);
 
+  useEffect(() => {
+    if (Object.keys(storeType).length !== 0) {
+      const storeTypeObj = Object.keys(storeType)
+        .map(key =>
+          storeType[key].map(item => ({
+            item: item, checked: true
+          }))
+        )
+        .flat()
+        .reduce((accu, curr) => ({ ...accu, [curr.item]: curr.checked }), {});
+
+      setStoreTypeCheck(storeTypeObj);
+      setState(c => ({
+        ...c,
+        type: storeTypeObj
+      }))
+    }
+  }, [storeType]);
+
   function handleChange(e) {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value
-    });
+    const target = e.target;
+    setState(c => ({
+      ...c, [target.name]: target.value
+    }));
   }
 
   function hadnleSubmit(e) {
     e.preventDefault();
     getLatLong(state.city + state.district + state.address);
-  }
+    const isTrueType = Object.entries(storeType)
+      .map(([key, val]) => ({ [key]: val.filter(_ => storeTypeCheck[_]) }))
+      .filter(_ => Object.values(_)[0].length !== 0)
+      .reduce((accu, curr) => ({ ...accu, ...curr }), {});
 
-  function openTypeDialog() {
-    setOpen(true);
-  }
-
-  function closeTypeDialog() {
-    setOpen(false);
+    createStore({
+      store_name: state.storename, city: state.city.split('-')[1], district: state.district.join(''),
+      address: state.address, tel: state.tel, business_time: state.businessTime,
+      types: isTrueType
+    })
   }
 
   function updateChildren(parent) {
     setChildrenType(storeType[parent]);
   }
 
+  function handleChangeParentType(e, parent) {
+    const children = storeType[parent];
+    const copyTypeChecked = { ...storeTypeCheck };
+    for (const kid of children) {
+      copyTypeChecked[kid] = e.target.checked;
+    }
+
+    setStoreTypeCheck(copyTypeChecked);
+  }
+
+  function handleChangeChildType(e, child) {
+    const target = e.target;
+    setStoreTypeCheck(c => ({
+      ...c,
+      [child]: target.checked
+    }));
+  }
+
+  function handleSubmitType() {
+    setOpen(false);
+    setState(c => ({
+      ...c,
+      type: storeTypeCheck
+    }));
+  }
+
+  function handleCancelType() {
+    setStoreTypeCheck(state.type);
+    setOpen(false);
+  }
+  console.log(state);
   return (
     <form
       className={classes.container}
@@ -115,10 +169,12 @@ const CreateStorePage = ({ county, district, error, storeType,
         </InputLabel>
         <Select
           id="demo-simple-select-disabled"
-          onClick={openTypeDialog}
-          value={state.type}
+          onClick={() => setOpen(true)}
+          value={Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}
           inputProps={{ name: 'type', id: 'select-store-type' }}>
-          >
+          <MenuItem value={Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}>
+            {Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}
+          </MenuItem>
         </Select>
       </FormControl>
       <TextField
@@ -154,7 +210,7 @@ const CreateStorePage = ({ county, district, error, storeType,
             inputProps={{ name: 'city', id: 'outlined-city-native-simple' }}>
             {
               county.map(({ countyname, countycode }) =>
-                <MenuItem key={countycode} value={countycode}>
+                <MenuItem key={countycode} value={`${countycode}-${countyname}`}>
                   {countyname}
                 </MenuItem>)
             }
@@ -173,7 +229,7 @@ const CreateStorePage = ({ county, district, error, storeType,
             inputProps={{ name: 'district', id: 'outlined-district-native-simple' }}>
             {
               district.map(({ towncode, townname }) =>
-                <MenuItem key={towncode} value={towncode}>
+                <MenuItem key={towncode} value={townname}>
                   {townname}
                 </MenuItem>)
             }
@@ -200,23 +256,21 @@ const CreateStorePage = ({ county, district, error, storeType,
         </Button>
       </Box>
       <Dialog
-        open={open}
         title='類別種類'
-        onCancel={closeTypeDialog}
-        onSubmit={closeTypeDialog}
-        styles={{
-          width: 500
-        }}
-      >
+        onCancel={handleCancelType}
+        onSubmit={handleSubmitType}
+        open={open}>
         <Typography variant="subtitle1">
           大類
-          </Typography>
+         </Typography>
         <div className={classes.storeTypeContainer}>
           {
             Object.keys(storeType).map(key => (
               <div key={key.toString()}>
                 <Checkbox
                   color="primary"
+                  onChange={(e) => handleChangeParentType(e, key)}
+                  checked={storeType[key].every(_ => storeTypeCheck[_])}
                 />
                 <Typography
                   variant="body1"
@@ -232,17 +286,20 @@ const CreateStorePage = ({ county, district, error, storeType,
         <Divider />
         <Typography variant="subtitle1">
           細項
-          </Typography>
+        </Typography>
         <div className={classes.storeTypeContainer}>
           {
             childrenType.map((child, idx) => (
               <div key={idx}>
-                <Checkbox
-                  color="primary"
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      color="primary"
+                      checked={storeTypeCheck[child]}
+                      onChange={(e) => handleChangeChildType(e, child)}
+                    />}
+                  label={child}
                 />
-                <Typography variant="body1" component="span">
-                  {child}
-                </Typography>
               </div>
             ))
           }
@@ -263,7 +320,8 @@ const actionCreators = {
   getCountry: shopActions.getCountry,
   getDistrict: shopActions.getDistrict,
   getLatLong: shopActions.addressToLatLong,
-  getStoreType: shopActions.getStoreType
+  getStoreType: shopActions.getStoreType,
+  createStore: shopActions.createStore
 };
 
 export default connect(mapStateToProp, actionCreators)(CreateStorePage);

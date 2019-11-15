@@ -1,7 +1,7 @@
 import { shopService, externalService } from '../services';
 
 export const shopActions = {
-  getCountry, getDistrict, addressToLatLong, getStoreType
+  getCountry, getDistrict, addressToLatLong, getStoreType, createStore
 }
 
 const GET_COUNTY_SUCCESS = 'GET_COUNTY_SUCCESS';
@@ -12,6 +12,9 @@ const GET_LAT_LONG_SUCCESS = 'GET_LAT_LONG_SUCCESS';
 const GET_LAT_LONG_FAILURE = 'GET_LAT_LONG_FAILURE';
 const GET_STORE_TYPE_SUCCESS = 'GET_STORE_TYPE_SUCCESS';
 const GET_STORE_TYPE_FAILURE = 'GET_STORE_TYPE_FAILURE';
+const CREATE_STORE_REQUEST = 'CREATE_STORE_REQUEST';
+const CREATE_STORE_SUCCESS = 'CREATE_STORE_SUCCESS';
+const CREATE_STORE_FAILURE = 'CREATE_STORE_FAILURE';
 
 function getCountry() {
   return dispatch => {
@@ -49,6 +52,17 @@ function getStoreType() {
       .then(
         data => dispatch({ type: GET_STORE_TYPE_SUCCESS, storeType: data.data }),
         error => dispatch({ type: GET_STORE_TYPE_FAILURE, error })
+      )
+  }
+}
+
+function createStore(data) {
+  return dispatch => {
+    dispatch({ type: CREATE_STORE_REQUEST });
+    shopService.createStore(data)
+      .then(
+        data => dispatch({ type: CREATE_STORE_SUCCESS, store: data.data }),
+        error => dispatch({ type: CREATE_STORE_FAILURE, error })
       )
   }
 }

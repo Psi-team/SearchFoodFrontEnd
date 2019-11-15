@@ -10,3 +10,6 @@ export const apiLogout = data => req('post', 'logout', data);
 
 // get store type 
 export const apiGetStoreType = () => req('get', 'storeType');
+
+// create store
+export const apiCreateStore = data => req('post', 'createStore', data);

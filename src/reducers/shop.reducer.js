@@ -43,3 +43,22 @@ export const storeType = (state = {}, action) => {
       return state;
   }
 }
+
+export const createStore = (state = {}, action) => {
+  switch (action.type) {
+    case 'CREATE_STORE_REQUEST':
+      return {
+        loading: true
+      }
+    case 'CREATE_STORE_SUCCESS':
+      return {
+        store: action.store
+      }
+    case 'CREATE_STORE_FAILURE':
+      return {
+        error: action.error
+      }
+    default:
+      return state;
+  }
+}
