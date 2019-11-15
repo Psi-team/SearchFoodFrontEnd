@@ -38,7 +38,7 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     margin: 20,
     '& > div': {
-      margin: 10,
+      margin: 10
     }
   },
   storeTypeName: {
@@ -48,8 +48,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-const CreateStorePage = ({ county, district, error, storeType,
-  getCountry, getDistrict, getLatLong, getStoreType, createStore }) => {
+const CreateStorePage = ({ county, district, error, loading, storeType,
+  getCountry, getDistrict, getStoreType, createStore }) => {
   const classes = useStyles();
   const [state, setState] = useState({
     storename: '', tel: '', businessTime: '',
@@ -74,17 +74,19 @@ const CreateStorePage = ({ county, district, error, storeType,
       const storeTypeObj = Object.keys(storeType)
         .map(key =>
           storeType[key].map(item => ({
-            item: item, checked: true
+            item: item, checked: false
           }))
         )
         .flat()
-        .reduce((accu, curr) => ({ ...accu, [curr.item]: curr.checked }), {});
+        .reduce((accu, curr) => ({
+          ...accu, [curr.item]: curr.checked
+        }), {});
 
       setStoreTypeCheck(storeTypeObj);
       setState(c => ({
         ...c,
         type: storeTypeObj
-      }))
+      }));
     }
   }, [storeType]);
 
@@ -97,17 +99,19 @@ const CreateStorePage = ({ county, district, error, storeType,
 
   function hadnleSubmit(e) {
     e.preventDefault();
-    getLatLong(state.city + state.district + state.address);
     const isTrueType = Object.entries(storeType)
       .map(([key, val]) => ({ [key]: val.filter(_ => storeTypeCheck[_]) }))
       .filter(_ => Object.values(_)[0].length !== 0)
       .reduce((accu, curr) => ({ ...accu, ...curr }), {});
-
     createStore({
-      store_name: state.storename, city: state.city.split('-')[1], district: state.district.join(''),
-      address: state.address, tel: state.tel, business_time: state.businessTime,
-      types: isTrueType
-    })
+      store_name: state.storename,
+      city: state.city,
+      district: state.district,
+      address: state.address,
+      tel: state.tel,
+      business_time: state.businessTime,
+      types: isTrueType,
+    });
   }
 
   function updateChildren(parent) {
@@ -144,7 +148,7 @@ const CreateStorePage = ({ county, district, error, storeType,
     setStoreTypeCheck(state.type);
     setOpen(false);
   }
-  console.log(state);
+
   return (
     <form
       className={classes.container}
@@ -172,8 +176,15 @@ const CreateStorePage = ({ county, district, error, storeType,
           onClick={() => setOpen(true)}
           value={Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}
           inputProps={{ name: 'type', id: 'select-store-type' }}>
-          <MenuItem value={Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}>
-            {Object.entries(state.type).filter(([key, val]) => val).map(_ => _[0]).join(',')}
+          <MenuItem
+            value={
+              Object.entries(state.type)
+              .filter(([key, val]) => val).map(_ => _[0]).join(',')
+          }>
+            {
+              Object.entries(state.type).filter(([key, val]) => 
+              val).map(_ => _[0]).join(',')
+            }
           </MenuItem>
         </Select>
       </FormControl>
@@ -247,13 +258,20 @@ const CreateStorePage = ({ county, district, error, storeType,
           disabled={!(state.city && state.district)}
           required />
       </div>
+      {
+        error &&
+        <Typography variant='h6' color='error'>{error}</Typography>
+      }
       <Box>
-        <Button
-          variant="contained"
-          className={classes.button}
-          type='submit'>
-          新增
-        </Button>
+        {
+          loading ? <CircularProgress /> :
+            <Button
+              variant="contained"
+              className={classes.button}
+              type='submit'>
+              新增
+            </Button>
+        }
       </Box>
       <Dialog
         title='類別種類'
@@ -312,14 +330,15 @@ const CreateStorePage = ({ county, district, error, storeType,
 function mapStateToProp(state) {
   return {
     ...state.county,
-    storeType: state.storeType
+    storeType: state.storeType,
+    loading: state.createStore.loading,
+    error: state.createStore.error
   }
 }
 
 const actionCreators = {
   getCountry: shopActions.getCountry,
   getDistrict: shopActions.getDistrict,
-  getLatLong: shopActions.addressToLatLong,
   getStoreType: shopActions.getStoreType,
   createStore: shopActions.createStore
 };

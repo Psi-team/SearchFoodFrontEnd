@@ -1,15 +1,15 @@
 import { shopService, externalService } from '../services';
+import { validator } from '../helpers/validator';
+import { history } from '../helpers/history';
 
 export const shopActions = {
-  getCountry, getDistrict, addressToLatLong, getStoreType, createStore
+  getCountry, getDistrict, getStoreType, createStore
 }
 
 const GET_COUNTY_SUCCESS = 'GET_COUNTY_SUCCESS';
 const GET_COUNTY_FAILURE = 'GET_COUNTY_FAILURE';
 const GET_DISTRICT_SUCCESS = 'GET_DISTRICT_SUCCESS';
 const GET_DISTRICT_FAILURE = 'GET_DISTRICT_FAILURE';
-const GET_LAT_LONG_SUCCESS = 'GET_LAT_LONG_SUCCESS';
-const GET_LAT_LONG_FAILURE = 'GET_LAT_LONG_FAILURE';
 const GET_STORE_TYPE_SUCCESS = 'GET_STORE_TYPE_SUCCESS';
 const GET_STORE_TYPE_FAILURE = 'GET_STORE_TYPE_FAILURE';
 const CREATE_STORE_REQUEST = 'CREATE_STORE_REQUEST';
@@ -36,16 +36,6 @@ function getDistrict(cityId) {
   }
 }
 
-function addressToLatLong(address) {
-  return dispatch => {
-    externalService.addressToLatLong(address)
-      .then(
-        data => dispatch({ type: GET_LAT_LONG_SUCCESS, latLong: data }),
-        error => dispatch({ type: GET_LAT_LONG_FAILURE, error })
-      );
-  }
-}
-
 function getStoreType() {
   return dispatch => {
     shopService.getStoreType()
@@ -57,12 +47,28 @@ function getStoreType() {
 }
 
 function createStore(data) {
-  return dispatch => {
-    dispatch({ type: CREATE_STORE_REQUEST });
-    shopService.createStore(data)
-      .then(
-        data => dispatch({ type: CREATE_STORE_SUCCESS, store: data.data }),
-        error => dispatch({ type: CREATE_STORE_FAILURE, error })
-      )
+  try {
+    validator({ type: 'createStore', data });
+    return dispatch => {
+      dispatch({ type: CREATE_STORE_REQUEST });
+      data['city'] = data['city'].split('-')[1];
+      data['district'] = data['district'].join('');
+      externalService.addressToLatLong(data.city + data.district + data.address)
+        .then(
+          latLong => shopService.createStore({ ...data, latLong }),
+          error => dispatch({ type: CREATE_STORE_FAILURE, error })
+        )
+        .then(
+          data => {
+            // TODO: there are some problem in page transfer.
+            history.push('/');
+            dispatch({ type: CREATE_STORE_SUCCESS, store: data.data })
+          },
+          error => dispatch({ type: CREATE_STORE_FAILURE, error })
+        )
+    }
+  }
+  catch ({ message }) {
+    return { type: CREATE_STORE_FAILURE, error: message }
   }
 }

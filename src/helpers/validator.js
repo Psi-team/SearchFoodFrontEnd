@@ -33,9 +33,25 @@ const registerHandler = {
   }
 }
 
+const createStoreHandler = {
+  set: (obj, prop, value) => {
+    console.log(value, value.length);
+    if (value === '')
+      throw new ValueError('欄位不得空白')
+    else if (prop === 'tel' && !(value.length === 8 || value.length === 10))
+      throw new ValueError('電話長度應為八碼或十碼，請再次確認')
+    else if (prop === 'tel' && typeof value !== 'number')
+      throw new TypeError('電話只能輸入數字');
+
+    obj[prop] = value;
+    return true;
+  }
+}
+
 const HANDLERENUMERATION = Object.freeze({
   login: loginHandler,
-  register: registerHandler
+  register: registerHandler,
+  createStore: createStoreHandler
 });
 
 export const validator = ({ type, data }) => {

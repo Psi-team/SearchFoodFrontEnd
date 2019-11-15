@@ -9,7 +9,6 @@ export const county = (state = initState, action) => {
       }
     case 'GET_COUNTY_FAILURE':
     case 'GET_DISTRICT_FAILURE':
-    case 'GET_LAT_LONG_FAILURE':
       return {
         ...state,
         error: action.error
@@ -18,11 +17,6 @@ export const county = (state = initState, action) => {
       return {
         ...state,
         district: action.district
-      }
-    case 'GET_LAT_LONG_SUCCESS':
-      return {
-        ...state,
-        latLong: action.latLong
       }
     default:
       return state;
