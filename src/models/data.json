@@ -18,9 +18,7 @@
       "id": 1
     }
   ],
-  "logout": {
-    "status": "200"
-  },
+  "logout": {},
   "storeType": {
     "飯": [
       "炒飯",

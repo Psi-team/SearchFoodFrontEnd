@@ -1,4 +1,4 @@
-import { apiGetStoreType, apiCreateStore } from '../apis';
+import { apiGetStoreType, apiCreateStore } from '../helpers/apis';
 
 export const shopService = { getStoreType, createStore };
 

@@ -5,26 +5,28 @@ import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } 
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { connect } from 'react-redux';
 
-import Drawer from '../Drawer';
 import { userActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
-  root: {
-    flexGrow: 1,
-  },
   appBar: {
-    backgroundColor: '#ffb5b5'
+    backgroundColor: '#ffb5b5',
+    padding: 10
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
+    userSelect: 'none',
+    font: 'Bold 40px/56px Verdana',
+    letterSpacing: '6px',
+    textShadow: '5px 3px 10px #00000029',
   },
   a: {
     textDecoration: 'none',
     color: '#fff',
-    display: 'inline-block'
+    display: 'inline-block',
+    color: '#4F576D',
   },
   userBox: {
     display: 'flex',
@@ -51,60 +53,56 @@ const Header = (props) => {
   };
 
   return (
-    <div className={classes.root}>
-      <AppBar position="static" className={classes.appBar}>
-        <Toolbar>
-          <Drawer />
-          <Typography variant="h6" className={classes.title}>
+    <AppBar position="static" className={classes.appBar}>
+      <Toolbar>
+        <Typography className={classes.title}>
+          <Link
+            className={classes.a}
+            to='/'>
+            Food
+          </Link>
+        </Typography>
+        {
+          !props.username ?
             <Link
               className={classes.a}
-              to='/'>
-              Food
+              to='/login'>
+              <Button color="inherit">
+                登入
+              </Button>
             </Link>
-          </Typography>
-          {
-            !props.username ?
-              <Link
-                className={classes.a}
-                to='/login'>
-                <Button color="inherit">
-                  Login
-                </Button>
-              </Link>
-              :
-              <Box className={classes.userBox}>
-                <Typography>{props.username}</Typography>
-                <IconButton
-                  aria-label="account of current user"
-                  aria-controls="primary-search-account-menu"
-                  aria-haspopup="true"
-                  onClick={handleMenu}
-                  color="inherit">
-                  <AccountCircle />
-                </IconButton>
-              </Box>
-          }
-          <Menu
-            id="menu-appbar"
-            anchorEl={anchorEl}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            keepMounted
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'right',
-            }}
-            open={open}
-            onClose={handleClose}
-          >
-            <MenuItem onClick={handleClick}>LogOut</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-          </Menu>
-        </Toolbar>
-      </AppBar>
-    </div>
+            :
+            <Box className={classes.userBox}>
+              <Typography>{props.username}</Typography>
+              <IconButton
+                aria-label="account of current user"
+                aria-controls="primary-search-account-menu"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit">
+                <AccountCircle />
+              </IconButton>
+            </Box>
+        }
+        <Menu
+          id="menu-appbar"
+          anchorEl={anchorEl}
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          keepMounted
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'right',
+          }}
+          onClose={handleClose}
+          open={open}>
+          <MenuItem onClick={handleClick}>LogOut</MenuItem>
+          <MenuItem onClick={handleClose}>My account</MenuItem>
+        </Menu>
+      </Toolbar>
+    </AppBar>
   );
 };
 

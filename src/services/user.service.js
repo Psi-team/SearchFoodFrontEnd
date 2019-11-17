@@ -1,4 +1,4 @@
-import { apiLogin, apiSignup, apiLogout } from '../apis';
+import { apiLogin, apiSignup, apiLogout } from '../helpers/apis';
 
 export const userService = { login, logout, register };
 
