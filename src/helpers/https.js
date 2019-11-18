@@ -26,9 +26,9 @@ const errorHandle = (status, msg) => {
       break;
 
     default:
-      console.log('resp沒有攔截到的錯誤', + msg);
+      console.log('resp沒有攔截到的錯誤', +msg);
   }
-}
+};
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
@@ -37,39 +37,45 @@ axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
  */
 const instance = axios.create();
 
-const { token } = localStorage.getItem('user') || {};
-if (token)
-  instance.defaults.headers.common['Authorization'] = ` Token ${token}`;
+const { token } = JSON.parse(localStorage.getItem('user')) || {};
+
+if (token) instance.defaults.headers.common['Authorization'] = ` Token ${token}`;
 
 //  request攔截器
-instance.interceptors.request.use((config) => {
-  console.log(config);
-  return config;
-}, (error) => {
-  return Promise.reject(error);
-});
+instance.interceptors.request.use(
+  config => {
+    console.log(config);
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  }
+);
 
 // response攔截器
-instance.interceptors.response.use((response) => {
-  console.log(response);
-  return response;
-}, (error) => {
-  const { response } = error;
-  console.log(response)
-  if (response) {
-    // 成功發出請求且收到res，但有error
-    errorHandle(response.status, response.data.error);
-    return Promise.reject(error);
-  } else {
-    // 成功發出請求但未收到res
-    if (!window.navigator.onLine) {
-      console.log('網路出了點問題，請重新連線後刷新網頁');
-    } else {
-      // 可能是跨域，或程式問題
+instance.interceptors.response.use(
+  response => {
+    console.log(response);
+    return response;
+  },
+  error => {
+    const { response } = error;
+    console.log(response);
+    if (response) {
+      // 成功發出請求且收到res，但有error
+      errorHandle(response.status, response.data.error);
       return Promise.reject(error);
+    } else {
+      // 成功發出請求但未收到res
+      if (!window.navigator.onLine) {
+        console.log('網路出了點問題，請重新連線後刷新網頁');
+      } else {
+        // 可能是跨域，或程式問題
+        return Promise.reject(error);
+      }
     }
   }
-});
+);
 
 export default (method, url, data = null) => {
   method = method.toLowerCase();
@@ -85,4 +91,4 @@ export default (method, url, data = null) => {
     console.log('未知的method' + method);
     return false;
   }
-}
+};
