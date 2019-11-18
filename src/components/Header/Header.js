@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
+import { Container, AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { connect } from 'react-redux';
 
@@ -10,31 +10,36 @@ import { userActions } from '../../actions';
 const useStyles = makeStyles(theme => ({
   appBar: {
     backgroundColor: '#ffb5b5',
-    padding: 10
+    padding: 10,
   },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
-    userSelect: 'none',
     font: 'Bold 40px/56px Verdana',
     letterSpacing: '6px',
     textShadow: '5px 3px 10px #00000029',
-  },
-  a: {
-    textDecoration: 'none',
-    color: '#fff',
-    display: 'inline-block',
     color: '#4F576D',
+    textDecoration: 'none',
+  },
+  linkContainer: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    '& > a, & > div': {
+      color: '#4F576D',
+      font: 'Bold 16px/20px Microsoft JhengHei',
+      marginLeft: 20,
+    },
   },
   userBox: {
     display: 'flex',
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
 }));
 
-const Header = (props) => {
+const Header = ({ username, logout }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -49,41 +54,36 @@ const Header = (props) => {
 
   const handleClick = () => {
     handleClose();
-    props.logout();
+    logout();
   };
 
   return (
     <AppBar position="static" className={classes.appBar}>
       <Toolbar>
-        <Typography className={classes.title}>
-          <Link
-            className={classes.a}
-            to='/'>
-            Food
-          </Link>
+        <Typography className={classes.title} component={Link} to="/">
+          Food
         </Typography>
-        {
-          !props.username ?
-            <Link
-              className={classes.a}
-              to='/login'>
-              <Button color="inherit">
-                登入
-              </Button>
-            </Link>
-            :
+        {/* TODO: Using hambarger bar to replace links in mobile mode */}
+        <Container className={classes.linkContainer}>
+          <Button component={Link} to="/searchFood">
+            搜尋美食
+          </Button>
+          <Button component={Link} to="/createStore">
+            新增餐館
+          </Button>
+          {!username ? (
+            <Button component={Link} to="/login">
+              登入
+            </Button>
+          ) : (
             <Box className={classes.userBox}>
-              <Typography>{props.username}</Typography>
-              <IconButton
-                aria-label="account of current user"
-                aria-controls="primary-search-account-menu"
-                aria-haspopup="true"
-                onClick={handleMenu}
-                color="inherit">
+              <Typography>{username}</Typography>
+              <IconButton onClick={handleMenu} color="inherit">
                 <AccountCircle />
               </IconButton>
             </Box>
-        }
+          )}
+        </Container>
         <Menu
           id="menu-appbar"
           anchorEl={anchorEl}
@@ -97,7 +97,8 @@ const Header = (props) => {
             horizontal: 'right',
           }}
           onClose={handleClose}
-          open={open}>
+          open={open}
+        >
           <MenuItem onClick={handleClick}>LogOut</MenuItem>
           <MenuItem onClick={handleClose}>My account</MenuItem>
         </Menu>
