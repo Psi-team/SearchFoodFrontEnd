@@ -24,11 +24,11 @@ function login(username, password) {
       userService.login(username, password).then(
         user => {
           window.location.assign('/');
-          localStorage.setItem('user', JSON.stringify(user));
-          dispatch({ type: LOGIN_SUCCESS, user });
+          localStorage.setItem('user', JSON.stringify(user.data));
+          dispatch({ type: LOGIN_SUCCESS, user: user.data });
         },
         error => {
-          dispatch({ type: LOGIN_FAILURE, error });
+          dispatch({ type: LOGIN_FAILURE, error: error.response.data.message });
         }
       );
     };
@@ -58,13 +58,13 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
             localStorage.setItem('user', JSON.stringify({ username: email, token: '1232asddsfsvfa' }));
             dispatch({ type: REGISTER_SUCCESS, user: { username: email, token: '1232asddsfsvfa' } });
           } else {
-            localStorage.setItem('user', JSON.stringify(user));
-            dispatch({ type: REGISTER_SUCCESS, user });
+            localStorage.setItem('user', JSON.stringify(user.data));
+            dispatch({ type: REGISTER_SUCCESS, user: user.data });
           }
           window.location.assign('/');
         },
         error => {
-          dispatch({ type: REGISTER_FAILURE, error });
+          dispatch({ type: REGISTER_FAILURE, error: error.response.data.message });
         }
       );
     };

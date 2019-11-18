@@ -26,8 +26,8 @@ const renderWithRedux = (ui, initState) => {
 const createMatchMedia = width => {
   return query => ({
     matches: mediaQuery.match(query, { width }),
-    addListener: () => {},
-    removeListener: () => {},
+    addListener: () => { },
+    removeListener: () => { },
   });
 };
 
@@ -37,7 +37,7 @@ jest.mock('../../actions');
 test('loginPage in PC mode', () => {
   window.matchMedia = createMatchMedia(761);
   const { userActions } = require('../../actions');
-  // userActions.login = jest.fn();
+  userActions.login = () => jest.fn();
   const { container } = renderWithRedux(<LoginPage />, {});
   expect(container).toMatchSnapshot();
   fireEvent.submit(getByTestId(container, 'form'));
