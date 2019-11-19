@@ -26,27 +26,26 @@ const renderWithRedux = (ui, initState) => {
 const createMatchMedia = width => {
   return query => ({
     matches: mediaQuery.match(query, { width }),
-    addListener: () => { },
-    removeListener: () => { },
+    addListener: () => {},
+    removeListener: () => {},
   });
 };
 
 afterEach(() => cleanup);
-jest.mock('../../actions');
 
-test('loginPage in PC mode', () => {
+test('loginPage in PC mode, form submit will trigger actions', () => {
   window.matchMedia = createMatchMedia(761);
-  const { userActions } = require('../../actions');
-  userActions.login = () => jest.fn();
-  const { container } = renderWithRedux(<LoginPage />, {});
+  const { container, store } = renderWithRedux(<LoginPage />, {});
   expect(container).toMatchSnapshot();
   fireEvent.submit(getByTestId(container, 'form'));
-  // expect(login).toHaveBeenCalled();
+  const state = store.getState();
+  // Because the submit data is fail to validator, so it will not call api
+  expect(state.user.error).toEqual('帳號或密碼不得空白');
 });
 
 test('loginPage in mobile mode', () => {
   window.matchMedia = createMatchMedia(759);
   const { container } = renderWithRedux(<LoginPage />, {});
   // It's hidden in mobile mode.
-  expect(() => getByText(container, /還不是會員/)).toThrow();
+  expect(() => getByText(container, /還*會員/)).toThrow();
 });
