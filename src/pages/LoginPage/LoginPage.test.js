@@ -49,3 +49,8 @@ test('loginPage in mobile mode', () => {
   // It's hidden in mobile mode.
   expect(() => getByText(container, /還*會員/)).toThrow();
 });
+
+test('loginPage in loading', () => {
+  const { container } = renderWithRedux(<LoginPage />, { user: { loading: true } });
+  expect(() => getByText(container, '登入')).toThrow();
+});
