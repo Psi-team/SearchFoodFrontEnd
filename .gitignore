@@ -24,3 +24,6 @@ yarn-error.log*
 
 .env
 __snapshots__
+
+# ui design
+/UI
