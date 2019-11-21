@@ -8,8 +8,8 @@ export const apiSignup = data => req('post', 'signup', data);
 // logout method should be post
 export const apiLogout = data => req('post', 'logout', data);
 
-// get store type 
-export const apiGetStoreType = () => req('get', 'storeType');
+// get store type
+export const apiGetStoreType = () => req('get', 'getStoreTypes');
 
 // create store
 export const apiCreateStore = data => req('post', 'createStore', data);

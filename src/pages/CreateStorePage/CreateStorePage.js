@@ -180,7 +180,12 @@ const CreateStorePage = ({
   }
 
   return (
-    <form className={classes.container} autoComplete="off" onSubmit={hadnleSubmit} noValidate>
+    <form
+      className={classes.container}
+      autoComplete="off"
+      onSubmit={hadnleSubmit}
+      noValidate
+    >
       <Typography variant="h1">新增店家</Typography>
       <TextField
         id="filled-storename-input"
@@ -231,16 +236,18 @@ const CreateStorePage = ({
         required
       />
       <TextField
-        id="filled-tel-input"
+        id="time"
         label="營業時間"
-        type="businessTime"
-        className={classes.textField}
-        value={state.businessTime}
+        type="time"
         onChange={handleChange}
-        name="businessTime"
-        margin="normal"
-        variant="filled"
-        required
+        value={state.businessTime}
+        className={classes.textField}
+        // InputLabelProps={{
+        //   shrink: true,
+        // }}
+        inputProps={{
+          step: 1800, // 30 min
+        }}
       />
       <div className={classes.addressWrap}>
         <FormControl variant="outlined" className={classes.formControl}>
@@ -257,8 +264,14 @@ const CreateStorePage = ({
             ))}
           </Select>
         </FormControl>
-        <FormControl variant="outlined" className={classes.formControl} disabled={district.length === 0}>
-          <InputLabel htmlFor="outlined-district-native-simple">地區</InputLabel>
+        <FormControl
+          variant="outlined"
+          className={classes.formControl}
+          disabled={district.length === 0}
+        >
+          <InputLabel htmlFor="outlined-district-native-simple">
+            地區
+          </InputLabel>
           <Select
             value={state.district}
             onChange={handleChange}
@@ -301,7 +314,12 @@ const CreateStorePage = ({
           </Button>
         )}
       </Box>
-      <Dialog title="類別種類" onCancel={handleCancelType} onSubmit={handleSubmitType} open={open}>
+      <Dialog
+        title="類別種類"
+        onCancel={handleCancelType}
+        onSubmit={handleSubmitType}
+        open={open}
+      >
         <Typography variant="subtitle1">大類</Typography>
         <div className={classes.storeTypeContainer}>
           {Object.keys(storeType).map(key => (
