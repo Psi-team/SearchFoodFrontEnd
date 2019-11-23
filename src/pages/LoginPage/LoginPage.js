@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-import { Container, OutlinedInput, Button, Typography, LinearProgress, useMediaQuery } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import {
+  Container,
+  OutlinedInput,
+  Button,
+  Typography,
+  LinearProgress,
+  useMediaQuery,
+  makeStyles,
+} from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
@@ -80,7 +87,8 @@ const LoginPage = ({ error, loading, login }) => {
   const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
   const matches = useMediaQuery('(min-width:760px)');
-  const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
+  const handleChange = e =>
+    setState({ ...state, [e.target.name]: e.target.value });
   const handleSubmit = e => {
     e.preventDefault();
     login(state.email, state.passwd);
@@ -89,9 +97,17 @@ const LoginPage = ({ error, loading, login }) => {
   return (
     <div className={classes.container}>
       <Container maxWidth="sm">
-        <form className={classes.form} autoComplete="off" onSubmit={handleSubmit} noValidate data-testid="form">
+        <form
+          className={classes.form}
+          autoComplete="off"
+          onSubmit={handleSubmit}
+          noValidate
+          data-testid="form"
+        >
           <Typography className={classes.title}>會員登入</Typography>
-          <div className={classes.errorMessage}>{error && <Typography component="p">{error}</Typography>}</div>
+          <div className={classes.errorMessage}>
+            {error && <Typography component="p">{error}</Typography>}
+          </div>
           <OutlinedInput
             className={classes.textField}
             value={state.email}
@@ -115,7 +131,11 @@ const LoginPage = ({ error, loading, login }) => {
             {loading ? (
               <LinearProgress />
             ) : (
-              <Button variant="contained" className={classes.button} type="submit">
+              <Button
+                variant="contained"
+                className={classes.button}
+                type="submit"
+              >
                 登入
               </Button>
             )}
