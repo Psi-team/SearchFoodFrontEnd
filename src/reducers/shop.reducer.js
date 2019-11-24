@@ -1,42 +1,51 @@
-const initState = { county: [], district: [] };
+const initState = {
+  county: [],
+  district: [],
+  storeType: {},
+  error: '',
+  loading: false,
+};
 
-export const county = (state = initState, action) => {
+export const storeInfo = (state = initState, action) => {
   switch (action.type) {
-    case 'GET_COUNTY_SUCCESS':
-      return {
-        county: action.county,
-        district: [],
-      };
-    case 'GET_COUNTY_FAILURE':
-    case 'GET_DISTRICT_FAILURE':
-    case 'GET_LAT_LONG_FAILURE':
+    case 'GET_COUNTY_REQUEST':
+    case 'GET_STORE_TYPE_REQUEST':
+    case 'GET_LAT_LONG_REQUEST':
       return {
         ...state,
-        error: action.error,
+        loading: true,
+      };
+    case 'GET_COUNTY_SUCCESS':
+      return {
+        ...state,
+        loading: Object.keys(state.storeType).length === 0,
+        county: action.county,
       };
     case 'GET_DISTRICT_SUCCESS':
       return {
         ...state,
+        loading: false,
         district: action.district,
+      };
+    case 'GET_STORE_TYPE_SUCCESS':
+      return {
+        ...state,
+        loading: state.county.length === 0,
+        storeType: action.storeType,
       };
     case 'GET_LAT_LONG_SUCCESS':
       return {
         ...state,
+        loading: false,
         latLong: action.latLong,
       };
-    default:
-      return state;
-  }
-};
-
-export const storeType = (state = {}, action) => {
-  switch (action.type) {
-    case 'GET_STORE_TYPE_SUCCESS':
-      return {
-        ...action.storeType,
-      };
+    case 'GET_COUNTY_FAILURE':
+    case 'GET_DISTRICT_FAILURE':
     case 'GET_STORE_TYPE_FAILURE':
+    case 'GET_LAT_LONG_FAILURE':
       return {
+        ...state,
+        loading: false,
         error: action.error,
       };
     default:

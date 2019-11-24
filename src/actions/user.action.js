@@ -55,8 +55,14 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
       userService.register(email, passwd1, birthYear, sexual).then(
         user => {
           if (process.env.REACT_APP_ENV) {
-            localStorage.setItem('user', JSON.stringify({ username: email, token: '1232asddsfsvfa' }));
-            dispatch({ type: REGISTER_SUCCESS, user: { username: email, token: '1232asddsfsvfa' } });
+            localStorage.setItem(
+              'user',
+              JSON.stringify({ username: email, token: '1232asddsfsvfa' })
+            );
+            dispatch({
+              type: REGISTER_SUCCESS,
+              user: { username: email, token: '1232asddsfsvfa' },
+            });
           } else {
             localStorage.setItem('user', JSON.stringify(user.data));
             dispatch({ type: REGISTER_SUCCESS, user: user.data });
@@ -64,7 +70,10 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
           window.location.assign('/');
         },
         error => {
-          dispatch({ type: REGISTER_FAILURE, error: error.response.data.message });
+          dispatch({
+            type: REGISTER_FAILURE,
+            error: error.response.data.message,
+          });
         }
       );
     };

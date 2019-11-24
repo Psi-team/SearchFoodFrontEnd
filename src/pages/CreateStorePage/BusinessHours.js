@@ -14,22 +14,24 @@ import { makeStyles } from '@material-ui/core/styles';
 import CancelIcon from '@material-ui/icons/Cancel';
 import RefreshIcon from '@material-ui/icons/Refresh';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
+  container: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(10)}px 0`,
+  },
   item: {
-    height: 80,
-    // margin: 10,
+    height: 75,
   },
   timeInput: {
-    margin: '0 5%',
+    margin: theme.spacing(5),
   },
   cross: {
     cursor: 'pointer',
     minWidth: 'auto',
-    margin: 10,
+    margin: theme.spacing(2),
   },
 }));
 
-const BusinessHours = ({ state, dispatch }) => {
+const BusinessHours = ({ state, setState }) => {
   const classes = useStyles();
 
   const handleChange = e => {
@@ -41,24 +43,26 @@ const BusinessHours = ({ state, dispatch }) => {
     } else {
       newDayTime = oldDayTime[0] + '-' + e.target.value;
     }
-    dispatch({ type: 'updateTime', payload: { ...state, [day]: newDayTime } });
+    setState({ type: 'updateTime', payload: { ...state, [day]: newDayTime } });
   };
 
   const clearTimeClick = key => {
-    dispatch({ type: 'updateTime', payload: { ...state, [key]: 'off' } });
+    setState({ type: 'updateTime', payload: { ...state, [key]: 'off' } });
   };
 
   const refreshTimeClick = key => {
-    dispatch({
+    setState({
       type: 'updateTime',
       payload: { ...state, [key]: '09:30-21:30' },
     });
   };
 
   return (
-    <Container maxWidth="lg">
-      <Typography variant="h4">營業時間</Typography>
-      <List className={classes.root}>
+    <Container maxWidth="lg" className={classes.container}>
+      <Typography variant="h5" gutterBottom={true}>
+        營業時間
+      </Typography>
+      <List>
         {Object.entries(state).map(([key, val]) => {
           const [startTime, endTime] = val.split('-');
           return (
@@ -125,7 +129,7 @@ const BusinessHours = ({ state, dispatch }) => {
 
 BusinessHours.propTypes = {
   state: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
+  setState: PropTypes.func.isRequired,
 };
 
 export default BusinessHours;

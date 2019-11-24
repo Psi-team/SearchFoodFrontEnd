@@ -6,13 +6,16 @@ export const shopActions = {
   getCountry,
   getDistrict,
   getStoreType,
-  createStore,
+  postStoreData,
 };
 
+const GET_COUNTY_REQUEST = 'GET_COUNTY_REQUEST';
 const GET_COUNTY_SUCCESS = 'GET_COUNTY_SUCCESS';
 const GET_COUNTY_FAILURE = 'GET_COUNTY_FAILURE';
+const GET_DISTRICT_REQUEST = 'GET_DISTRICT_REQUEST';
 const GET_DISTRICT_SUCCESS = 'GET_DISTRICT_SUCCESS';
 const GET_DISTRICT_FAILURE = 'GET_DISTRICT_FAILURE';
+const GET_STORE_TYPE_REQUEST = 'GET_STORE_TYPE_REQUEST';
 const GET_STORE_TYPE_SUCCESS = 'GET_STORE_TYPE_SUCCESS';
 const GET_STORE_TYPE_FAILURE = 'GET_STORE_TYPE_FAILURE';
 const CREATE_STORE_REQUEST = 'CREATE_STORE_REQUEST';
@@ -21,6 +24,7 @@ const CREATE_STORE_FAILURE = 'CREATE_STORE_FAILURE';
 
 function getCountry() {
   return dispatch => {
+    dispatch({ type: GET_COUNTY_REQUEST });
     externalService.getCounty().then(
       data => dispatch({ type: GET_COUNTY_SUCCESS, county: data.countyItem }),
       error => dispatch({ type: GET_COUNTY_FAILURE, error })
@@ -30,6 +34,7 @@ function getCountry() {
 
 function getDistrict(cityId) {
   return dispatch => {
+    dispatch({ type: GET_DISTRICT_REQUEST });
     externalService.getDistrict(cityId).then(
       data => dispatch({ type: GET_DISTRICT_SUCCESS, district: data.townItem }),
       error => dispatch({ type: GET_DISTRICT_FAILURE, error })
@@ -39,6 +44,7 @@ function getDistrict(cityId) {
 
 function getStoreType() {
   return dispatch => {
+    dispatch({ type: GET_STORE_TYPE_REQUEST });
     shopService.getStoreType().then(
       data => dispatch({ type: GET_STORE_TYPE_SUCCESS, storeType: data.data }),
       error => dispatch({ type: GET_STORE_TYPE_FAILURE, error })
@@ -46,8 +52,9 @@ function getStoreType() {
   };
 }
 
-function createStore(data) {
+function postStoreData(data) {
   try {
+    console.log(data);
     validator({ type: 'createStore', data });
     return dispatch => {
       dispatch({ type: CREATE_STORE_REQUEST });
@@ -65,7 +72,11 @@ function createStore(data) {
             history.push('/');
             dispatch({ type: CREATE_STORE_SUCCESS, store: data.data });
           },
-          error => dispatch({ type: CREATE_STORE_FAILURE, error: error.response.data.message })
+          error =>
+            dispatch({
+              type: CREATE_STORE_FAILURE,
+              error: error.response.data.message,
+            })
         );
     };
   } catch ({ message }) {
