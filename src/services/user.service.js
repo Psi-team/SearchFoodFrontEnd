@@ -10,7 +10,8 @@ function login(username, passwd) {
       setTimeout(() => {
         const user = { data: { username: 'test', token: 'adawrq31312eda' } };
         localStorage.setItem('user', JSON.stringify(user.data));
-        if (username !== 'admin' || passwd !== 'admin') return reject('帳號或密碼錯誤');
+        if (username !== 'admin' || passwd !== 'admin')
+          return reject({ response: { data: { message: '帳號或密碼錯誤' } } });
 
         return resolve(user);
       }, 2000);
