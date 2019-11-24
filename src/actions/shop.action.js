@@ -54,11 +54,9 @@ function getStoreType() {
 
 function postStoreData(data) {
   try {
-    console.log(data);
     validator({ type: 'createStore', data });
     return dispatch => {
       dispatch({ type: CREATE_STORE_REQUEST });
-      data['city'] = data['city'].split('-')[1];
       data['district'] = data['district'].join('');
       externalService
         .addressToLatLong(data.city + data.district + data.address)
