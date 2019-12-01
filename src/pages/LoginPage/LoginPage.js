@@ -86,7 +86,7 @@ const useStyles = makeStyles(() => ({
 const LoginPage = ({ error, loading, login }) => {
   const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
-  const matches = useMediaQuery('(min-width:760px)');
+  const matches = useMediaQuery('(min-width:768px)');
   const handleChange = e =>
     setState({ ...state, [e.target.name]: e.target.value });
   const handleSubmit = e => {

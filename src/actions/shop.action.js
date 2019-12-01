@@ -7,6 +7,7 @@ export const shopActions = {
   getDistrict,
   getStoreType,
   postStoreData,
+  searchStoreData,
 };
 
 const GET_COUNTY_REQUEST = 'GET_COUNTY_REQUEST';
@@ -21,6 +22,9 @@ const GET_STORE_TYPE_FAILURE = 'GET_STORE_TYPE_FAILURE';
 const CREATE_STORE_REQUEST = 'CREATE_STORE_REQUEST';
 const CREATE_STORE_SUCCESS = 'CREATE_STORE_SUCCESS';
 const CREATE_STORE_FAILURE = 'CREATE_STORE_FAILURE';
+const SEARCH_STORE_REQUEST = 'SEARCH_STORE_REQUEST';
+const SEARCH_STORE_SUCCESS = 'SEARCH_STORE_SUCCESS';
+const SEARCH_STORE_FAILURE = 'CREATE_STORE_FAILURE';
 
 function getCounty() {
   return dispatch => {
@@ -80,4 +84,20 @@ function postStoreData(data) {
   } catch ({ message }) {
     return { type: CREATE_STORE_FAILURE, error: message };
   }
+}
+
+function searchStoreData(data) {
+  return dispatch => {
+    dispatch({ type: SEARCH_STORE_REQUEST });
+    shopService.searchStore(data).then(
+      data => {
+        dispatch({ type: SEARCH_STORE_SUCCESS, list: data.data });
+      },
+      error =>
+        dispatch({
+          type: SEARCH_STORE_FAILURE,
+          error: error.response.data.message,
+        })
+    );
+  };
 }

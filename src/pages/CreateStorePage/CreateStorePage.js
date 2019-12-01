@@ -102,7 +102,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const CreateStorePage = ({
-  getCountry,
+  getCounty,
   getDistrict,
   getStoreType,
   storeInfo,
@@ -114,9 +114,9 @@ const CreateStorePage = ({
   const history = useHistory();
   const classes = useStyles();
   useEffect(() => {
-    getCountry();
+    getCounty();
     getStoreType();
-  }, [getCountry, getStoreType]);
+  }, [getCounty, getStoreType]);
 
   useEffect(() => {
     if (state.city) {
@@ -209,7 +209,7 @@ function mapStateToProp(state) {
 }
 
 const actionCreators = {
-  getCountry: shopActions.getCountry,
+  getCounty: shopActions.getCounty,
   getDistrict: shopActions.getDistrict,
   getStoreType: shopActions.getStoreType,
   postStoreData: shopActions.postStoreData,

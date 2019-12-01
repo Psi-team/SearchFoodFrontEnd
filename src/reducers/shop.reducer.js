@@ -71,3 +71,23 @@ export const createStore = (state = {}, action) => {
       return state;
   }
 };
+
+export const searchStore = (state = [], action) => {
+  switch (action.type) {
+    case 'SEARCH_STORE_REQUEST':
+      return {
+        loading: true,
+      };
+    case 'SEARCH_STORE_SUCCESS':
+      return {
+        loading: false,
+        storeList: action.list,
+      };
+    case 'SEARCH_STORE_FAILURE':
+      return {
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};

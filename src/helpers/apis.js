@@ -13,3 +13,6 @@ export const apiGetStoreType = () => req('get', 'getStoreTypes');
 
 // create store
 export const apiCreateStore = data => req('post', 'createStore', data);
+
+// search store
+export const apiGetStores = data => req('get', 'search', data);

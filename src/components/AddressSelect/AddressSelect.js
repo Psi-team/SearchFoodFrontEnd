@@ -35,7 +35,6 @@ const AddressSelect = ({
     }
   }, [city, getDistrict]);
 
-  console.log(storeInfo);
   return (
     <>
       <TextField

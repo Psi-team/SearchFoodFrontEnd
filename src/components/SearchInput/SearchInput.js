@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { InputBase, makeStyles } from '@material-ui/core';
 import { fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
-
+import { connect } from 'react-redux';
 import AddressSelect from '../AddressSelect';
+import { shopActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   search: {
@@ -11,10 +12,10 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.15),
-    '&:hover': {
-      backgroundColor: fade(theme.palette.common.white, 0.25),
-    },
+    backgroundColor: fade(theme.palette.common.white, 0.35),
+    // '&:hover': {
+    //   backgroundColor: fade(theme.palette.common.white, 0.65),
+    // },
     marginLeft: 0,
     width: '100%',
     [theme.breakpoints.up('sm')]: {
@@ -47,7 +48,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SearchInput = () => {
+const SearchInput = ({ searchStore }) => {
   // const [addressDisplay, setAddressDisplay] = useState('none');
   const classes = useStyles();
   const [state, setState] = useState({
@@ -63,6 +64,13 @@ const SearchInput = () => {
     });
   };
 
+  const handleClick = e => {
+    if (state.foodType === '' && state.city === '' && state.district === '') {
+      return;
+    }
+
+    searchStore(state);
+  };
   // const toggleAddress = (e, isFocus) => {
   //   setAddressDisplay(isFocus ? 'block' : 'none');
   // };
@@ -88,11 +96,15 @@ const SearchInput = () => {
           handleChange={handleChange}
         />
       </div>
-      <div className={classes.searchIcon}>
+      <div className={classes.searchIcon} onClick={handleClick}>
         <SearchIcon />
       </div>
     </div>
   );
 };
 
-export default SearchInput;
+const actionCreators = {
+  searchStore: shopActions.searchStoreData,
+};
+
+export default connect(null, actionCreators)(SearchInput);
