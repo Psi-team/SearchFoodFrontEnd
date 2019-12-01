@@ -1,11 +1,23 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
-import { Container, AppBar, Box, Toolbar, Typography, Button, IconButton, Menu, MenuItem } from '@material-ui/core';
+import {
+  Container,
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  Menu,
+  MenuItem,
+  useMediaQuery,
+} from '@material-ui/core';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import { connect } from 'react-redux';
 
 import { userActions } from '../../actions';
+import SearchInput from '../SearchInput';
 
 const useStyles = makeStyles(theme => ({
   appBar: {
@@ -43,6 +55,7 @@ const Header = ({ username, logout }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
+  const matches = useMediaQuery('(min-width:768px)');
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -60,14 +73,16 @@ const Header = ({ username, logout }) => {
   return (
     <AppBar position="static" className={classes.appBar}>
       <Toolbar>
-        <Typography className={classes.title} component={Link} to="/">
-          Food
-        </Typography>
+        {matches ? (
+          <Typography className={classes.title} component={Link} to="/">
+            Food
+          </Typography>
+        ) : (
+          ''
+        )}
         {/* TODO: Using hambarger bar to replace links in mobile mode */}
         <Container className={classes.linkContainer}>
-          <Button component={Link} to="/searchFood">
-            搜尋美食
-          </Button>
+          <SearchInput />
           <Button component={Link} to="/createStore">
             新增餐館
           </Button>

@@ -3,7 +3,7 @@ import { validator } from '../helpers/validator';
 import { history } from '../helpers/history';
 
 export const shopActions = {
-  getCountry,
+  getCounty,
   getDistrict,
   getStoreType,
   postStoreData,
@@ -22,7 +22,7 @@ const CREATE_STORE_REQUEST = 'CREATE_STORE_REQUEST';
 const CREATE_STORE_SUCCESS = 'CREATE_STORE_SUCCESS';
 const CREATE_STORE_FAILURE = 'CREATE_STORE_FAILURE';
 
-function getCountry() {
+function getCounty() {
   return dispatch => {
     dispatch({ type: GET_COUNTY_REQUEST });
     externalService.getCounty().then(
