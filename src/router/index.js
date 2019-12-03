@@ -6,7 +6,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import PrivateRoute from '../helpers/PrivateRoute';
 import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
-import LoginPage from '../pages/LoginPage';
+import LoginPage from '../pages/Login';
 import RegisterPage from '../pages/RegisterPage';
 import SearchPage from '../pages/SearchPage';
 import CreateStorePage from '../pages/CreateStorePage';
@@ -16,8 +16,8 @@ const useStyles = makeStyles(() => ({
     padding: 0,
     display: 'flex',
     flexDirection: 'column',
-    height: '100vh'
-  }
+    height: '100vh',
+  },
 }));
 
 const Router = () => {
@@ -28,19 +28,19 @@ const Router = () => {
       <CssBaseline />
       <Container className={classes.container} maxWidth="xl">
         <Header />
-        <Route exact path='/'>
+        <Route exact path="/">
           <HomePage />
         </Route>
-        <Route path='/login'>
+        <Route path="/login">
           <LoginPage />
         </Route>
-        <Route path='/register'>
+        <Route path="/register">
           <RegisterPage />
         </Route>
-        <PrivateRoute path='/search'>
+        <PrivateRoute path="/search">
           <SearchPage />
         </PrivateRoute>
-        <PrivateRoute path='/createStore'>
+        <PrivateRoute path="/createStore">
           <CreateStorePage />
         </PrivateRoute>
       </Container>

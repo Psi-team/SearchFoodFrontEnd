@@ -6,7 +6,6 @@ import {
   Dialog,
   DialogTitle,
   DialogActions,
-  Typography,
   makeStyles,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
@@ -146,11 +145,7 @@ const CreateStorePage = ({
       <form onSubmit={handleSubmit} noValidate>
         <Grid container>
           <Grid item xs={12} sm={6}>
-            <StoreBasicInfo
-              state={state}
-              setState={setState}
-              storeInfo={storeInfo}
-            />
+            <StoreBasicInfo state={state} setState={setState} storeInfo={storeInfo} />
           </Grid>
           <Grid item xs={12} sm={6}>
             <BusinessHours state={state.businessHours} setState={setState} />
