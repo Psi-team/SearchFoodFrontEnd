@@ -6,18 +6,17 @@ export const theme = responsiveFontSizes(
       // type: 'dark', // Switching the dark mode on is a single property value change.
       primary: {
         // light: will be calculated from palette.primary.main,
-        main: '#311b92', //'#ffb5b5',
+        main: '#311b92',
         // dark: will be calculated from palette.primary.main,
         // contrastText: will be calculated to contrast with palette.primary.main
+        contrastText: '#4F576D',
       },
       secondary: {
         // light: will be calculated from palette.secondary.main,
-        main: '#64b5f6',
+        main: '#ffb5b5',
         // dark: will be calculated from palette.secondary.main,
         // contrastText: will be calculated from palette.secondary.main,
-      },
-      background: {
-        main: '#ffb5b5',
+        contrastText: '#4F576D',
       },
       error: {
         main: '#c62828',
@@ -86,9 +85,6 @@ export const theme = responsiveFontSizes(
             '"Segoe UI Emoji"',
             '"Segoe UI Symbol"',
           ].join(','),
-          hover: {
-            background: 'red',
-          },
         },
       },
     },

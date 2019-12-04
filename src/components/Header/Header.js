@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  Container,
+  Hidden,
   AppBar,
   Box,
   Toolbar,
@@ -12,42 +12,33 @@ import {
   Menu,
   MenuItem,
   useMediaQuery,
+  Grid,
 } from '@material-ui/core';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+import { AccountCircle, Menu as MenuIcon } from '@material-ui/icons';
 import { connect } from 'react-redux';
 
 import { userActions } from '../../actions';
 import SearchInput from '../SearchInput';
 
 const useStyles = makeStyles(theme => ({
-  appBar: {
-    backgroundColor: '#ffb5b5',
-    padding: 10,
-  },
   menuButton: {
     marginRight: theme.spacing(2),
   },
   title: {
     flexGrow: 1,
     font: 'Bold 40px/56px Verdana',
-    letterSpacing: '6px',
     textShadow: '5px 3px 10px #00000029',
-    color: '#4F576D',
     textDecoration: 'none',
   },
-  linkContainer: {
-    display: 'flex',
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    '& > a, & > div': {
-      color: '#4F576D',
-      font: 'Bold 16px/20px Microsoft JhengHei',
-      marginLeft: 20,
+  button: {
+    margin: theme.spacing(2),
+    '& > span': {
+      fontWeight: 550,
+      fontSize: '1.2rem',
+      [theme.breakpoints.down('sm')]: {
+        fontSize: '0.8rem',
+      },
     },
-  },
-  userBox: {
-    display: 'flex',
-    alignItems: 'center',
   },
 }));
 
@@ -71,36 +62,45 @@ const Header = ({ username, logout }) => {
   };
 
   return (
-    <AppBar position="static" className={classes.appBar}>
+    <AppBar position="static" color="secondary">
       <Toolbar>
-        {matches ? (
-          <Typography className={classes.title} component={Link} to="/">
+        <Hidden smDown>
+          <Typography className={classes.title} component={Link} to="/" color="inherit">
             Food
           </Typography>
-        ) : (
-          ''
-        )}
-        {/* TODO: Using hambarger bar to replace links in mobile mode */}
-        <Container className={classes.linkContainer}>
+        </Hidden>
+        <Grid container justify="flex-end" alignContent="center" wrap="nowrap">
           <SearchInput />
-          <Button component={Link} to="/createStore">
+          <Button className={classes.button} component={Link} to="/createStore" color="inherit">
             新增餐館
           </Button>
           {!username ? (
-            <Button component={Link} to="/login">
+            <Button className={classes.button} component={Link} to="/login" color="inherit">
               登入
             </Button>
           ) : (
-            <Box className={classes.userBox}>
-              <Typography>{username}</Typography>
-              <IconButton onClick={handleMenu} color="inherit">
-                <AccountCircle />
-              </IconButton>
-            </Box>
+            <Grid container wrap="nowrap" item xs={1} alignItems="center">
+              <Hidden smDown>
+                <Grid item>
+                  <Typography variant="subtitle1">{username}</Typography>
+                </Grid>
+                <Grid item>
+                  <IconButton onClick={handleMenu} color="inherit">
+                    <AccountCircle />
+                  </IconButton>
+                </Grid>
+              </Hidden>
+              <Hidden mdUp>
+                <Grid item>
+                  <IconButton onClick={handleMenu} color="inherit">
+                    <MenuIcon />
+                  </IconButton>
+                </Grid>
+              </Hidden>
+            </Grid>
           )}
-        </Container>
+        </Grid>
         <Menu
-          id="menu-appbar"
           anchorEl={anchorEl}
           anchorOrigin={{
             vertical: 'top',
