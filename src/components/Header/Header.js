@@ -35,7 +35,6 @@ const useStyles = makeStyles(theme => ({
     textDecoration: 'none',
   },
   button: {
-    margin: theme.spacing(2),
     '& > span': {
       fontWeight: 550,
       fontSize: '1.2rem',
@@ -78,16 +77,16 @@ const Header = ({ username, logout }) => {
           </Typography>
         </Hidden>
         <Grid container alignItems="center" wrap="nowrap">
-          <Grid item xs={10}>
+          <Grid item xs={9}>
             <SearchInput />
           </Grid>
           <Grid
             container
             wrap="nowrap"
             item
-            xs={2}
+            xs={3}
             alignItems="center"
-            justify="space-between"
+            justify="flex-end"
           >
             {!username ? (
               <Button
@@ -101,10 +100,10 @@ const Header = ({ username, logout }) => {
             ) : (
               <>
                 <Hidden smDown>
-                  <Grid item>
+                  <Grid item xs={7}>
                     <Typography variant="subtitle1">{username}</Typography>
                   </Grid>
-                  <Grid item>
+                  <Grid item xs={5}>
                     <IconButton onClick={handleMenu} color="inherit">
                       <AccountCircle />
                     </IconButton>

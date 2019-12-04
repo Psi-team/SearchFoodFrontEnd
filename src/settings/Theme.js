@@ -24,6 +24,9 @@ export const theme = responsiveFontSizes(
       contrastThreshold: 3,
       tonalOffset: 0.2,
     },
+    shape: {
+      borderRadius: 30,
+    },
     typography: {
       htmlFontSize: 12, //Material-UI uses rem units for the font size
       fontSize: 10,
