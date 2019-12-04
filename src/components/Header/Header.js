@@ -1,18 +1,16 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { makeStyles } from '@material-ui/core/styles';
 import {
   Hidden,
   AppBar,
-  Box,
   Toolbar,
   Typography,
   Button,
   IconButton,
   Menu,
   MenuItem,
-  useMediaQuery,
   Grid,
+  makeStyles,
 } from '@material-ui/core';
 import { AccountCircle, Menu as MenuIcon } from '@material-ui/icons';
 import { connect } from 'react-redux';
@@ -21,8 +19,14 @@ import { userActions } from '../../actions';
 import SearchInput from '../SearchInput';
 
 const useStyles = makeStyles(theme => ({
-  menuButton: {
-    marginRight: theme.spacing(2),
+  toolbar: {
+    display: 'flex',
+    '& > div': {
+      width: 'auto',
+      [theme.breakpoints.down('sm')]: {
+        width: '100%',
+      },
+    },
   },
   title: {
     flexGrow: 1,
@@ -46,7 +50,6 @@ const Header = ({ username, logout }) => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const matches = useMediaQuery('(min-width:768px)');
 
   const handleMenu = event => {
     setAnchorEl(event.currentTarget);
@@ -63,42 +66,60 @@ const Header = ({ username, logout }) => {
 
   return (
     <AppBar position="static" color="secondary">
-      <Toolbar>
+      <Toolbar className={classes.toolbar}>
         <Hidden smDown>
-          <Typography className={classes.title} component={Link} to="/" color="inherit">
+          <Typography
+            className={classes.title}
+            component={Link}
+            to="/"
+            color="inherit"
+          >
             Food
           </Typography>
         </Hidden>
-        <Grid container justify="flex-end" alignContent="center" wrap="nowrap">
-          <SearchInput />
-          <Button className={classes.button} component={Link} to="/createStore" color="inherit">
-            新增餐館
-          </Button>
-          {!username ? (
-            <Button className={classes.button} component={Link} to="/login" color="inherit">
-              登入
-            </Button>
-          ) : (
-            <Grid container wrap="nowrap" item xs={1} alignItems="center">
-              <Hidden smDown>
-                <Grid item>
-                  <Typography variant="subtitle1">{username}</Typography>
-                </Grid>
-                <Grid item>
-                  <IconButton onClick={handleMenu} color="inherit">
-                    <AccountCircle />
-                  </IconButton>
-                </Grid>
-              </Hidden>
-              <Hidden mdUp>
-                <Grid item>
-                  <IconButton onClick={handleMenu} color="inherit">
-                    <MenuIcon />
-                  </IconButton>
-                </Grid>
-              </Hidden>
-            </Grid>
-          )}
+        <Grid container alignItems="center" wrap="nowrap">
+          <Grid item xs={10}>
+            <SearchInput />
+          </Grid>
+          <Grid
+            container
+            wrap="nowrap"
+            item
+            xs={2}
+            alignItems="center"
+            justify="space-between"
+          >
+            {!username ? (
+              <Button
+                className={classes.button}
+                component={Link}
+                to="/login"
+                color="inherit"
+              >
+                登入
+              </Button>
+            ) : (
+              <>
+                <Hidden smDown>
+                  <Grid item>
+                    <Typography variant="subtitle1">{username}</Typography>
+                  </Grid>
+                  <Grid item>
+                    <IconButton onClick={handleMenu} color="inherit">
+                      <AccountCircle />
+                    </IconButton>
+                  </Grid>
+                </Hidden>
+                <Hidden mdUp>
+                  <Grid item container justify="flex-end">
+                    <IconButton onClick={handleMenu} color="inherit">
+                      <MenuIcon />
+                    </IconButton>
+                  </Grid>
+                </Hidden>
+              </>
+            )}
+          </Grid>
         </Grid>
         <Menu
           anchorEl={anchorEl}
@@ -114,8 +135,11 @@ const Header = ({ username, logout }) => {
           onClose={handleClose}
           open={open}
         >
-          <MenuItem onClick={handleClick}>LogOut</MenuItem>
-          <MenuItem onClick={handleClose}>My account</MenuItem>
+          <MenuItem onClick={handleClose}>個人檔案</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/createStore">
+            新增餐館
+          </MenuItem>
+          <MenuItem onClick={handleClick}>登出</MenuItem>
         </Menu>
       </Toolbar>
     </AppBar>
