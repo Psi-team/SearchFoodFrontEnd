@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { InputBase, makeStyles } from '@material-ui/core';
+import {
+  Paper,
+  InputBase,
+  IconButton,
+  Divider,
+  makeStyles,
+} from '@material-ui/core';
 import { fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
@@ -7,44 +13,22 @@ import AddressSelect from '../AddressSelect';
 import { shopActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
-  search: {
-    // position: 'relative',
+  root: {
+    padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: fade(theme.palette.common.white, 0.35),
-    // '&:hover': {
-    //   backgroundColor: fade(theme.palette.common.white, 0.65),
-    // },
-    marginLeft: 0,
-    width: '100%',
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: theme.spacing(1),
-      width: 'auto',
-    },
+    width: 400,
   },
-  address: {},
-  searchIcon: {
-    width: theme.spacing(7),
-    height: '100%',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    cursor: 'pointer',
+  input: {
+    marginLeft: theme.spacing(1),
+    flex: 1,
   },
-  inputRoot: {
-    color: 'inherit',
+  iconButton: {
+    padding: 10,
   },
-  inputInput: {
-    padding: theme.spacing(1, 3, 1, 1),
-    transition: theme.transitions.create('width'),
-    width: '80%',
-    [theme.breakpoints.up('sm')]: {
-      width: 150,
-      // '&:focus': {
-      //   width: 200,
-      // },
-    },
+  divider: {
+    height: 28,
+    margin: 4,
   },
 }));
 
@@ -69,37 +53,36 @@ const SearchInput = ({ searchStore }) => {
       return;
     }
 
-    searchStore(state);
+    // searchStore(state);
   };
   // const toggleAddress = (e, isFocus) => {
   //   setAddressDisplay(isFocus ? 'block' : 'none');
   // };
 
   return (
-    <div className={classes.search}>
+    <Paper component="form" className={classes.root}>
       <InputBase
-        placeholder="搜尋食物"
-        classes={{
-          root: classes.inputRoot,
-          input: classes.inputInput,
-        }}
-        value={state.name}
-        // onFocus={e => toggleAddress(e, true)}
-        onChange={handleChange}
-        name="foodType"
-        inputProps={{ 'aria-label': 'search' }}
+        className={classes.input}
+        placeholder="搜尋店家"
+        inputProps={{ 'aria-label': '搜尋店家' }}
       />
-      <div className={classes.address}>
-        <AddressSelect
-          city={state.city}
-          district={state.district}
-          handleChange={handleChange}
-        />
-      </div>
-      <div className={classes.searchIcon} onClick={handleClick}>
+      <IconButton
+        className={classes.iconButton}
+        aria-label="search"
+        onClick={handleClick}
+        color="inherit"
+      >
         <SearchIcon />
-      </div>
-    </div>
+      </IconButton>
+      <Divider className={classes.divider} orientation="vertical" />
+      <IconButton
+        color="inherit"
+        className={classes.iconButton}
+        aria-label="directions"
+      >
+        <SearchIcon />
+      </IconButton>
+    </Paper>
   );
 };
 

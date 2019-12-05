@@ -21,15 +21,19 @@ import SearchInput from '../SearchInput';
 const useStyles = makeStyles(theme => ({
   toolbar: {
     display: 'flex',
+    justifyContent: 'space-between',
+    height: '15vh',
     '& > div': {
-      width: 'auto',
+      width: 'auto', //TODO:先暫時設置400
+      minWidth: 400,
       [theme.breakpoints.down('sm')]: {
         width: '100%',
+        minWidth: 'auto',
       },
     },
   },
   title: {
-    flexGrow: 1,
+    // flexGrow: 1,
     font: 'Bold 40px/56px Verdana',
     textShadow: '5px 3px 10px #00000029',
     textDecoration: 'none',
@@ -76,7 +80,13 @@ const Header = ({ username, logout }) => {
             Food
           </Typography>
         </Hidden>
-        <Grid container alignItems="center" wrap="nowrap">
+        <Grid
+          container
+          justify="space-around"
+          alignItems="center"
+          wrap="nowrap"
+          spacing={3}
+        >
           <Grid item xs={9}>
             <SearchInput />
           </Grid>
