@@ -1,15 +1,29 @@
 import React, { useEffect } from 'react';
-import { MenuItem, TextField, makeStyles } from '@material-ui/core';
+import { MenuItem, TextField, Divider, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 import { shopActions } from '../../actions';
 
-const useStyles = makeStyles(() => ({
+const useStyles = makeStyles(theme => ({
   textField: {
-    width: 100,
-    '& > label': {
-      color: 'rgba(0,0,0,0.4)',
+    width: 70,
+    [theme.breakpoints.down('sm')]: {
+      width: 50,
     },
+    '& > div': {
+      backgroundColor: 'transparent',
+      borderWidth: 0,
+    },
+    '& .Mui-focused': {
+      backgroundColor: 'transparent',
+    },
+    '& fieldset, & svg': {
+      display: 'none',
+    },
+  },
+  divider: {
+    height: 28,
+    margin: theme.spacing(0.5),
   },
   input: {
     color: '#4F576D',
@@ -56,6 +70,7 @@ const AddressSelect = ({
           </MenuItem>
         ))}
       </TextField>
+      <Divider className={classes.divider} orientation="vertical" />
       <TextField
         select
         label={district === '' ? '區' : ''}
@@ -65,7 +80,6 @@ const AddressSelect = ({
         onChange={handleChange}
         InputLabelProps={{ shrink: false }}
         InputProps={{
-          // disableUnderline: true,
           className: classes.input,
         }}
         variant="outlined"

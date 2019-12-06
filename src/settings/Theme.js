@@ -59,7 +59,7 @@ export const theme = responsiveFontSizes(
         root: {
           borderRadius: 30,
           backgroundColor: '#F9F9F9',
-          marginBottom: '2rem',
+          // marginBottom: '2rem',
 
           '& fieldset': {
             borderRadius: 30,

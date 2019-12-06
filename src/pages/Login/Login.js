@@ -27,6 +27,9 @@ const useStyles = makeStyles(theme => ({
     '& > p:first-child': {
       fontWeight: 'bold',
     },
+    '& > div': {
+      marginBottom: '2rem',
+    },
   },
   button: {
     '& > span': {
@@ -43,14 +46,20 @@ const useStyles = makeStyles(theme => ({
 const LoginPage = ({ error, loading, login }) => {
   const [state, setState] = useState({ email: '', passwd: '' });
   const classes = useStyles();
-  const handleChange = e => setState({ ...state, [e.target.name]: e.target.value });
+  const handleChange = e =>
+    setState({ ...state, [e.target.name]: e.target.value });
   const handleSubmit = e => {
     e.preventDefault();
     login(state.email, state.passwd);
   };
 
   return (
-    <Grid className={classes.container} container justify="center" alignItems="center">
+    <Grid
+      className={classes.container}
+      container
+      justify="center"
+      alignItems="center"
+    >
       <Container
         component="form"
         maxWidth="sm"
@@ -87,7 +96,13 @@ const LoginPage = ({ error, loading, login }) => {
             {error}
           </Typography>
         )}
-        <Box component={Grid} container justify="center" alignContent="center" mb={3}>
+        <Box
+          component={Grid}
+          container
+          justify="center"
+          alignContent="center"
+          mb={3}
+        >
           {loading ? (
             <CircularProgress />
           ) : (
@@ -105,7 +120,12 @@ const LoginPage = ({ error, loading, login }) => {
         <Grid container alignItems="center" justify="center">
           <Hidden smDown>
             <Grid item>
-              <Typography paragraph component="span" align="center" variant="body1">
+              <Typography
+                paragraph
+                component="span"
+                align="center"
+                variant="body1"
+              >
                 還不是會員?
               </Typography>
             </Grid>

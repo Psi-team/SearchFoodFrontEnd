@@ -6,7 +6,6 @@ import {
   Divider,
   makeStyles,
 } from '@material-ui/core';
-import { fade } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
 import AddressSelect from '../AddressSelect';
@@ -18,6 +17,13 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     width: 400,
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
+  },
+  address: {
+    display: 'flex',
+    alignItems: 'center',
   },
   input: {
     marginLeft: theme.spacing(1),
@@ -33,7 +39,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchInput = ({ searchStore }) => {
-  // const [addressDisplay, setAddressDisplay] = useState('none');
   const classes = useStyles();
   const [state, setState] = useState({
     foodType: '',
@@ -55,30 +60,28 @@ const SearchInput = ({ searchStore }) => {
 
     // searchStore(state);
   };
-  // const toggleAddress = (e, isFocus) => {
-  //   setAddressDisplay(isFocus ? 'block' : 'none');
-  // };
 
   return (
-    <Paper component="form" className={classes.root}>
+    <Paper className={classes.root}>
       <InputBase
         className={classes.input}
         placeholder="搜尋店家"
         inputProps={{ 'aria-label': '搜尋店家' }}
       />
-      <IconButton
-        className={classes.iconButton}
-        aria-label="search"
-        onClick={handleClick}
-        color="inherit"
-      >
-        <SearchIcon />
-      </IconButton>
+      <Divider className={classes.divider} orientation="vertical" />
+      <div className={classes.address}>
+        <AddressSelect
+          city={state.city}
+          district={state.district}
+          handleChange={handleChange}
+        />
+      </div>
       <Divider className={classes.divider} orientation="vertical" />
       <IconButton
         color="inherit"
         className={classes.iconButton}
-        aria-label="directions"
+        onClick={handleClick}
+        aria-label="search"
       >
         <SearchIcon />
       </IconButton>

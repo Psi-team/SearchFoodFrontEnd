@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => ({
     '& > div': {
       width: 'auto', //TODO:先暫時設置400
       minWidth: 400,
-      [theme.breakpoints.down('sm')]: {
+      [theme.breakpoints.down('xs')]: {
         width: '100%',
         minWidth: 'auto',
       },
@@ -70,7 +70,7 @@ const Header = ({ username, logout }) => {
   return (
     <AppBar position="static" color="secondary">
       <Toolbar className={classes.toolbar}>
-        <Hidden smDown>
+        <Hidden xsDown>
           <Typography
             className={classes.title}
             component={Link}
@@ -82,19 +82,19 @@ const Header = ({ username, logout }) => {
         </Hidden>
         <Grid
           container
-          justify="space-around"
+          justify="space-between"
           alignItems="center"
           wrap="nowrap"
-          spacing={3}
+          spacing={2}
         >
-          <Grid item xs={9}>
+          <Grid item xs={10}>
             <SearchInput />
           </Grid>
           <Grid
             container
             wrap="nowrap"
             item
-            xs={3}
+            xs={2}
             alignItems="center"
             justify="flex-end"
           >
