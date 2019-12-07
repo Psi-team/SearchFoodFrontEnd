@@ -8,6 +8,8 @@ import {
 } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
+import { useHistory } from 'react-router';
+
 import AddressSelect from '../AddressSelect';
 import { shopActions } from '../../actions';
 
@@ -39,6 +41,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchInput = ({ searchStore }) => {
+  const history = useHistory();
   const classes = useStyles();
   const [state, setState] = useState({
     foodType: '',
@@ -53,17 +56,21 @@ const SearchInput = ({ searchStore }) => {
     });
   };
 
-  const handleClick = e => {
+  const handleClick = () => {
     if (state.foodType === '' && state.city === '' && state.district === '') {
       return;
     }
 
-    // searchStore(state);
+    searchStore(state);
+    history.push('/search');
   };
 
   return (
     <Paper className={classes.root}>
       <InputBase
+        value={state.foodType}
+        onChange={handleChange}
+        name="foodType"
         className={classes.input}
         placeholder="搜尋店家"
         inputProps={{ 'aria-label': '搜尋店家' }}

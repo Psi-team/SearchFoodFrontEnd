@@ -72,19 +72,23 @@ export const createStore = (state = {}, action) => {
   }
 };
 
-export const searchStore = (state = [], action) => {
+export const searchStore = (state = { loading: false, datas: [] }, action) => {
   switch (action.type) {
     case 'SEARCH_STORE_REQUEST':
       return {
+        ...state,
         loading: true,
       };
     case 'SEARCH_STORE_SUCCESS':
       return {
+        ...state,
         loading: false,
-        storeList: action.list,
+        datas: action.list,
       };
     case 'SEARCH_STORE_FAILURE':
       return {
+        ...state,
+        loading: false,
         error: action.error,
       };
     default:
