@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -35,19 +35,35 @@ const useStyles = makeStyles(theme => ({
     },
   },
   card: {
-    // maxWidth: 345,
+    transition: theme.transitions.create('all'),
+    boxSizing: 'border-box',
+    '&:hover': {
+      // because background image size is 16:9, so the border should be the same.
+      borderWidth: '2.8124px 5px',
+      borderColor: theme.palette.secondary.main,
+      borderStyle: 'solid',
+      cursor: 'pointer',
+    },
   },
-  cardContent: {
+  content: {
     '& > p, & > div': {
       marginBottom: theme.spacing(0.5),
       marginLeft: theme.spacing(1),
     },
   },
-  media: {
-    height: 0,
-    paddingTop: '56.25%', // 16:9
+  mediaContainer: {
     position: 'relative',
-    '& > div': {
+    overflow: 'hidden',
+
+    '& > div:first-child': {
+      height: 0,
+      paddingTop: '56.25%', // 16:9
+      transition: theme.transitions.create('all'),
+      '&:hover': {
+        transform: 'scale(1.1)',
+      },
+    },
+    '& > div:nth-child(2)': {
       position: 'absolute',
       top: '20%',
       left: 0,
@@ -57,6 +73,7 @@ const useStyles = makeStyles(theme => ({
       letterSpacing: theme.spacing(0.5),
     },
   },
+  media: {},
   rating: {
     display: 'flex',
     alignItems: 'center',
@@ -65,11 +82,35 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchPage = ({ loading, datas }) => {
-  const [pageIndex, setPageIndex] = useState(0);
-  const classes = useStyles();
+  const [pageIndex, setPageIndex] = useState(1);
+  const [currentData, setCurrentData] = useState([]);
 
+  useEffect(() => {
+    if (datas.length !== 0) {
+      const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
+      setCurrentData(newRangeDatas);
+    }
+  }, [datas, pageIndex]);
+
+  const classes = useStyles();
   function judgeIsNewOpen(createdDate) {
     return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
+  }
+
+  function handlePrevpage() {
+    if (pageIndex === 0) {
+      return;
+    }
+
+    setPageIndex(pageIndex - 1);
+  }
+
+  function handleNextpage() {
+    if (pageIndex + 1 === datas.length) {
+      return;
+    }
+
+    setPageIndex(pageIndex + 1);
   }
 
   function calculateDistance() {}
@@ -80,27 +121,31 @@ const SearchPage = ({ loading, datas }) => {
     <Container className={classes.root}>
       <Toolbar>
         <Grid container alignContent="center" className={classes.pageSettings}>
-          <IconButton>
+          <IconButton onClick={handlePrevpage}>
             <ArrowBackIosIcon />
           </IconButton>
-          <Typography>{pageIndex}</Typography>
-          <IconButton>
+          <Typography>
+            {`${pageIndex}/${Math.ceil(datas.length / 20)}`}
+          </Typography>
+          <IconButton onClick={handleNextpage}>
             <ArrowForwardIosIcon />
           </IconButton>
         </Grid>
       </Toolbar>
       <Grid container justify="flex-start" alignitems="center" spacing={3}>
-        {datas.map(data => (
+        {currentData.map(data => (
           <Grid key={data.storeId} item md={4} sm={6} xs={12}>
             <Card className={classes.card}>
-              <CardMedia
-                className={classes.media}
-                image={`${require(`../../assets/images/login.jpg`)}`}
-              >
-                {judgeIsNewOpen(data.createdDate) ? <div>新上市</div> : null}
-              </CardMedia>
+              <div className={classes.mediaContainer}>
+                <CardMedia
+                  className={classes.media}
+                  image={`${require(`../../assets/images/login.jpg`)}`}
+                >
+                  {judgeIsNewOpen(data.createdDate) ? <div>新上市</div> : null}
+                </CardMedia>
+              </div>
               <CardHeader title={data.storename} subheader="這才叫美食" />
-              <CardContent className={classes.cardContent}>
+              <CardContent className={classes.content}>
                 <div className={classes.rating}>
                   <Rating
                     name="read-only"
@@ -109,7 +154,7 @@ const SearchPage = ({ loading, datas }) => {
                     readOnly
                   />
                   <Typography variant="body1" align="center">
-                    {data.star}
+                    {data.star.toFixed(1)}
                   </Typography>
                 </div>
                 <Typography>{data.location}</Typography>
