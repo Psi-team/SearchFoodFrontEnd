@@ -14,6 +14,7 @@ import {
   CardActions,
   Typography,
   Toolbar,
+  useMediaQuery,
   Button,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
@@ -23,6 +24,8 @@ import {
   ArrowBackIos as ArrowBackIosIcon,
   ArrowForwardIos as ArrowForwardIosIcon,
 } from '@material-ui/icons';
+
+import { calculatePageNumber } from './calculatePageNumber';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -79,12 +82,17 @@ const useStyles = makeStyles(theme => ({
     alignItems: 'center',
     marginTop: -theme.spacing(2),
   },
+  bottomBar: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 }));
 
 const SearchPage = ({ loading, datas }) => {
   const [pageIndex, setPageIndex] = useState(1);
   const [currentData, setCurrentData] = useState([]);
-
+  const match = useMediaQuery(theme => theme.breakpoints.down('sm'));
   useEffect(() => {
     if (datas.length !== 0) {
       const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
@@ -120,17 +128,25 @@ const SearchPage = ({ loading, datas }) => {
   ) : datas.length === 0 ? null : (
     <Container className={classes.root}>
       <Toolbar>
-        <Grid container alignContent="center" className={classes.pageSettings}>
-          <IconButton onClick={handlePrevpage}>
-            <ArrowBackIosIcon />
-          </IconButton>
-          <Typography>
-            {`${pageIndex}/${Math.ceil(datas.length / 20)}`}
-          </Typography>
-          <IconButton onClick={handleNextpage}>
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </Grid>
+        {match ? (
+          ''
+        ) : (
+          <Grid
+            container
+            alignContent="center"
+            className={classes.pageSettings}
+          >
+            <IconButton onClick={handlePrevpage}>
+              <ArrowBackIosIcon />
+            </IconButton>
+            <Typography>
+              {`${pageIndex}/${Math.ceil(datas.length / 20)}`}
+            </Typography>
+            <IconButton onClick={handleNextpage}>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Grid>
+        )}
       </Toolbar>
       <Grid container justify="flex-start" alignitems="center" spacing={3}>
         {currentData.map(data => (
@@ -172,6 +188,17 @@ const SearchPage = ({ loading, datas }) => {
           </Grid>
         ))}
       </Grid>
+      {match ? (
+        ''
+      ) : (
+        <Toolbar className={classes.bottomBar}>
+          {calculatePageNumber.map(num => (
+            <Button key={num} variant="contained" color="secondary">
+              {num}
+            </Button>
+          ))}
+        </Toolbar>
+      )}
     </Container>
   );
 };
