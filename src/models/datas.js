@@ -42,6 +42,7 @@ module.exports = () => {
         星期六: 'off',
         星期日: 'off',
       },
+      tags: ['R'],
       star: Math.random() * 5,
       tel: '0912345678',
       type: '炒飯',

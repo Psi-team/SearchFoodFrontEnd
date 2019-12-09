@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -18,7 +19,9 @@ import {
   useMediaQuery,
   Button,
   Fade,
+  Avatar,
 } from '@material-ui/core';
+import { red, grey } from '@material-ui/core/colors';
 import Rating from '@material-ui/lab/Rating';
 import {
   Favorite as FavoriteIcon,
@@ -78,6 +81,15 @@ const useStyles = makeStyles(theme => ({
       letterSpacing: theme.spacing(0.5),
     },
   },
+  cardHeader: {
+    flexDirection: 'row-reverse',
+    '& > div:first-child': {
+      display: 'flex',
+    },
+  },
+  avatar: {
+    backgroundColor: red[500],
+  },
   media: {},
   rating: {
     display: 'flex',
@@ -109,13 +121,19 @@ const SearchPage = ({ loading, datas }) => {
     }
   }, [datas, pageIndex]);
 
+  useEffect(() => {
+    if (match) {
+      console.log(datas);
+      setCurrentData(datas);
+    }
+  }, [match, datas]);
   const classes = useStyles();
   function judgeIsNewOpen(createdDate) {
     return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
   }
 
   function handlePrevpage() {
-    if (pageIndex === 0) {
+    if (pageIndex === 1) {
       return;
     }
 
@@ -140,37 +158,76 @@ const SearchPage = ({ loading, datas }) => {
         {match ? (
           ''
         ) : (
-          <Grid container alignContent="center" className={classes.pageSettings}>
-            <IconButton onClick={handlePrevpage}>
-              <ArrowBackIosIcon />
-            </IconButton>
-            <Typography>{`${pageIndex}/${Math.ceil(datas.length / 20)}`}</Typography>
-            <IconButton onClick={handleNextpage}>
-              <ArrowForwardIosIcon />
-            </IconButton>
+          <Grid
+            container
+            alignContent="center"
+            className={classes.pageSettings}
+          >
+            <Button
+              onClick={handlePrevpage}
+              // component={Link}
+              // to={`/search?page=${pageIndex}`}
+            >
+              <ArrowBackIosIcon
+                style={{ color: pageIndex === 1 ? grey[400] : grey[700] }}
+              />
+            </Button>
+            <Typography>{`${pageIndex}/${Math.ceil(
+              datas.length / 20
+            )}`}</Typography>
+            <Button
+              onClick={handleNextpage}
+              disabled={Math.ceil(datas.length / 20) === pageIndex}
+              // component={Link}
+              // to={`/search?page=${pageIndex}`}
+            >
+              <ArrowForwardIosIcon
+                style={{
+                  color:
+                    Math.ceil(datas.length / 20) === pageIndex
+                      ? grey[400]
+                      : grey[700],
+                }}
+              />
+            </Button>
           </Grid>
         )}
       </Toolbar>
       <Grid container justify="flex-start" alignitems="center" spacing={3}>
         {currentData.map(data => (
-          <Grid key={data.storeId} item md={4} sm={6} xs={12}>
+          <Grid key={data.storeId} item lg={3} md={4} sm={6} xs={12}>
             <Card className={classes.card}>
               <div className={classes.mediaContainer}>
                 <LazyLoad height={200} offset={-200} once>
                   <Fade in={true} timeout={{ enter: 2000 }}>
                     <CardMedia
                       className={classes.media}
-                      image={`https://picsum.photos/id/${Math.floor(Math.random() * 299) +
-                        1}/200/300`}
+                      image={`https://picsum.photos/id/${Math.floor(
+                        Math.random() * 299
+                      ) + 1}/200/300`}
                     />
                   </Fade>
                 </LazyLoad>
                 {judgeIsNewOpen(data.createdDate) && <div>新上市</div>}
               </div>
-              <CardHeader title={data.storename} subheader="這才叫美食" />
+              <CardHeader
+                className={classes.cardHeader}
+                title={data.storename}
+                subheader="這才叫美食"
+                avatar={
+                  <Avatar aria-label="recipe" className={classes.avatar}>
+                    {data.tags[0]}
+                  </Avatar>
+                }
+              />
               <CardContent className={classes.content}>
                 <div className={classes.rating}>
-                  <Rating name="read-only" value={data.star} precision={0.1} readOnly />
+                  <Rating
+                    name="read-only"
+                    value={data.star}
+                    precision={0.1}
+                    readOnly
+                  />
                   <Typography variant="body1" align="center">
                     {data.star.toFixed(1)}
                   </Typography>
@@ -194,16 +251,18 @@ const SearchPage = ({ loading, datas }) => {
         ''
       ) : (
         <Toolbar className={classes.bottomBar}>
-          {calculatePageNumber(pageIndex, datas.length).map((num, idx) => (
-            <Button
-              key={idx}
-              variant="contained"
-              color={pageIndex === num ? 'secondary' : 'inherit'}
-              disabled={isNaN(num)}
-            >
-              {num}
-            </Button>
-          ))}
+          {calculatePageNumber(pageIndex, Math.ceil(datas.length / 20)).map(
+            (num, idx) => (
+              <Button
+                key={idx}
+                variant="contained"
+                color={pageIndex === num ? 'secondary' : 'inherit'}
+                disabled={isNaN(num)}
+              >
+                {num}
+              </Button>
+            )
+          )}
         </Toolbar>
       )}
     </Container>
