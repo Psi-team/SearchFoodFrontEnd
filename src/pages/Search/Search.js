@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import LazyLoad from 'react-lazyload';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -16,6 +17,7 @@ import {
   Toolbar,
   useMediaQuery,
   Button,
+  Fade,
 } from '@material-ui/core';
 import Rating from '@material-ui/lab/Rating';
 import {
@@ -29,7 +31,7 @@ import { calculatePageNumber } from './calculatePageNumber';
 
 const useStyles = makeStyles(theme => ({
   root: {
-    overflow: 'auto',
+    // overflow: 'auto',
     height: '100%',
   },
   pageSettings: {
@@ -61,10 +63,10 @@ const useStyles = makeStyles(theme => ({
     '& > div:first-child': {
       height: 0,
       paddingTop: '56.25%', // 16:9
-      transition: theme.transitions.create('all'),
-      '&:hover': {
-        transform: 'scale(1.1)',
-      },
+      // transition: theme.transitions.create('all'),
+      // '&:hover': {
+      //   transform: 'scale(1.1)',
+      // },
     },
     '& > div:nth-child(2)': {
       position: 'absolute',
@@ -81,11 +83,18 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
     marginTop: -theme.spacing(2),
+    '& > p': {
+      letterSpacing: theme.spacing(0.1),
+    },
   },
   bottomBar: {
+    marginTop: theme.spacing(2),
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+    '& > button': {
+      margin: theme.spacing(0.5),
+    },
   },
 }));
 
@@ -131,17 +140,11 @@ const SearchPage = ({ loading, datas }) => {
         {match ? (
           ''
         ) : (
-          <Grid
-            container
-            alignContent="center"
-            className={classes.pageSettings}
-          >
+          <Grid container alignContent="center" className={classes.pageSettings}>
             <IconButton onClick={handlePrevpage}>
               <ArrowBackIosIcon />
             </IconButton>
-            <Typography>
-              {`${pageIndex}/${Math.ceil(datas.length / 20)}`}
-            </Typography>
+            <Typography>{`${pageIndex}/${Math.ceil(datas.length / 20)}`}</Typography>
             <IconButton onClick={handleNextpage}>
               <ArrowForwardIosIcon />
             </IconButton>
@@ -153,22 +156,21 @@ const SearchPage = ({ loading, datas }) => {
           <Grid key={data.storeId} item md={4} sm={6} xs={12}>
             <Card className={classes.card}>
               <div className={classes.mediaContainer}>
-                <CardMedia
-                  className={classes.media}
-                  image={`${require(`../../assets/images/login.jpg`)}`}
-                >
-                  {judgeIsNewOpen(data.createdDate) ? <div>新上市</div> : null}
-                </CardMedia>
+                <LazyLoad height={200} offset={-200} once>
+                  <Fade in={true} timeout={{ enter: 2000 }}>
+                    <CardMedia
+                      className={classes.media}
+                      image={`https://picsum.photos/id/${Math.floor(Math.random() * 299) +
+                        1}/200/300`}
+                    />
+                  </Fade>
+                </LazyLoad>
+                {judgeIsNewOpen(data.createdDate) && <div>新上市</div>}
               </div>
               <CardHeader title={data.storename} subheader="這才叫美食" />
               <CardContent className={classes.content}>
                 <div className={classes.rating}>
-                  <Rating
-                    name="read-only"
-                    value={data.star}
-                    precision={0.1}
-                    readOnly
-                  />
+                  <Rating name="read-only" value={data.star} precision={0.1} readOnly />
                   <Typography variant="body1" align="center">
                     {data.star.toFixed(1)}
                   </Typography>
@@ -192,8 +194,13 @@ const SearchPage = ({ loading, datas }) => {
         ''
       ) : (
         <Toolbar className={classes.bottomBar}>
-          {calculatePageNumber.map(num => (
-            <Button key={num} variant="contained" color="secondary">
+          {calculatePageNumber(pageIndex, datas.length).map((num, idx) => (
+            <Button
+              key={idx}
+              variant="contained"
+              color={pageIndex === num ? 'secondary' : 'inherit'}
+              disabled={isNaN(num)}
+            >
               {num}
             </Button>
           ))}

@@ -47,7 +47,7 @@ module.exports = () => {
       type: '炒飯',
       click_week: 1000,
       storeId: i,
-      createdDate: '2019-11-01',
+      createdDate: '2019-12-01',
     });
   }
 

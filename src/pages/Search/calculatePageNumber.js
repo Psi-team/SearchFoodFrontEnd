@@ -1,43 +1,48 @@
 export const calculatePageNumber = (current, total) => {
-  const arr = [1];
+  const arr = [];
 
-  if (total === arr[0]) {
-    return arr;
-  } else if (current !== total) {
-    if (current - 1 <= 1) {
-      let i = 2;
-      while (i < 4) {
-        arr.push(i++);
-      }
-      arr.push('...');
-    } else if (current + 1 === total) {
-      arr.push('...');
-      let i = -1;
-      while (i < 1) {
-        arr.push(current + i++);
-      }
+  // 因為會抓current前後各1，以及total前一個，因此current +1 +1 < total -1
+  if (current > 3 + total - current || current + 3 < total) {
+    let i = current === 1 ? 0 : current === total ? -2 : -1;
+    do {
+      arr.push(current + i++);
+    } while (arr.length < 3);
+
+    if (arr[0] === 1) {
+      arr.push('...', total - 1, total);
+    } else if (arr[2] === total) {
+      arr.unshift(1, 2, '...');
     } else {
-      arr.push('...');
-      let i = -1;
-      while (i < 2) {
-        arr.push(current + i++);
+      if (arr[0] > 3) {
+        arr.unshift(1, 2, '...');
+      } else {
+        let i = 1;
+        do {
+          arr.unshift(i++);
+        } while (i < arr[i - 1]);
       }
-      arr.push('...');
+
+      if (arr[arr.length - 1] < total - 2) {
+        arr.push('...', total - 1, total);
+      } else {
+        let i = total - arr[arr.length - 1];
+        do {
+          arr.push(total - i--);
+        } while (i > 0);
+      }
     }
-    // push the end of number
-    arr.push(total);
-    return [1, 2, 3, 4, 5];
-  } else if (current - 2 > 2) {
-    arr.push('...');
-    let i = 2;
-    while (i > 0) {
-      arr.push(current - i--);
-    }
-    return arr;
   } else {
-    let i = current - 1;
-    while (i > 0) {
-      arr.push(current - i--);
-    }
+    let i = 1;
+    do {
+      arr.push(i++);
+    } while (i < total + 1);
   }
+
+  return arr.sort((a, b) => {
+    if (!isNaN(a) && !isNaN(b)) {
+      return a > b ? 1 : -1;
+    } else {
+      return 0;
+    }
+  });
 };

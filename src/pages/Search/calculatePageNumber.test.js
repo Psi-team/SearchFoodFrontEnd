@@ -22,7 +22,12 @@ it('test the pageNumber equals to current number, and also equal to the length o
 
 it('test the current number is diffierent to the pageNumber', () => {
   const result1 = calculatePageNumber(6, 20);
-  expect(result1).toEqual([1, '...', 5, 6, 7, '...', 20]);
+  expect(result1).toEqual([1, 2, '...', 5, 6, 7, '...', 19, 20]);
   const result2 = calculatePageNumber(3, 29);
-  expect(result2).toEqual([1, 2, 3, 4, '...', 29]);
+  expect(result2).toEqual([1, 2, 3, 4, '...', 28, 29]);
+});
+
+it('test', () => {
+  const result = calculatePageNumber(4, 5);
+  expect(result).toEqual([1, 2, 3, 4, 5]);
 });
