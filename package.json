@@ -27,7 +27,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "plop": "plop"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@testing-library/jest-dom": "^4.2.3",
     "@testing-library/react": "^9.2.0",
-    "json-server": "^0.15.1"
+    "json-server": "^0.15.1",
+    "plop": "^2.5.3"
   }
 }

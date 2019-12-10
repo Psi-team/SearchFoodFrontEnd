@@ -25,7 +25,7 @@ module.exports = () => {
     '頂呱呱',
     '胖老爹',
   ];
-  for (let i = 0; i < 1000; i++) {
+  for (let i = 0; i < 100; i++) {
     data.search.push({
       storename: names[Math.floor(Math.random() * names.length)],
       location: '新北市土城區中央路四段',
