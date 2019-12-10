@@ -48,7 +48,9 @@ module.exports = () => {
       type: '炒飯',
       click_week: 1000,
       storeId: i,
-      createdDate: '2019-12-01',
+      createdDate: `2019-${Math.round(Math.random()) + 11}-${Math.floor(
+        Math.random() * 30 + 1
+      )}`,
     });
   }
 

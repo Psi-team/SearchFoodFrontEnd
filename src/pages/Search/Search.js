@@ -3,7 +3,13 @@ import { useLocation } from 'react-router';
 import { List, WindowScroller } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { makeStyles, CircularProgress, Container, Grid, useMediaQuery } from '@material-ui/core';
+import {
+  makeStyles,
+  CircularProgress,
+  Container,
+  Grid,
+  useMediaQuery,
+} from '@material-ui/core';
 
 import SettingBar from './SettingBar';
 import StoreCardView from './StoreCardView';
@@ -22,14 +28,14 @@ const SearchPage = ({ loading, datas }) => {
   const location = useLocation();
   const params = new URLSearchParams(location.search);
   const [pageIndex, setPageIndex] = useState(Number(params.get('page')) || 1);
-  const match = useMediaQuery(theme => theme.breakpoints.down('sm'));
+  const match = useMediaQuery(theme => theme.breakpoints.down('xs'));
   const path = `/search${location.search.split('&page')[0]}`;
   useEffect(() => {
     if (datas.length !== 0) {
       const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
       setCurrentData(newRangeDatas);
     }
-  }, [datas, pageIndex]);
+  }, [pageIndex, datas]);
 
   useEffect(() => {
     if (match) {
@@ -38,9 +44,30 @@ const SearchPage = ({ loading, datas }) => {
       const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
       setCurrentData(newRangeDatas);
     }
-  }, [match, datas]);
+  }, [match, datas, pageIndex]);
 
   const classes = useStyles();
+
+  function sortByStar(powerOperaton) {
+    // TODO: 這邊直接對原本data做修改，不應該這樣處理，之後再回來調整
+    datas.sort((a, b) =>
+      a.star > b.star ? -1 * powerOperaton : 1 * powerOperaton
+    );
+    if (pageIndex === 1) {
+      setCurrentData(datas.slice(0, 20));
+    } else {
+      setPageIndex(1);
+    }
+  }
+
+  function sortByCreatedDate() {
+    datas.sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1));
+    if (pageIndex === 1) {
+      setCurrentData(datas.slice(0, 20));
+    } else {
+      setPageIndex(1);
+    }
+  }
 
   function rowRenderer({ key, index, style }) {
     return (
@@ -60,6 +87,8 @@ const SearchPage = ({ loading, datas }) => {
         length={datas.length}
         pageIndex={pageIndex}
         setPageIndex={setPageIndex}
+        sortByStar={sortByStar}
+        sortByCreatedDate={sortByCreatedDate}
       />
       {/* TODO: 尚未解決react-virtualize grid 排法 先以match控制 */}
       {match ? (
@@ -74,7 +103,7 @@ const SearchPage = ({ loading, datas }) => {
               rowHeight={500}
               rowRenderer={rowRenderer}
               scrollTop={scrollTop}
-              width={width} //padding 16
+              width={width - 32} //padding 16
             />
           )}
         </WindowScroller>
