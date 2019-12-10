@@ -9,7 +9,11 @@ export const calculatePageNumber = (current, total) => {
     } while (arr.length < 3);
 
     if (arr[0] === 1) {
-      arr.push('...', total - 1, total);
+      if (arr[2] < total - 2) {
+        arr.push('...', total - 1, total);
+      } else {
+        arr.push(total - 1, total);
+      }
     } else if (arr[2] === total) {
       arr.unshift(1, 2, '...');
     } else {
@@ -22,7 +26,7 @@ export const calculatePageNumber = (current, total) => {
         } while (i < arr[i - 1]);
       }
 
-      if (arr[arr.length - 1] < total - 3) {
+      if (arr[arr.length - 1] < total - 2) {
         arr.push('...', total - 1, total);
       } else {
         let i = total - arr[arr.length - 1] - 1;
