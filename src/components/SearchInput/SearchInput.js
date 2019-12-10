@@ -1,15 +1,10 @@
 import React, { useState } from 'react';
-import {
-  Paper,
-  InputBase,
-  IconButton,
-  Divider,
-  makeStyles,
-} from '@material-ui/core';
+import { Paper, InputBase, IconButton, Divider, makeStyles } from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
+import { useHistory, useLocation } from 'react-router';
 
+import useMountEffect from '../../helpers/useMountEffect';
 import AddressSelect from '../AddressSelect';
 import { shopActions } from '../../actions';
 
@@ -18,7 +13,7 @@ const useStyles = makeStyles(theme => ({
     padding: '2px 4px',
     display: 'flex',
     alignItems: 'center',
-    width: 400,
+    width: 450,
     [theme.breakpoints.down('sm')]: {
       width: '100%',
     },
@@ -42,12 +37,23 @@ const useStyles = makeStyles(theme => ({
 
 const SearchInput = ({ searchStore }) => {
   const history = useHistory();
+  const location = useLocation();
   const classes = useStyles();
+  const params = new URLSearchParams(location.search);
   const [state, setState] = useState({
-    foodType: '',
-    city: '',
-    district: '',
+    foodType: params.get('foodType') || '',
+    city: params.get('city') || '',
+    district: params.get('district') || '',
   });
+  const searchData = () => {
+    if (state.foodType === '' && state.city === '' && state.district === '') {
+      return;
+    }
+
+    searchStore(state);
+  };
+
+  useMountEffect(() => searchData());
 
   const handleChange = e => {
     setState({
@@ -57,12 +63,10 @@ const SearchInput = ({ searchStore }) => {
   };
 
   const handleClick = () => {
-    if (state.foodType === '' && state.city === '' && state.district === '') {
-      return;
-    }
-
-    searchStore(state);
-    history.push('/search');
+    searchData();
+    history.push(
+      `/search?foodType=${state.foodType}&city=${state.city}&district=${state.district}`
+    );
   };
 
   return (
@@ -77,11 +81,7 @@ const SearchInput = ({ searchStore }) => {
       />
       <Divider className={classes.divider} orientation="vertical" />
       <div className={classes.address}>
-        <AddressSelect
-          city={state.city}
-          district={state.district}
-          handleChange={handleChange}
-        />
+        <AddressSelect city={state.city} district={state.district} handleChange={handleChange} />
       </div>
       <Divider className={classes.divider} orientation="vertical" />
       <IconButton

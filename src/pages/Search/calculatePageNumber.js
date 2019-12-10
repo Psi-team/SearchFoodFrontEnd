@@ -22,13 +22,13 @@ export const calculatePageNumber = (current, total) => {
         } while (i < arr[i - 1]);
       }
 
-      if (arr[arr.length - 1] < total - 2) {
+      if (arr[arr.length - 1] < total - 3) {
         arr.push('...', total - 1, total);
       } else {
-        let i = total - arr[arr.length - 1];
+        let i = total - arr[arr.length - 1] - 1;
         do {
           arr.push(total - i--);
-        } while (i > 0);
+        } while (i >= 0);
       }
     }
   } else {

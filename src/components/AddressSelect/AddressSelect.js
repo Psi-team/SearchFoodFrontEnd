@@ -6,9 +6,15 @@ import { shopActions } from '../../actions';
 
 const useStyles = makeStyles(theme => ({
   textField: {
-    width: 70,
+    width: 75,
+    '& div': {
+      padding: theme.spacing(0.5),
+    },
+    '& label': {
+      transform: 'translate(50%, 50%)',
+    },
     [theme.breakpoints.down('sm')]: {
-      width: 50,
+      width: 65,
     },
     '& > div': {
       backgroundColor: 'transparent',
@@ -30,14 +36,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const AddressSelect = ({
-  storeInfo,
-  getCounty,
-  getDistrict,
-  city,
-  district,
-  handleChange,
-}) => {
+const AddressSelect = ({ storeInfo, getCounty, getDistrict, city, district, handleChange }) => {
   const classes = useStyles();
   useEffect(() => {
     getCounty();
@@ -86,8 +85,8 @@ const AddressSelect = ({
         disabled={city ? false : true}
       >
         {storeInfo.district.map(({ towncode, townname }) => (
-          <MenuItem key={towncode} value={townname}>
-            {townname}
+          <MenuItem key={towncode} value={townname.join()}>
+            {townname.join()}
           </MenuItem>
         ))}
       </TextField>

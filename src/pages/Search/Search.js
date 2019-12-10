@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import PropTypes from 'prop-types';
@@ -66,10 +67,6 @@ const useStyles = makeStyles(theme => ({
     '& > div:first-child': {
       height: 0,
       paddingTop: '56.25%', // 16:9
-      // transition: theme.transitions.create('all'),
-      // '&:hover': {
-      //   transform: 'scale(1.1)',
-      // },
     },
     '& > div:nth-child(2)': {
       position: 'absolute',
@@ -111,8 +108,10 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const SearchPage = ({ loading, datas }) => {
-  const [pageIndex, setPageIndex] = useState(1);
   const [currentData, setCurrentData] = useState([]);
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const [pageIndex, setPageIndex] = useState(Number(params.get('page')) || 1);
   const match = useMediaQuery(theme => theme.breakpoints.down('sm'));
   useEffect(() => {
     if (datas.length !== 0) {
@@ -127,6 +126,7 @@ const SearchPage = ({ loading, datas }) => {
       setCurrentData(datas);
     }
   }, [match, datas]);
+
   const classes = useStyles();
   function judgeIsNewOpen(createdDate) {
     return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
@@ -148,6 +148,11 @@ const SearchPage = ({ loading, datas }) => {
     setPageIndex(pageIndex + 1);
   }
 
+  function handleNumberClick(num) {
+    setPageIndex(num);
+    window.scrollTo(0, 0);
+  }
+
   function calculateDistance() {}
 
   return loading ? (
@@ -158,35 +163,24 @@ const SearchPage = ({ loading, datas }) => {
         {match ? (
           ''
         ) : (
-          <Grid
-            container
-            alignContent="center"
-            className={classes.pageSettings}
-          >
+          <Grid container alignContent="center" className={classes.pageSettings}>
             <Button
               onClick={handlePrevpage}
-              // component={Link}
-              // to={`/search?page=${pageIndex}`}
+              component={Link}
+              to={`/search${location.search.split('&page')[0]}&page=${pageIndex}`}
             >
-              <ArrowBackIosIcon
-                style={{ color: pageIndex === 1 ? grey[400] : grey[700] }}
-              />
+              <ArrowBackIosIcon style={{ color: pageIndex === 1 ? grey[400] : grey[700] }} />
             </Button>
-            <Typography>{`${pageIndex}/${Math.ceil(
-              datas.length / 20
-            )}`}</Typography>
+            <Typography>{`${pageIndex}/${Math.ceil(datas.length / 20)}`}</Typography>
             <Button
               onClick={handleNextpage}
               disabled={Math.ceil(datas.length / 20) === pageIndex}
-              // component={Link}
-              // to={`/search?page=${pageIndex}`}
+              component={Link}
+              to={`/search${location.search.split('&page')[0]}&page=${pageIndex}`}
             >
               <ArrowForwardIosIcon
                 style={{
-                  color:
-                    Math.ceil(datas.length / 20) === pageIndex
-                      ? grey[400]
-                      : grey[700],
+                  color: Math.ceil(datas.length / 20) === pageIndex ? grey[400] : grey[700],
                 }}
               />
             </Button>
@@ -202,9 +196,8 @@ const SearchPage = ({ loading, datas }) => {
                   <Fade in={true} timeout={{ enter: 2000 }}>
                     <CardMedia
                       className={classes.media}
-                      image={`https://picsum.photos/id/${Math.floor(
-                        Math.random() * 299
-                      ) + 1}/200/300`}
+                      image={`https://picsum.photos/id/${Math.floor(Math.random() * 299) +
+                        1}/200/300`}
                     />
                   </Fade>
                 </LazyLoad>
@@ -222,12 +215,7 @@ const SearchPage = ({ loading, datas }) => {
               />
               <CardContent className={classes.content}>
                 <div className={classes.rating}>
-                  <Rating
-                    name="read-only"
-                    value={data.star}
-                    precision={0.1}
-                    readOnly
-                  />
+                  <Rating name="read-only" value={data.star} precision={0.1} readOnly />
                   <Typography variant="body1" align="center">
                     {data.star.toFixed(1)}
                   </Typography>
@@ -251,18 +239,19 @@ const SearchPage = ({ loading, datas }) => {
         ''
       ) : (
         <Toolbar className={classes.bottomBar}>
-          {calculatePageNumber(pageIndex, Math.ceil(datas.length / 20)).map(
-            (num, idx) => (
-              <Button
-                key={idx}
-                variant="contained"
-                color={pageIndex === num ? 'secondary' : 'inherit'}
-                disabled={isNaN(num)}
-              >
-                {num}
-              </Button>
-            )
-          )}
+          {calculatePageNumber(pageIndex, Math.ceil(datas.length / 20)).map((num, idx) => (
+            <Button
+              key={idx}
+              onClick={() => handleNumberClick(num)}
+              component={Link}
+              to={`/search${location.search.split('&page')[0]}&page=${num}`}
+              variant="contained"
+              color={pageIndex === num ? 'secondary' : 'inherit'}
+              disabled={isNaN(num)}
+            >
+              {num}
+            </Button>
+          ))}
         </Toolbar>
       )}
     </Container>
