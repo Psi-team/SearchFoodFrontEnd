@@ -24,9 +24,20 @@ const useStyles = makeStyles(theme => ({
   },
   textField: {
     width: 150,
-    '& fieldset': {
-      borderWidth: 3,
+    '& div': {
+      padding: theme.spacing(0.5),
     },
+    '& label': {
+      transform: 'translate(50%, 50%)',
+    },
+    '& fieldset': {
+      borderWidth: 1,
+      borderRadius: 0,
+      borderColor: '#000',
+    },
+  },
+  input: {
+    color: theme.palette.primary.main,
   },
 }));
 
@@ -70,14 +81,14 @@ const SettingBar = ({
   }
 
   function handleCreatedDateClick() {
-    setFavoriteName('好評');
+    setFavoriteName('');
     setFilterTarget('createdDate');
     sortByCreatedDate();
   }
 
   return (
     <Toolbar>
-      <Grid container spacing={3} justify="flex-start" alignItems="center">
+      <Grid container spacing={3} justify="flex-start" alignItems="center" wrap="nowrap">
         <Grid item>
           <Button
             variant="outlined"
@@ -90,7 +101,6 @@ const SettingBar = ({
         <Grid item>
           <TextField
             select
-            color={filterTarget === 'star' ? 'secondary' : 'primary'}
             label={favoriteName === '' ? '星星數' : ''}
             className={classes.textField}
             value={favoriteName}
@@ -109,32 +119,20 @@ const SettingBar = ({
       {match ? (
         ''
       ) : (
-        <Grid
-          container
-          justify="flex-end"
-          alignContent="center"
-          className={classes.pageSettings}
-        >
-          <Button
-            onClick={handlePrevpage}
-            component={Link}
-            to={`${path}&page=${pageIndex}`}
-          >
-            <ArrowBackIosIcon
-              style={{ color: pageIndex === 1 ? grey[400] : grey[700] }}
-            />
+        <Grid container justify="flex-end" alignContent="center" className={classes.pageSettings}>
+          <Button onClick={handlePrevpage} component={Link} to={`${path}&page=${pageIndex}`}>
+            <ArrowBackIosIcon style={{ color: pageIndex === 1 ? grey[400] : grey[700] }} />
           </Button>
-          <Typography>{`${pageIndex}/${Math.ceil(length / 20)}`}</Typography>
+          <Typography>{`${pageIndex}/${length}`}</Typography>
           <Button
             onClick={handleNextpage}
-            disabled={Math.ceil(length / 20) === pageIndex}
+            disabled={length === pageIndex}
             component={Link}
             to={`${path}&page=${pageIndex}`}
           >
             <ArrowForwardIosIcon
               style={{
-                color:
-                  Math.ceil(length / 20) === pageIndex ? grey[400] : grey[700],
+                color: length === pageIndex ? grey[400] : grey[700],
               }}
             />
           </Button>

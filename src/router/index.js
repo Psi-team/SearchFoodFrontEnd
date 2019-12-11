@@ -37,9 +37,9 @@ const Router = () => {
         <Route path="/register">
           <RegisterPage />
         </Route>
-        <PrivateRoute path="/search">
+        <Route path="/search">
           <Search />
-        </PrivateRoute>
+        </Route>
         <PrivateRoute path="/createStore">
           <CreateStorePage />
         </PrivateRoute>

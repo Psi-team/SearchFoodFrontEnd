@@ -26,7 +26,7 @@ const BottomBar = ({ pageIndex, length, path, setPageIndex }) => {
 
   return (
     <Toolbar className={classes.bottomBar}>
-      {calculatePageNumber(pageIndex, Math.ceil(length / 20)).map((num, idx) => (
+      {calculatePageNumber(pageIndex, length).map((num, idx) => (
         <Button
           key={idx}
           onClick={() => handleNumberClick(num)}

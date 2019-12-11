@@ -1,15 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { useLocation } from 'react-router';
 import { List, WindowScroller } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  makeStyles,
-  CircularProgress,
-  Container,
-  Grid,
-  useMediaQuery,
-} from '@material-ui/core';
+import { makeStyles, CircularProgress, Container, Grid, useMediaQuery } from '@material-ui/core';
 
 import SettingBar from './SettingBar';
 import StoreCardView from './StoreCardView';
@@ -32,16 +26,16 @@ const SearchPage = ({ loading, datas }) => {
   const path = `/search${location.search.split('&page')[0]}`;
   useEffect(() => {
     if (datas.length !== 0) {
-      const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
+      const newRangeDatas = datas.slice(24 * (pageIndex - 1), 24 * pageIndex);
       setCurrentData(newRangeDatas);
     }
   }, [pageIndex, datas]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (match) {
       setCurrentData(datas);
     } else {
-      const newRangeDatas = datas.slice(20 * (pageIndex - 1), 20 * pageIndex);
+      const newRangeDatas = datas.slice(24 * (pageIndex - 1), 24 * pageIndex);
       setCurrentData(newRangeDatas);
     }
   }, [match, datas, pageIndex]);
@@ -50,11 +44,9 @@ const SearchPage = ({ loading, datas }) => {
 
   function sortByStar(powerOperaton) {
     // TODO: 這邊直接對原本data做修改，不應該這樣處理，之後再回來調整
-    datas.sort((a, b) =>
-      a.star > b.star ? -1 * powerOperaton : 1 * powerOperaton
-    );
+    datas.sort((a, b) => (a.star > b.star ? -1 * powerOperaton : 1 * powerOperaton));
     if (pageIndex === 1) {
-      setCurrentData(datas.slice(0, 20));
+      setCurrentData(datas.slice(0, 24));
     } else {
       setPageIndex(1);
     }
@@ -63,7 +55,7 @@ const SearchPage = ({ loading, datas }) => {
   function sortByCreatedDate() {
     datas.sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1));
     if (pageIndex === 1) {
-      setCurrentData(datas.slice(0, 20));
+      setCurrentData(datas.slice(0, 24));
     } else {
       setPageIndex(1);
     }
@@ -84,7 +76,7 @@ const SearchPage = ({ loading, datas }) => {
       <SettingBar
         path={path}
         match={match}
-        length={datas.length}
+        length={Math.ceil(datas.length / 24)}
         pageIndex={pageIndex}
         setPageIndex={setPageIndex}
         sortByStar={sortByStar}
@@ -100,7 +92,7 @@ const SearchPage = ({ loading, datas }) => {
               isScrolling={isScrolling}
               onScroll={onChildScroll}
               rowCount={currentData.length}
-              rowHeight={500}
+              rowHeight={450}
               rowRenderer={rowRenderer}
               scrollTop={scrollTop}
               width={width - 32} //padding 16
@@ -116,7 +108,7 @@ const SearchPage = ({ loading, datas }) => {
         ''
       ) : (
         <BottomBar
-          length={datas.length}
+          length={Math.ceil(datas.length / 24)}
           pageIndex={pageIndex}
           setPageIndex={setPageIndex}
           path={path}
