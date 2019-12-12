@@ -5,6 +5,7 @@ export const userActions = {
   login,
   logout,
   register,
+  getUserLocation,
 };
 
 const LOGIN_REQUEST = 'LOGIN_REQUEST';
@@ -14,6 +15,8 @@ const LOGOUT = 'LOGOUT';
 const REGISTER_REQUEST = 'REGISTER_REQUEST';
 const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 const REGISTER_FAILURE = 'REGISTER_FAILURE';
+const GET_LOCATION_SUCCESS = 'GET_LOCATION_SUCCESS';
+const GET_LOCATION_FAILURE = 'GET_LOCATION_FAILURE';
 
 function login(username, password) {
   try {
@@ -80,4 +83,23 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
   } catch ({ message }) {
     return { type: REGISTER_FAILURE, error: message };
   }
+}
+
+function getUserLocation() {
+  return dispath => {
+    if (window.navigator.geolocation) {
+      window.navigator.geolocation.getCurrentPosition(
+        position => {
+          const { latitude, longitude } = position.coords;
+          console.log(latitude, longitude);
+          dispath({ type: GET_LOCATION_SUCCESS, location: { latitude, longitude } });
+        },
+        error => {
+          dispath({ type: GET_LOCATION_FAILURE });
+        }
+      );
+    } else {
+      dispath({ type: GET_LOCATION_FAILURE });
+    }
+  };
 }

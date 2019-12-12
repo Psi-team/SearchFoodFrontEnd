@@ -16,6 +16,7 @@ import red from '@material-ui/core/colors/red';
 import Rating from '@material-ui/lab/Rating';
 import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
 
+import { calcBusinessHours } from '../../../helpers/calcBusinessHours';
 function judgeIsNewOpen(createdDate) {
   return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
 }
@@ -123,6 +124,7 @@ const StoreCardView = ({ data }) => {
         </div>
         <Typography>{data.location}</Typography>
         <Typography color="textSecondary">{data.tel}</Typography>
+        <Typography color="textSecondary">{calcBusinessHours(data.businessHours)}</Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">

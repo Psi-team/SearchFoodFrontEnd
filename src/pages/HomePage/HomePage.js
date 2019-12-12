@@ -1,7 +1,9 @@
 import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Box, Typography } from '@material-ui/core';
+import { makeStyles, Box, Typography } from '@material-ui/core';
+import { connect } from 'react-redux';
 
+import { userActions } from '../../actions';
+import useMountEffect from '../../helpers/useMountEffect';
 const useStyles = makeStyles(theme => ({
   box: {
     background: `linear-gradient(115deg, #8887EB 50%, transparent 50%),
@@ -11,22 +13,29 @@ const useStyles = makeStyles(theme => ({
     flexDirection: 'column',
     alignContent: 'flex-start',
     justifyContent: 'center',
-    paddingLeft: '15%'
+    paddingLeft: '15%',
   },
   content: {
     fontStyle: 'italic',
-    fontWeight: '900'
-  }
+    fontWeight: '900',
+  },
 }));
 
-const HomePage = () => {
+const HomePage = ({ getUserLocation }) => {
   const classes = useStyles();
+  useMountEffect(() => getUserLocation());
 
   return (
     <Box className={classes.box}>
-      <Typography variant='h4' className={classes.content}>民以食為天</Typography>
+      <Typography variant="h4" className={classes.content}>
+        民以食為天
+      </Typography>
     </Box>
   );
-}
+};
 
-export default HomePage;
+const actionCreators = {
+  getUserLocation: userActions.getUserLocation,
+};
+
+export default connect(null, actionCreators)(HomePage);

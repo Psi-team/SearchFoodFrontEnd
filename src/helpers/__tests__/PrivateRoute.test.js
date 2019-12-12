@@ -6,12 +6,12 @@ import { Provider } from 'react-redux';
 import { render, getByText, cleanup } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 
-import reducer from '../reducers';
-import PrivateRoute from './PrivateRoute';
+import reducer from '../../reducers';
+import PrivateRoute from '../PrivateRoute';
 
 afterEach(() => cleanup);
 
-const MyComponent = ({ content }) => (<div>{content}</div>);
+const MyComponent = ({ content }) => <div>{content}</div>;
 
 const renderWithRedux = initState => {
   const store = createStore(reducer, initState);
@@ -22,17 +22,18 @@ const renderWithRedux = initState => {
     ...render(
       <Provider store={store}>
         <Router history={history}>
-          <Route path='/login'>
-            <MyComponent content='loginPage' />
+          <Route path="/login">
+            <MyComponent content="loginPage" />
           </Route>
-          <PrivateRoute path='/test'>
-            <MyComponent content='testPage' />
-          </PrivateRoute>,
+          <PrivateRoute path="/test">
+            <MyComponent content="testPage" />
+          </PrivateRoute>
+          ,
         </Router>
       </Provider>
     ),
-    store
-  }
+    store,
+  };
 };
 
 test('when username is undefined, it will redirect to login page', () => {

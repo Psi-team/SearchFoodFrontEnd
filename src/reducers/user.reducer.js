@@ -6,20 +6,33 @@ export const user = (state = initState, action) => {
   switch (action.type) {
     case 'LOGIN_REQUEST':
       return {
+        ...state,
         loggingIn: true,
-        loading: true
+        loading: true,
       };
     case 'LOGIN_SUCCESS':
       return {
-        ...action.user
+        ...state,
+        ...action.user,
       };
     case 'LOGIN_FAILURE':
       return {
-        error: action.error
-      }
+        ...state,
+        error: action.error,
+      };
     case 'LOGOUT':
       return {};
+    case 'GET_LOCATION_SUCCESS':
+      return {
+        ...state,
+        location: action.location,
+      };
+    case 'GET_LOCATION_FAILURE':
+      return {
+        ...state,
+        location: '',
+      };
     default:
       return state;
   }
-}
+};

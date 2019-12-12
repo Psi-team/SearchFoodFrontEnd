@@ -1,4 +1,4 @@
-import { calculatePageNumber } from './calculatePageNumber';
+import { calculatePageNumber } from '../calcPageNumber';
 
 it('test the pageNumber equals 1', () => {
   const result = calculatePageNumber(1, 1);

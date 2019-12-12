@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import { Toolbar, Button, makeStyles } from '@material-ui/core';
 
-import { calculatePageNumber } from '../../../helpers/calculatePageNumber';
+import { calculatePageNumber } from '../../../helpers/calcPageNumber';
 
 const useStyles = makeStyles(theme => ({
   bottomBar: {
