@@ -142,6 +142,14 @@ const SettingBar = ({
   );
 };
 
-SettingBar.propTypes = {};
+SettingBar.propTypes = {
+  path: PropTypes.string.isRequired,
+  length: PropTypes.number.isRequired,
+  match: PropTypes.bool.isRequired,
+  pageIndex: PropTypes.number.isRequired,
+  setPageIndex: PropTypes.func.isRequired,
+  sortByStar: PropTypes.func.isRequired,
+  sortByCreatedDate: PropTypes.func.isRequired,
+};
 
 export default SettingBar;

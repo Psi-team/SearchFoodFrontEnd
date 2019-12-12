@@ -8,8 +8,9 @@ import Header from '../components/Header';
 import HomePage from '../pages/HomePage';
 import LoginPage from '../pages/Login';
 import RegisterPage from '../pages/RegisterPage';
-import Search from '../pages/Search';
+import SearchPage from '../pages/Search';
 import CreateStorePage from '../pages/CreateStorePage';
+import StorePage from '../pages/Store';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -38,8 +39,11 @@ const Router = () => {
           <RegisterPage />
         </Route>
         <Route path="/search">
-          <Search />
+          <SearchPage />
         </Route>
+        <PrivateRoute path="/store:storename">
+          <StorePage />
+        </PrivateRoute>
         <PrivateRoute path="/createStore">
           <CreateStorePage />
         </PrivateRoute>

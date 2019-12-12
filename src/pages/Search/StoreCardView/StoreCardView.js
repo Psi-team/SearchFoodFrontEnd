@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import {
   Card,
@@ -33,6 +34,8 @@ const useStyles = makeStyles(theme => ({
   card: {
     transition: theme.transitions.create('all'),
     boxSizing: 'border-box',
+    textDecoration: 'none',
+    display: 'block',
     '&:hover': {
       // because background image size is 16:9, so the border should be the same.
       borderWidth: '2.8124px 5px',
@@ -96,7 +99,7 @@ const useStyles = makeStyles(theme => ({
 const StoreCardView = ({ data }) => {
   const classes = useStyles();
   return (
-    <Card className={classes.card}>
+    <Card className={classes.card} component={Link} to={`/store:${data.storename}`}>
       <div className={classes.mediaContainer}>
         <LazyLoad height={200} offset={-200} once>
           <Fade in={true} timeout={{ enter: 2000 }}>
