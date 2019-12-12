@@ -1,5 +1,11 @@
 import React, { useState } from 'react';
-import { Paper, InputBase, IconButton, Divider, makeStyles } from '@material-ui/core';
+import {
+  Paper,
+  InputBase,
+  IconButton,
+  Divider,
+  makeStyles,
+} from '@material-ui/core';
 import SearchIcon from '@material-ui/icons/Search';
 import { connect } from 'react-redux';
 import { useHistory, useLocation } from 'react-router';
@@ -50,7 +56,7 @@ const SearchInput = ({ searchStore }) => {
       return;
     }
 
-    searchStore(state);
+    searchStore({ ...state, city: state.city.split('-')[1] || '' });
   };
 
   useMountEffect(() => searchData());
@@ -81,7 +87,11 @@ const SearchInput = ({ searchStore }) => {
       />
       <Divider className={classes.divider} orientation="vertical" />
       <div className={classes.address}>
-        <AddressSelect city={state.city} district={state.district} handleChange={handleChange} />
+        <AddressSelect
+          city={state.city}
+          district={state.district}
+          handleChange={handleChange}
+        />
       </div>
       <Divider className={classes.divider} orientation="vertical" />
       <IconButton
