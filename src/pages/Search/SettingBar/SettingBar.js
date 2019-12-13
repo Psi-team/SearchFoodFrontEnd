@@ -46,7 +46,7 @@ const SettingBar = ({
   length,
   match,
   pageIndex,
-  setPageIndex,
+  changePageIndex,
   sortByStar,
   sortByCreatedDate,
 }) => {
@@ -62,22 +62,6 @@ const SettingBar = ({
     }
     setFavoriteName(e.target.value);
     setFilterTarget('star');
-  }
-
-  function handlePrevpage() {
-    if (pageIndex === 1) {
-      return;
-    }
-
-    setPageIndex(pageIndex - 1);
-  }
-
-  function handleNextpage() {
-    if (pageIndex + 1 === length) {
-      return;
-    }
-
-    setPageIndex(pageIndex + 1);
   }
 
   function handleCreatedDateClick() {
@@ -120,15 +104,24 @@ const SettingBar = ({
         ''
       ) : (
         <Grid container justify="flex-end" alignContent="center" className={classes.pageSettings}>
-          <Button onClick={handlePrevpage} component={Link} to={`${path}&page=${pageIndex}`}>
-            <ArrowBackIosIcon style={{ color: pageIndex === 1 ? grey[400] : grey[700] }} />
+          <Button
+            onClick={() => changePageIndex('prev')}
+            disabled={1 === pageIndex}
+            component={Link}
+            to={`${path}&page=${pageIndex - 1}`}
+          >
+            <ArrowBackIosIcon
+              style={{
+                color: pageIndex === 1 ? grey[400] : grey[700],
+              }}
+            />
           </Button>
           <Typography>{`${pageIndex}/${length}`}</Typography>
           <Button
-            onClick={handleNextpage}
+            onClick={() => changePageIndex('next')}
             disabled={length === pageIndex}
             component={Link}
-            to={`${path}&page=${pageIndex}`}
+            to={`${path}&page=${pageIndex + 1}`}
           >
             <ArrowForwardIosIcon
               style={{
@@ -147,7 +140,8 @@ SettingBar.propTypes = {
   length: PropTypes.number.isRequired,
   match: PropTypes.bool.isRequired,
   pageIndex: PropTypes.number.isRequired,
-  setPageIndex: PropTypes.func.isRequired,
+  handlePrevpage: PropTypes.func.isRequired,
+  handleNextpage: PropTypes.func.isRequired,
   sortByStar: PropTypes.func.isRequired,
   sortByCreatedDate: PropTypes.func.isRequired,
 };

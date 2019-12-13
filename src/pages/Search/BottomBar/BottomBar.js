@@ -17,10 +17,10 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const BottomBar = ({ pageIndex, length, path, setPageIndex }) => {
+const BottomBar = ({ pageIndex, length, path, changePageIndex }) => {
   const classes = useStyles();
   function handleNumberClick(num) {
-    setPageIndex(num);
+    changePageIndex('order', num);
     window.scrollTo(0, 0);
   }
 
@@ -47,7 +47,7 @@ BottomBar.propTypes = {
   pageIndex: PropTypes.number.isRequired,
   length: PropTypes.number.isRequired,
   path: PropTypes.string.isRequired,
-  setPageIndex: PropTypes.func.isRequired,
+  changePageIndex: PropTypes.func.isRequired,
 };
 
 export default BottomBar;

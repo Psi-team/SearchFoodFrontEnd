@@ -61,6 +61,22 @@ const SearchPage = ({ loading, datas }) => {
     }
   }
 
+  function changePageIndex(type, page) {
+    switch (type) {
+      case 'order':
+        setPageIndex(page);
+        break;
+      case 'prev':
+        setPageIndex(pageIndex === 1 ? pageIndex : pageIndex - 1);
+        break;
+      case 'next':
+        setPageIndex(pageIndex === datas.length - 1 ? pageIndex : pageIndex + 1);
+        break;
+      default:
+        throw new Error(`unknown type ${type}`);
+    }
+  }
+
   function rowRenderer({ key, index, style }) {
     return (
       <Grid key={key} item lg={3} md={4} sm={6} xs={12} style={style}>
@@ -78,7 +94,7 @@ const SearchPage = ({ loading, datas }) => {
         match={match}
         length={Math.ceil(datas.length / 24)}
         pageIndex={pageIndex}
-        setPageIndex={setPageIndex}
+        changePageIndex={changePageIndex}
         sortByStar={sortByStar}
         sortByCreatedDate={sortByCreatedDate}
       />
@@ -110,7 +126,7 @@ const SearchPage = ({ loading, datas }) => {
         <BottomBar
           length={Math.ceil(datas.length / 24)}
           pageIndex={pageIndex}
-          setPageIndex={setPageIndex}
+          changePageIndex={changePageIndex}
           path={path}
         />
       )}
