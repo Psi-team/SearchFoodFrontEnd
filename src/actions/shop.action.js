@@ -8,6 +8,7 @@ export const shopActions = {
   getStoreType,
   postStoreData,
   searchStoreData,
+  fetchStore,
 };
 
 const GET_COUNTY_REQUEST = 'GET_COUNTY_REQUEST';
@@ -24,7 +25,10 @@ const CREATE_STORE_SUCCESS = 'CREATE_STORE_SUCCESS';
 const CREATE_STORE_FAILURE = 'CREATE_STORE_FAILURE';
 const SEARCH_STORE_REQUEST = 'SEARCH_STORE_REQUEST';
 const SEARCH_STORE_SUCCESS = 'SEARCH_STORE_SUCCESS';
-const SEARCH_STORE_FAILURE = 'CREATE_STORE_FAILURE';
+const SEARCH_STORE_FAILURE = 'SEARCH_STORE_FAILURE';
+const FETCH_STORE_REQUEST = 'FETCH_STORE_REQUEST';
+const FETCH_STORE_SUCCESS = 'FETCH_STORE_SUCCESS';
+const FETCH_STORE_FAILURE = 'FETCH_STORE_FAILURE';
 
 function getCounty() {
   return dispatch => {
@@ -98,6 +102,23 @@ function searchStoreData(data) {
           type: SEARCH_STORE_FAILURE,
           error: error.response.data.message,
         })
+    );
+  };
+}
+
+function fetchStore(storeId) {
+  return dispatch => {
+    dispatch({ type: FETCH_STORE_REQUEST });
+    shopService.fetchStore(storeId).then(
+      data => {
+        dispatch({ type: FETCH_STORE_SUCCESS, payload: data.data });
+      },
+      error => {
+        dispatch({
+          type: FETCH_STORE_FAILURE,
+          error: error.response.data.message,
+        });
+      }
     );
   };
 }

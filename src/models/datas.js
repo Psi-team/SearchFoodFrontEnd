@@ -49,9 +49,46 @@ module.exports = () => {
       type: '炒飯',
       click_week: 1000,
       storeId: i,
-      createdDate: `2019-${Math.round(Math.random()) + 11}-${Math.floor(Math.random() * 30 + 1)}`,
+      createdDate: `2019-${Math.round(Math.random()) + 11}-${Math.floor(
+        Math.random() * 30 + 1
+      )}`,
     });
   }
 
+  data.storeDetail = {
+    storename: '肯德基',
+    type: ['速食', '甜點'],
+    star: 3,
+    slogan: '',
+    businessHours: {
+      星期一: timeArray[Math.round(Math.random() * 2)],
+      星期二: timeArray[Math.round(Math.random() * 2)],
+      星期三: timeArray[Math.round(Math.random() * 2)],
+      星期四: timeArray[Math.round(Math.random() * 2)],
+      星期五: timeArray[Math.round(Math.random() * 2)],
+      星期六: timeArray[Math.round(Math.random() * 2)],
+      星期日: timeArray[Math.round(Math.random() * 2)],
+    },
+    tel: '0912345678',
+    address: '新北市板橋民族路三段',
+    pictures: [
+      'https://picsum.photos/id/217/800/450',
+      'https://picsum.photos/id/204/800/450',
+      'https://picsum.photos/id/192/800/450',
+    ],
+    comments: [
+      {
+        createUser: 'Kai',
+        createDate: '2019-03-26',
+        contents:
+          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid consequatur eum voluptate debitis quaerat asperiores ratione optio in. In, dolorem expedita? Modi similique natus nemo consequuntur deleniti nisi distinctio at.',
+        pictures: [
+          'https://picsum.photos/id/237/800/450',
+          'https://picsum.photos/id/234/800/450',
+          'https://picsum.photos/id/232/800/450',
+        ],
+      },
+    ],
+  };
   return data;
 };

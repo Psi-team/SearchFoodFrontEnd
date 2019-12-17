@@ -1,23 +1,36 @@
-import React from "react";
+import React from 'react';
 import PropTypes from 'prop-types';
-import {makeStyles} from '@material-ui/core';
+import { connect } from 'react-redux';
 
-const useStyles = makeStyles(theme => ({
+import DetailView from './DetailView';
+import CommentsView from './CommentsView';
+import { Container, CircularProgress } from '@material-ui/core';
 
-}));
-
-const Store = () => {
-const classes = useStyles();
-
-return (
-<div>
-  hello
-</div>
-);
+const Store = ({ store, loading }) => {
+  return (
+    <Container>
+      {loading ? (
+        <CircularProgress />
+      ) : (
+        <>
+          <DetailView data={store} />
+          <CommentsView data={store.comments} />
+        </>
+      )}
+    </Container>
+  );
 };
 
 Store.propTypes = {
-
+  store: PropTypes.object,
+  loading: PropTypes.bool.isRequired,
 };
 
-export default Store;
+function mapStateToProp(state) {
+  return {
+    store: state.fetchStore.store,
+    loading: state.fetchStore.loading,
+  };
+}
+
+export default connect(mapStateToProp)(Store);

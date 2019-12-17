@@ -41,7 +41,7 @@ const Router = () => {
         <Route path="/search">
           <SearchPage />
         </Route>
-        <PrivateRoute path="/store:storename">
+        <PrivateRoute path="/storeDetail:storename">
           <StorePage />
         </PrivateRoute>
         <PrivateRoute path="/createStore">

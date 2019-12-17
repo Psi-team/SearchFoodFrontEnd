@@ -95,3 +95,27 @@ export const searchStore = (state = { loading: false, datas: [] }, action) => {
       return state;
   }
 };
+
+export const fetchStore = (state = { loading: false, store: null }, action) => {
+  switch (action.type) {
+    case 'FETCH_STORE_REQUEST':
+      return {
+        ...state,
+        loading: true,
+      };
+    case 'FETCH_STORE_SUCCESS':
+      return {
+        ...state,
+        loading: false,
+        store: action.payload,
+      };
+    case 'FETCH_STORE_FAILURE':
+      return {
+        ...state,
+        loading: false,
+        error: action.error,
+      };
+    default:
+      return state;
+  }
+};

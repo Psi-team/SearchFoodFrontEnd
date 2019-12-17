@@ -1,6 +1,16 @@
-import { apiGetStoreType, apiCreateStore, apiGetStores } from '../helpers/apis';
+import {
+  apiGetStoreType,
+  apiCreateStore,
+  apiGetStores,
+  apiGetStore,
+} from '../helpers/apis';
 
-export const shopService = { getStoreType, createStore, searchStore };
+export const shopService = {
+  getStoreType,
+  createStore,
+  searchStore,
+  fetchStore,
+};
 
 function getStoreType() {
   return apiGetStoreType();
@@ -18,4 +28,8 @@ function searchStore(data) {
     district: encodeURI(data.district),
   };
   return apiGetStores(encodeData);
+}
+
+function fetchStore(data) {
+  return apiGetStore({ store_id: data });
 }

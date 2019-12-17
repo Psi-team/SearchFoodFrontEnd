@@ -72,7 +72,13 @@ const SettingBar = ({
 
   return (
     <Toolbar>
-      <Grid container spacing={3} justify="flex-start" alignItems="center" wrap="nowrap">
+      <Grid
+        container
+        spacing={3}
+        justify="flex-start"
+        alignItems="center"
+        wrap="nowrap"
+      >
         <Grid item>
           <Button
             variant="outlined"
@@ -103,7 +109,12 @@ const SettingBar = ({
       {match ? (
         ''
       ) : (
-        <Grid container justify="flex-end" alignContent="center" className={classes.pageSettings}>
+        <Grid
+          container
+          justify="flex-end"
+          alignContent="center"
+          className={classes.pageSettings}
+        >
           <Button
             onClick={() => changePageIndex('prev')}
             disabled={1 === pageIndex}
@@ -140,8 +151,7 @@ SettingBar.propTypes = {
   length: PropTypes.number.isRequired,
   match: PropTypes.bool.isRequired,
   pageIndex: PropTypes.number.isRequired,
-  handlePrevpage: PropTypes.func.isRequired,
-  handleNextpage: PropTypes.func.isRequired,
+  changePageIndex: PropTypes.func.isRequired,
   sortByStar: PropTypes.func.isRequired,
   sortByCreatedDate: PropTypes.func.isRequired,
 };

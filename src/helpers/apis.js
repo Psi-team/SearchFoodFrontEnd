@@ -16,3 +16,6 @@ export const apiCreateStore = data => req('post', 'createStore', data);
 
 // search store
 export const apiGetStores = data => req('get', 'search', data);
+
+// fetch single store
+export const apiGetStore = data => req('get', 'storeDetail', data);

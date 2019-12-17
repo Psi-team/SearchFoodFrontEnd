@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import LazyLoad from 'react-lazyload';
 import {
   Card,
@@ -15,9 +16,14 @@ import {
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 import Rating from '@material-ui/lab/Rating';
-import { Favorite as FavoriteIcon, Share as ShareIcon } from '@material-ui/icons';
+import {
+  Favorite as FavoriteIcon,
+  Share as ShareIcon,
+} from '@material-ui/icons';
 
 import { calcBusinessHours } from '../../../helpers/calcBusinessHours';
+import { shopActions } from '../../../actions';
+
 function judgeIsNewOpen(createdDate) {
   return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
 }
@@ -96,14 +102,21 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const StoreCardView = ({ data }) => {
+const StoreCardView = ({ data, fetchStore }) => {
   const classes = useStyles();
   return (
-    <Card className={classes.card} component={Link} to={`/store:${data.storename}`}>
+    <Card
+      className={classes.card}
+      component={Link}
+      to={`/storeDetail:${data.storename}`}
+      onClick={() => fetchStore(data.storeId)}
+    >
       <div className={classes.mediaContainer}>
         <LazyLoad height={200} offset={-200} once>
           <Fade in={true} timeout={{ enter: 2000 }}>
-            <CardMedia image={`${require(`../../../assets/images/login.jpg`)}`} />
+            <CardMedia
+              image={`${require(`../../../assets/images/login.jpg`)}`}
+            />
           </Fade>
         </LazyLoad>
         {judgeIsNewOpen(data.createdDate) && <div>新上市</div>}
@@ -127,7 +140,9 @@ const StoreCardView = ({ data }) => {
         </div>
         <Typography>{data.location}</Typography>
         <Typography color="textSecondary">{data.tel}</Typography>
-        <Typography color="textSecondary">{calcBusinessHours(data.businessHours)}</Typography>
+        <Typography color="textSecondary">
+          {calcBusinessHours(data.businessHours)}
+        </Typography>
       </CardContent>
       <CardActions disableSpacing>
         <IconButton aria-label="add to favorites">
@@ -141,4 +156,8 @@ const StoreCardView = ({ data }) => {
   );
 };
 
-export default StoreCardView;
+const actionCreator = {
+  fetchStore: shopActions.fetchStore,
+};
+
+export default connect(null, actionCreator)(StoreCardView);
