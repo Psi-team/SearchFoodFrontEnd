@@ -59,7 +59,7 @@ module.exports = () => {
     storename: '肯德基',
     type: ['速食', '甜點'],
     star: 3,
-    slogan: '',
+    slogan: '沒吃過肯德基，別說過吃過速食',
     businessHours: {
       星期一: timeArray[Math.round(Math.random() * 2)],
       星期二: timeArray[Math.round(Math.random() * 2)],

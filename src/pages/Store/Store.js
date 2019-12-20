@@ -1,15 +1,26 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Container, CircularProgress } from '@material-ui/core';
 
 import DetailView from './DetailView';
 import CommentsView from './CommentsView';
-import { Container, CircularProgress } from '@material-ui/core';
+import { shopActions } from '../../actions';
+import useMountEffect from '../../helpers/useMountEffect';
+import { useParams } from 'react-router';
 
-const Store = ({ store, loading }) => {
+const Store = ({ store, loading, fetchStore }) => {
+  const param = useParams();
+  useMountEffect(() => {
+    if (loading || !store) {
+      const storeId = param.storename.split('-')[1];
+      fetchStore(storeId)
+    }
+  }, []);
+
   return (
     <Container>
-      {loading ? (
+      {loading || !store ? (
         <CircularProgress />
       ) : (
         <>
@@ -24,6 +35,7 @@ const Store = ({ store, loading }) => {
 Store.propTypes = {
   store: PropTypes.object,
   loading: PropTypes.bool.isRequired,
+  fetchStore: PropTypes.func.isRequired
 };
 
 function mapStateToProp(state) {
@@ -33,4 +45,8 @@ function mapStateToProp(state) {
   };
 }
 
-export default connect(mapStateToProp)(Store);
+const actionCreator = {
+  fetchStore: shopActions.fetchStore,
+};
+
+export default connect(mapStateToProp, actionCreator)(Store);

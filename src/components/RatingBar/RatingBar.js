@@ -5,23 +5,25 @@ import Rating from '@material-ui/lab/Rating';
 
 const useStyles = makeStyles(theme => ({
   rating: {
+    width: '100%',
     display: 'flex',
     alignItems: 'center',
-    marginTop: theme.spacing(2),
     '& > p': {
+      marginLeft: theme.spacing(0.5),
       letterSpacing: theme.spacing(0.1),
     },
   },
 }));
 
-const RatingBar = ({ rating, readOnly, className = '' }) => {
+const RatingBar = ({ rating, readOnly, className = '', handleChange=() => {} }) => {
   const classes = useStyles();
-
+  
   return (
     <div className={`${classes.rating} ${className}`}>
       <Rating
-        name="read-only"
+        name="star"
         value={rating}
+        onChange={handleChange}
         precision={0.1}
         readOnly={readOnly}
       />
@@ -36,6 +38,7 @@ RatingBar.propTypes = {
   rating: PropTypes.number.isRequired,
   readOnly: PropTypes.bool.isRequired,
   classes: PropTypes.string,
+  handleChange: PropTypes.func
 };
 
 export default RatingBar;

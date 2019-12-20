@@ -10,16 +10,9 @@ import {
   Avatar,
   CardContent,
   Typography,
-  // CardActions,
-  // IconButton,
   makeStyles,
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
-
-// import {
-//   Favorite as FavoriteIcon,
-//   Share as ShareIcon,
-// } from '@material-ui/icons';
 
 import { shopActions } from '../../../actions';
 import { calcBusinessHours } from '../../../helpers/calcBusinessHours';
@@ -104,7 +97,7 @@ const StoreCardView = ({ data, fetchStore }) => {
     <Card
       className={classes.card}
       component={Link}
-      to={`/storeDetail:${data.storename}`}
+      to={`/storeDetail:${data.storename}-${data.storeId}`}
       onClick={() => fetchStore(data.storeId)}
     >
       <div className={classes.mediaContainer}>
@@ -139,14 +132,6 @@ const StoreCardView = ({ data, fetchStore }) => {
           {calcBusinessHours(data.businessHours)}
         </Typography>
       </CardContent>
-      {/* <CardActions disableSpacing>
-        <IconButton aria-label="add to favorites">
-          <FavoriteIcon />
-        </IconButton>
-        <IconButton aria-label="share">
-          <ShareIcon />
-        </IconButton>
-      </CardActions> */}
     </Card>
   );
 };

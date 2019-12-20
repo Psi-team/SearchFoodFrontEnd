@@ -6,7 +6,14 @@ import {
   Typography,
   GridList,
   GridListTile,
+  Container,
+  IconButton,
+  Divider,
 } from '@material-ui/core';
+import {
+   Favorite as FavoriteIcon,
+   Share as ShareIcon,
+} from '@material-ui/icons';
 
 import RatingBar from '../../../components/RatingBar';
 
@@ -25,13 +32,30 @@ const useStyles = makeStyles(theme => ({
     transform: 'translateZ(0)',
   },
   rating: {
-    display: 'flex',
-    alignItems: 'center',
-    marginTop: theme.spacing(2),
-    '& > p': {
-      letterSpacing: theme.spacing(0.1),
-    },
+    marginBottom: theme.spacing(2)
   },
+  items: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'flex-end',
+    marginBottom: theme.spacing(2),
+    '& > p:first-child': {
+      marginRight: theme.spacing(2)
+    }
+  },
+  businessHours: {
+    display: 'flex',
+    fontSize: '',
+    '& > p:first-child': {
+      marginRight: theme.spacing(2)
+    },
+    marginBottom: theme.spacing(0.5)
+  },
+  bottomLinks: {
+    '& > button': {
+      float: "right"
+    }
+  }
 }));
 
 const DetailView = ({ data }) => {
@@ -43,8 +67,8 @@ const DetailView = ({ data }) => {
   }
 
   return (
-    <Grid container alignItems="center" spacing={3} className={classes.root}>
-      <Grid item md={7} sm={12} className={classes.mainImage}>
+    <Grid container spacing={3} className={classes.root} alignItems='stretch'>
+      <Grid item md={5} sm={12} xs={12} className={classes.mainImage}>
         <img src={data.pictures[imgIndex]} alt="store" />
         <GridList className={classes.gridList} cols={2}>
           {data.pictures.map((tile, idx) => (
@@ -57,10 +81,43 @@ const DetailView = ({ data }) => {
           ))}
         </GridList>
       </Grid>
-      <Grid item md={5} sm={12}>
-        <Typography variant="h1">{data.storename}</Typography>
-        <Typography variant="subtitle1">{data.type.join(',')}</Typography>
-        <RatingBar rating={data.star} readOnly={true} />
+      <Grid item md={7} sm={12} xs={12}>
+        <Typography variant="h2">{data.storename}</Typography>
+        <Container>
+          <Typography variant="subtitle2" paragraph>{data.slogan}</Typography>
+          <RatingBar rating={data.star} readOnly={true} className={classes.rating} />
+          <div className={classes.items}>
+            <Typography variant='body1'>類別: </Typography>
+            <Typography variant="body2">{data.type.join(',')}</Typography>
+          </div>
+          <div className={classes.items}>
+            <Typography variant='body1'>電話: </Typography>
+            <Typography variant="body2">{data.tel}</Typography>
+          </div>
+          <div className={classes.items}>
+            <Typography variant='body1'>地址: </Typography>
+            <Typography variant="body2">{data.address}</Typography>
+          </div>
+            <Typography variant="body1" paragraph>營業時間: </Typography>
+            {
+              Object.entries(data.businessHours).map(([key, val]) => (
+                <Container key={key.toString()} className={classes.businessHours}>
+                  <Typography variant='body2'>{key}: </Typography>
+                  <Typography variant='body2'>{val}</Typography>
+                </Container>
+              ))
+            }
+        </Container>
+        <Divider />
+        {/* TODO: share line and fb or ig link and keep favorate */}
+        <Container className={classes.bottomLinks}>
+          <IconButton aria-label="add to favorites">
+            <FavoriteIcon />
+          </IconButton>
+          <IconButton aria-label="share">
+            <ShareIcon />
+          </IconButton>
+        </Container>
       </Grid>
     </Grid>
   );
