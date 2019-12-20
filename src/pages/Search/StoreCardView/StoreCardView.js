@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
 import LazyLoad from 'react-lazyload';
 import {
   Card,
@@ -14,7 +13,6 @@ import {
 } from '@material-ui/core';
 import red from '@material-ui/core/colors/red';
 
-import { shopActions } from '../../../actions';
 import { calcBusinessHours } from '../../../helpers/calcBusinessHours';
 import RatingBar from '../../../components/RatingBar';
 
@@ -91,14 +89,13 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const StoreCardView = ({ data, fetchStore }) => {
+const StoreCardView = ({ data }) => {
   const classes = useStyles();
   return (
     <Card
       className={classes.card}
       component={Link}
       to={`/storeDetail:${data.storename}-${data.storeId}`}
-      onClick={() => fetchStore(data.storeId)}
     >
       <div className={classes.mediaContainer}>
         <LazyLoad height={200} offset={-200} once>
@@ -136,8 +133,4 @@ const StoreCardView = ({ data, fetchStore }) => {
   );
 };
 
-const actionCreator = {
-  fetchStore: shopActions.fetchStore,
-};
-
-export default connect(null, actionCreator)(StoreCardView);
+export default StoreCardView;
