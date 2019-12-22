@@ -14,6 +14,9 @@ import RatingBar from './RatingBar';
 import { shopActions } from '../redux/actions';
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    marginBottom: theme.spacing(5),
+  },
   messageBody: {
     display: 'flex',
     flexDirection: 'column',
@@ -142,7 +145,7 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
   }
 
   return (
-    <Container>
+    <Container className={classes.root}>
       <Typography variant="h4" paragraph>
         您的評論
       </Typography>
