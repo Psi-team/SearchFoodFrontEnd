@@ -19,3 +19,6 @@ export const apiGetStores = data => req('get', 'search', data);
 
 // fetch single store
 export const apiGetStore = data => req('get', 'storeDetail', data);
+
+// leave message
+export const apiLeaveMessage = data => req('post', 'leaveComment', data);

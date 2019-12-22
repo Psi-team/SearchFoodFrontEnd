@@ -5,11 +5,11 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import PrivateRoute from '../helpers/PrivateRoute';
 import Header from '../components/Header';
-import HomePage from '../pages/HomePage';
+import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
-import RegisterPage from '../pages/RegisterPage';
+import RegisterPage from '../pages/Register';
 import SearchPage from '../pages/Search';
-import CreateStorePage from '../pages/CreateStorePage';
+// import CreateStorePage from '../pages/CreateStore';
 import StorePage from '../pages/Store';
 
 const useStyles = makeStyles(() => ({
@@ -44,9 +44,9 @@ const Router = () => {
         <PrivateRoute path="/storeDetail:storename">
           <StorePage />
         </PrivateRoute>
-        <PrivateRoute path="/createStore">
+        {/* <PrivateRoute path="/createStore">
           <CreateStorePage />
-        </PrivateRoute>
+        </PrivateRoute> */}
       </Container>
     </BrowserRouter>
   );
