@@ -10,6 +10,7 @@ export const shopService = {
   createStore,
   searchStore,
   fetchStore,
+  createMessage,
 };
 
 function getStoreType() {
@@ -32,4 +33,9 @@ function searchStore(data) {
 
 function fetchStore(data) {
   return apiGetStore({ store_id: data });
+}
+
+function createMessage(data) {
+  console.log(data);
+  return Promise.resolve('success');
 }

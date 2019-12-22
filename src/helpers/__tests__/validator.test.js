@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 
-import { validator } from './validator';
+import { validator } from '../validator';
 
 describe('test validator cases', () => {
   afterEach(() => (initState = {}));
@@ -17,15 +17,26 @@ describe('test validator cases', () => {
   });
 
   test('test register validator', () => {
-    initState = { type: 'register', data: { email: '', passwd1: '', passwd2: '' } };
+    initState = {
+      type: 'register',
+      data: { email: '', passwd1: '', passwd2: '' },
+    };
     expect(validatorWrap).toThrowError(/不得空白/);
     initState.data = { email: '123', passwd1: '123', passwd2: '1' };
     expect(validatorWrap).toThrowError(/帳號格式錯誤/);
     initState.data = { email: 'test@test.com', passwd1: '123', passwd2: '123' };
     expect(validatorWrap).toThrowError(/密碼長度/);
-    initState.data = { email: 'test@test.com', passwd1: '123456', passwd2: '1234567' };
+    initState.data = {
+      email: 'test@test.com',
+      passwd1: '123456',
+      passwd2: '1234567',
+    };
     expect(validatorWrap).toThrowError(/密碼不相同/);
-    initState.data = { email: 'test@test.com', passwd1: '123456', passwd2: '123456' };
+    initState.data = {
+      email: 'test@test.com',
+      passwd1: '123456',
+      passwd2: '123456',
+    };
     expect(validatorWrap).not.toThrow();
   });
 

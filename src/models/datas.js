@@ -80,6 +80,43 @@ module.exports = () => {
       {
         createUser: 'Kai',
         createDate: '2019-03-26',
+        star: 3,
+        contents:
+          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid consequatur eum voluptate debitis quaerat asperiores ratione optio in. In, dolorem expedita? Modi similique natus nemo consequuntur deleniti nisi distinctio at.',
+        pictures: [
+          'https://picsum.photos/id/237/800/450',
+          'https://picsum.photos/id/234/800/450',
+          'https://picsum.photos/id/232/800/450',
+        ],
+      },
+      {
+        createUser: 'Eai',
+        createDate: '2019-03-26',
+        star: 2,
+        contents:
+          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid consequatur eum voluptate debitis quaerat asperiores ratione optio in. In, dolorem expedita? Modi similique natus nemo consequuntur deleniti nisi distinctio at.',
+        pictures: [
+          'https://picsum.photos/id/237/800/450',
+          'https://picsum.photos/id/234/800/450',
+          'https://picsum.photos/id/232/800/450',
+        ],
+      },
+      {
+        createUser: 'Wri',
+        createDate: '2019-03-26',
+        star: 3.3,
+        contents:
+          'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid consequatur eum voluptate debitis quaerat asperiores ratione optio in. In, dolorem expedita? Modi similique natus nemo consequuntur deleniti nisi distinctio at.',
+        pictures: [
+          'https://picsum.photos/id/237/800/450',
+          'https://picsum.photos/id/234/800/450',
+          'https://picsum.photos/id/232/800/450',
+        ],
+      },
+      {
+        createUser: 'Aai',
+        createDate: '2019-03-26',
+        star: 4.2,
         contents:
           'Lorem ipsum dolor sit, amet consectetur adipisicing elit. Aliquid consequatur eum voluptate debitis quaerat asperiores ratione optio in. In, dolorem expedita? Modi similique natus nemo consequuntur deleniti nisi distinctio at.',
         pictures: [

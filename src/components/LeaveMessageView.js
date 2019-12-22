@@ -75,7 +75,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LeaveMessageView = ({ createMessage }) => {
+const LeaveMessageView = ({ createMessage, storeId, username }) => {
   const classes = useStyles();
   const [commentData, setCommentData] = useState({
     star: 0,
@@ -136,7 +136,7 @@ const LeaveMessageView = ({ createMessage }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    // createMessage(commentData);
+    createMessage({ ...commentData, storeId, username });
   }
 
   return (
@@ -199,11 +199,19 @@ const LeaveMessageView = ({ createMessage }) => {
 };
 
 LeaveMessageView.propTypes = {
+  username: PropTypes.string.isRequired,
+  storeId: PropTypes.string.isRequired,
   createMessage: PropTypes.func.isRequired,
 };
+
+function mapStateToProp(state) {
+  return {
+    username: state.user.username,
+  };
+}
 
 const actionCreator = {
   createMessage: shopActions.createMessage,
 };
 
-export default connect(null, actionCreator)(LeaveMessageView);
+export default connect(mapStateToProp, actionCreator)(LeaveMessageView);

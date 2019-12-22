@@ -103,7 +103,7 @@ function fetchStore(storeId) {
 function createMessage(data) {
   return dispatch => {
     dispatch({ type: CREATE_MESSAGE_REQUEST });
-    shopService.leaveMessage(data).then(
+    shopService.createMessage(data).then(
       data => {
         dispatch({ type: CREATE_MESSAGE_SUCCESS });
       },

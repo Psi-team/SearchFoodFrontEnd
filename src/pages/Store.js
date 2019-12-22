@@ -8,15 +8,14 @@ import useMountEffect from '../helpers/useMountEffect';
 import { shopActions } from '../redux/actions';
 import DetailView from '../components/DetailView';
 import LeaveMessage from '../components/LeaveMessageView';
-// import MessageView from '../components/MessageView';
+import MessageView from '../components/MessageView';
 
 const Store = ({ store, loading, fetchStore }) => {
-  console.log(store);
   const param = useParams();
   const isFetching = loading || Object.keys(store).length === 0;
+  const storeId = param.storename.split('-')[1];
   useMountEffect(() => {
     if (isFetching) {
-      const storeId = param.storename.split('-')[1];
       fetchStore(storeId);
     }
   }, []);
@@ -28,8 +27,8 @@ const Store = ({ store, loading, fetchStore }) => {
       ) : (
         <>
           <DetailView data={store} />
-          <LeaveMessage />
-          {/* <MessageView data={store.comments} /> */}
+          <LeaveMessage storeId={storeId} />
+          <MessageView data={store.comments} />
         </>
       )}
     </Container>

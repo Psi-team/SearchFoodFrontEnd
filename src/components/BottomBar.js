@@ -21,7 +21,6 @@ const BottomBar = ({ pageIndex, length, path, changePageIndex }) => {
   const classes = useStyles();
   function handleNumberClick(num) {
     changePageIndex('order', num);
-    window.scrollTo(0, 0);
   }
 
   return (

@@ -4,6 +4,7 @@ import { CssBaseline, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 
 import PrivateRoute from '../helpers/PrivateRoute';
+import ScrollToTop from '../helpers/ScrollToTop';
 import Header from '../components/Header';
 import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
@@ -27,6 +28,7 @@ const Router = () => {
   return (
     <BrowserRouter>
       <CssBaseline />
+      <ScrollToTop />
       <Container className={classes.container} maxWidth="xl">
         <Header />
         <Route exact path="/">
