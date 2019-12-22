@@ -3,6 +3,7 @@ import {
   apiCreateStore,
   apiGetStores,
   apiGetStore,
+  apiLeaveMessage,
 } from '../helpers/apis';
 
 export const shopService = {
@@ -36,6 +37,13 @@ function fetchStore(data) {
 }
 
 function createMessage(data) {
-  console.log(data);
-  return Promise.resolve('success');
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, val]) => {
+    if (key === 'pic') {
+      formData.append(`${key}[]`, val);
+    } else {
+      formData.append(key, val);
+    }
+  });
+  return apiLeaveMessage(formData);
 }

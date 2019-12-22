@@ -7,6 +7,8 @@ module.exports = () => {
       速食: ['麥當勞', '肯德基', '頂呱呱', '胖老爹'],
     },
     search: [],
+    createComment: {},
+    signup: {},
   };
   const names = [
     '炒飯',
@@ -127,5 +129,6 @@ module.exports = () => {
       },
     ],
   };
+
   return data;
 };

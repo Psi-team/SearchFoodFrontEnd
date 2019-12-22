@@ -39,7 +39,7 @@ const instance = axios.create();
 
 const { token } = JSON.parse(localStorage.getItem('user')) || {};
 
-if (token) instance.defaults.headers.common['Authorization'] = ` Token ${token}`;
+if (token) instance.defaults.headers.common['Authorization'] = token;
 
 //  request攔截器
 instance.interceptors.request.use(
@@ -79,7 +79,19 @@ instance.interceptors.response.use(
 
 export default (method, url, data = null) => {
   method = method.toLowerCase();
-  if (method === 'post') {
+  if (url === 'createComment') {
+    console.log('tt');
+    return axios({
+      method: method,
+      baseURL: process.env.REACT_APP_API_URL,
+      url: url,
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: token,
+      },
+      data: data,
+    });
+  } else if (method === 'post') {
     return instance.post(url, data);
   } else if (method === 'get') {
     return instance.get(url, { params: data });

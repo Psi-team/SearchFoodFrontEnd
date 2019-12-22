@@ -5,7 +5,18 @@ export const userService = { login, logout, register };
 function login(username, passwd) {
   const browser = getUserBrowser();
 
-  return apiLogin({ username, passwd, browser });
+  if (process.env.REACT_APP_ENV) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const user = { data: { username: 'test', token: 'adawrq31312eda' } };
+        localStorage.setItem('user', JSON.stringify(user.data));
+        if (username !== 'admin' || passwd !== 'admin')
+          return reject({ response: { data: { message: '帳號或密碼錯誤' } } });
+
+        return resolve(user);
+      }, 2000);
+    });
+  } else return apiLogin({ username, passwd, browser });
 }
 
 function logout() {

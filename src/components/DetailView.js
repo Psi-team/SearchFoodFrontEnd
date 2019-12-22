@@ -27,17 +27,28 @@ const useStyles = makeStyles(theme => ({
       width: '100%',
     },
   },
+  storeInfo: {
+    [theme.breakpoints.down('sm')]: {
+      textAlign: 'center',
+    },
+  },
   gridList: {
     flexWrap: 'nowrap',
     transform: 'translateZ(0)',
   },
   rating: {
     marginBottom: theme.spacing(2),
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
   },
   items: {
     width: '100%',
     display: 'flex',
     alignItems: 'flex-end',
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
     marginBottom: theme.spacing(2),
     '& > p:first-child': {
       marginRight: theme.spacing(2),
@@ -50,6 +61,9 @@ const useStyles = makeStyles(theme => ({
       marginRight: theme.spacing(2),
     },
     marginBottom: theme.spacing(0.5),
+    [theme.breakpoints.down('sm')]: {
+      justifyContent: 'center',
+    },
   },
   bottomLinks: {
     '& > button': {
@@ -81,8 +95,10 @@ const DetailView = ({ data }) => {
           ))}
         </GridList>
       </Grid>
-      <Grid item md={7} sm={12} xs={12}>
-        <Typography variant="h2">{data.storename}</Typography>
+      <Grid item md={7} sm={12} xs={12} className={classes.storeInfo}>
+        <Typography variant="h2" paragraph>
+          {data.storename}
+        </Typography>
         <Container>
           <Typography variant="subtitle2" paragraph>
             {data.slogan}

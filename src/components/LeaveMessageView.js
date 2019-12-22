@@ -7,6 +7,7 @@ import {
   TextareaAutosize,
   Typography,
   Button,
+  CircularProgress,
 } from '@material-ui/core';
 
 import RatingBar from './RatingBar';
@@ -29,6 +30,7 @@ const useStyles = makeStyles(theme => ({
   },
   textarea: {
     width: '100%',
+    fontSize: 18,
     resize: 'none',
   },
   uploadImgBtn: {
@@ -75,7 +77,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LeaveMessageView = ({ createMessage, storeId, username }) => {
+const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
   const classes = useStyles();
   const [commentData, setCommentData] = useState({
     star: 0,
@@ -185,20 +187,25 @@ const LeaveMessageView = ({ createMessage, storeId, username }) => {
           上傳圖片
         </Button>
         <div className={classes.imgs} ref={imgsRef}></div>
-        <Button
-          type="submit"
-          variant="contained"
-          color="primary"
-          className={classes.button}
-        >
-          送出
-        </Button>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            className={classes.button}
+          >
+            送出
+          </Button>
+        )}
       </Container>
     </Container>
   );
 };
 
 LeaveMessageView.propTypes = {
+  loading: PropTypes.bool.isRequired,
   username: PropTypes.string.isRequired,
   storeId: PropTypes.string.isRequired,
   createMessage: PropTypes.func.isRequired,
@@ -207,6 +214,7 @@ LeaveMessageView.propTypes = {
 function mapStateToProp(state) {
   return {
     username: state.user.username,
+    loading: state.createMessage.loading,
   };
 }
 

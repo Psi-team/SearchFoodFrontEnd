@@ -106,6 +106,7 @@ function createMessage(data) {
     shopService.createMessage(data).then(
       data => {
         dispatch({ type: CREATE_MESSAGE_SUCCESS });
+        window.location.reload();
       },
       error => {
         dispatch({
