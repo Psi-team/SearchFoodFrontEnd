@@ -28,7 +28,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "plop": "plop"
+    "plop": "plop",
+    "server": "json-server src/models/datas.js --port=3021"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -70,6 +70,9 @@ const AddressSelect = ({
         }}
         variant="outlined"
       >
+        <MenuItem key="countyAll" value="">
+          全部
+        </MenuItem>
         {addressInfo.county.map(({ countyname, countycode }) => (
           <MenuItem key={countycode} value={`${countycode}-${countyname}`}>
             {countyname}
@@ -91,6 +94,9 @@ const AddressSelect = ({
         variant="outlined"
         disabled={city ? false : true}
       >
+        <MenuItem key="districtAll" value="">
+          全部
+        </MenuItem>
         {addressInfo.district.map(({ towncode, townname }) => (
           <MenuItem key={towncode} value={townname.join()}>
             {townname.join()}

@@ -41,7 +41,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SearchInput = ({ searchStors }) => {
+const SearchInput = ({ className, searchStors }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -76,7 +76,7 @@ const SearchInput = ({ searchStors }) => {
   };
 
   return (
-    <Paper className={classes.root}>
+    <Paper className={`${classes.root} ${className}`}>
       <InputBase
         value={state.foodType}
         onChange={handleChange}

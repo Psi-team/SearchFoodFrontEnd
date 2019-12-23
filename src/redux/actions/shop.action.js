@@ -2,9 +2,9 @@ import { shopService, externalService } from '../../services';
 import { validator } from '../../helpers/validator';
 import { history } from '../../helpers/history';
 import {
-  GET_STORE_TYPE_REQUEST,
-  GET_STORE_TYPE_SUCCESS,
-  GET_STORE_TYPE_FAILURE,
+  GET_STORETYPE_REQUEST,
+  GET_STORETYPE_SUCCESS,
+  GET_STORETYPE_FAILURE,
   CREATE_STORE_REQUEST,
   CREATE_STORE_SUCCESS,
   CREATE_STORE_FAILURE,
@@ -29,10 +29,10 @@ export const shopActions = {
 
 function getStoreType() {
   return dispatch => {
-    dispatch({ type: GET_STORE_TYPE_REQUEST });
+    dispatch({ type: GET_STORETYPE_REQUEST });
     shopService.getStoreType().then(
-      data => dispatch({ type: GET_STORE_TYPE_SUCCESS, payload: data.data }),
-      error => dispatch({ type: GET_STORE_TYPE_FAILURE, payload: error })
+      data => dispatch({ type: GET_STORETYPE_SUCCESS, payload: data.data }),
+      error => dispatch({ type: GET_STORETYPE_FAILURE, payload: error })
     );
   };
 }
@@ -74,11 +74,12 @@ function searchStores(data) {
       data => {
         dispatch({ type: SEARCH_STORE_SUCCESS, payload: data.data });
       },
-      error =>
+      error => {
         dispatch({
           type: SEARCH_STORE_FAILURE,
           payload: error.response.data.message,
-        })
+        });
+      }
     );
   };
 }

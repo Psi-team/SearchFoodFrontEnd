@@ -1,11 +1,15 @@
 import req from './https';
 
-// login method should be post
+// login
 export const apiLogin = data => req('post', 'login', data);
 
+// signup
 export const apiSignup = data => req('post', 'signup', data);
 
-// logout method should be post
+// reset password
+export const apiResetPassword = data => req('post', 'resetPassword', data);
+
+// logout
 export const apiLogout = data => req('post', 'logout', data);
 
 // get store type

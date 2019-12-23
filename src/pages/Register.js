@@ -1,43 +1,27 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
-  Box,
-  TextField,
-  Button,
   Typography,
-  FormControl,
-  InputLabel,
-  Select,
-  CircularProgress,
+  OutlinedInput,
+  TextField,
+  FormControlLabel,
+  Radio,
+  RadioGroup,
+  MenuItem,
+  Button,
+  makeStyles,
 } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
 
 import { connect } from 'react-redux';
 
 import { userActions } from '../redux/actions';
+import AccountView from '../components/AccountView';
+import Loading from '../components/Loading';
 
 const useStyles = makeStyles(theme => ({
-  container: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
-  textField: {
-    marginLeft: theme.spacing(1),
-    marginRight: theme.spacing(1),
-  },
-  dense: {
-    marginTop: theme.spacing(2),
-  },
-  button: {
-    margin: theme.spacing(1),
-  },
-  formControl: {
-    margin: theme.spacing(1),
-    minWidth: 120,
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
+  radios: {
+    flexDirection: 'row',
+    paddingLeft: theme.spacing(2),
+    color: theme.palette.secondary.light,
   },
 }));
 
@@ -46,132 +30,113 @@ const yearOptions = () => {
   const arr = [];
   for (let i = nowYear - 100; i < nowYear; i++)
     arr.push(
-      <option key={i.toString()} value={i}>
+      <MenuItem key={i.toString()} value={i}>
         {i}
-      </option>
+      </MenuItem>
     );
 
   return arr;
 };
 
-const Register = props => {
+const Register = ({ loading, register, error }) => {
   const classes = useStyles();
-  const inputLabel = useRef(null);
   const [state, setState] = useState({
     email: '',
+    nickname: '',
     passwd1: '',
     passwd2: '',
     birthYear: '',
-    sexual: 0,
+    sexual: '0',
   });
-  const [labelWidth, setLabelWidth] = useState(0);
-  useEffect(() => {
-    setLabelWidth(inputLabel.current.offsetWidth);
-  }, []);
 
-  const handleChange = e =>
+  const handleChange = e => {
     setState({ ...state, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
-    props.register({ ...state });
+    register({ ...state });
   };
 
   return (
-    <form
-      className={classes.container}
-      autoComplete="off"
-      //It cancels the html5 default validation.
-      noValidate
-      onSubmit={handleSubmit}
-    >
-      <Typography variant="h3">註冊</Typography>
-      <TextField
-        id="filled-email-input"
-        label="email"
-        type="email"
-        className={classes.textField}
+    <AccountView handleSubmit={handleSubmit}>
+      <Typography variant="h4" color="primary" align="center" paragraph>
+        註冊
+      </Typography>
+      <RadioGroup
+        aria-label="sexual"
+        name="sexual"
+        value={state.sexual}
+        onChange={handleChange}
+        className={classes.radios}
+      >
+        <FormControlLabel value="0" control={<Radio />} label="Male" />
+        <FormControlLabel value="1" control={<Radio />} label="Female" />
+      </RadioGroup>
+      <OutlinedInput
+        autoComplete="off"
         value={state.email}
         onChange={handleChange}
         name="email"
-        margin="normal"
-        variant="filled"
+        placeholder="email"
+        fullWidth
+        required
+      />
+      <OutlinedInput
+        autoComplete="off"
+        value={state.nickname}
+        onChange={handleChange}
+        name="nickname"
+        placeholder="暱稱"
+        fullWidth
+        required
+      />
+      <OutlinedInput
+        autoComplete="off"
+        type="password"
+        value={state.passwd1}
+        onChange={handleChange}
+        name="passwd1"
+        placeholder="password"
+        fullWidth
+        required
+      />
+      <OutlinedInput
+        autoComplete="off"
+        type="password"
+        value={state.passwd2}
+        onChange={handleChange}
+        name="passwd2"
+        placeholder="password"
+        fullWidth
         required
       />
       <TextField
-        id="filled-password1-input"
-        label="password"
-        type="password"
+        select
+        label={state.birthYear === '' ? '出生年' : ''}
         className={classes.textField}
-        value={state.passwd1}
+        value={state.birthYear}
+        name="birthYear"
         onChange={handleChange}
-        margin="normal"
-        variant="filled"
-        name="passwd1"
-      />
-      <TextField
-        id="filled-password2-input"
-        label="password"
-        type="password"
-        className={classes.textField}
-        value={state.passwd2}
-        onChange={handleChange}
-        margin="normal"
-        variant="filled"
-        name="passwd2"
-      />
-
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} htmlFor="outlined-birthYear-native-simple">
-          BirthYear
-        </InputLabel>
-        <Select
-          native
-          value={state.birthYear}
-          onChange={handleChange}
-          labelWidth={labelWidth}
-          inputProps={{
-            name: 'birthYear',
-            id: 'outlined-birthYear-native-simple',
-          }}
-        >
-          <option value="" disabled></option>
-          {yearOptions()}
-        </Select>
-      </FormControl>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel ref={inputLabel} htmlFor="outlined-sex-native-simple">
-          Sex
-        </InputLabel>
-        <Select
-          native
-          value={state.sexual}
-          onChange={handleChange}
-          labelWidth={labelWidth}
-          inputProps={{
-            name: 'sexual',
-            id: 'outlined-sex-native-simple',
-          }}
-        >
-          <option value={0}>man</option>
-          <option value={1}>woman</option>
-        </Select>
-      </FormControl>
-      {props.error && (
-        <Typography variant="h6" color="error">
-          {props.error}
+        InputLabelProps={{ shrink: false }}
+        InputProps={{
+          className: classes.input,
+        }}
+        variant="outlined"
+        fullWidth
+      >
+        {yearOptions()}
+      </TextField>
+      {error && (
+        <Typography variant="h6" color="error" align="center" paragraph>
+          {error}
         </Typography>
       )}
-      {props.loading ? (
-        <CircularProgress className={classes.progress} />
-      ) : (
-        <Box>
-          <Button variant="contained" className={classes.button} type="submit">
-            註冊
-          </Button>
-        </Box>
-      )}
-    </form>
+      <Button size="large" fullWidth variant="contained" type="submit">
+        送出
+      </Button>
+      <Loading loading={loading} />
+    </AccountView>
   );
 };
 

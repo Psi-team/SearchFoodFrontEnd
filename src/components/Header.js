@@ -16,7 +16,6 @@ import { AccountCircle, Menu as MenuIcon } from '@material-ui/icons';
 import { connect } from 'react-redux';
 
 import { userActions } from '../redux/actions';
-import SearchInput from './SearchInput';
 
 const useStyles = makeStyles(theme => ({
   toolbar: {
@@ -70,65 +69,49 @@ const Header = ({ loggedIn, username, logout }) => {
   return (
     <AppBar position="static" color="secondary">
       <Toolbar className={classes.toolbar}>
-        <Hidden xsDown>
-          <Typography
-            className={classes.title}
-            component={Link}
-            to="/"
-            color="inherit"
-          >
-            Food
-          </Typography>
-        </Hidden>
-        <Grid
-          container
-          justify="space-between"
-          alignItems="center"
-          wrap="nowrap"
-          spacing={2}
+        {/* <Hidden xsDown> */}
+        <Typography
+          className={classes.title}
+          component={Link}
+          to="/"
+          color="inherit"
         >
-          <Grid item xs={10}>
-            <SearchInput />
-          </Grid>
-          <Grid
-            container
-            wrap="nowrap"
-            item
-            xs={2}
-            alignItems="center"
-            justify="flex-end"
-          >
-            {!loggedIn ? (
-              <Button
-                className={classes.button}
-                component={Link}
-                to="/login"
-                color="inherit"
-              >
-                登入
-              </Button>
-            ) : (
-              <>
-                <Hidden smDown>
-                  <Grid item xs={7}>
-                    <Typography variant="subtitle1">{username}</Typography>
-                  </Grid>
-                  <Grid item xs={5}>
-                    <IconButton onClick={handleMenu} color="inherit">
-                      <AccountCircle />
-                    </IconButton>
-                  </Grid>
-                </Hidden>
-                <Hidden mdUp>
-                  <Grid item container justify="flex-end">
-                    <IconButton onClick={handleMenu} color="inherit">
-                      <MenuIcon />
-                    </IconButton>
-                  </Grid>
-                </Hidden>
-              </>
-            )}
-          </Grid>
+          Food
+        </Typography>
+        {/* </Hidden> */}
+        <Grid container justify="flex-end" alignItems="center" wrap="nowrap">
+          {!loggedIn ? (
+            <Button
+              className={classes.button}
+              component={Link}
+              to="/login"
+              color="inherit"
+            >
+              登入
+            </Button>
+          ) : (
+            <>
+              <Hidden smDown>
+                <Grid item xs={10}>
+                  <Typography variant="subtitle1" align="right">
+                    {username}
+                  </Typography>
+                </Grid>
+                <Grid item xs={2}>
+                  <IconButton onClick={handleMenu} color="inherit">
+                    <AccountCircle />
+                  </IconButton>
+                </Grid>
+              </Hidden>
+              <Hidden mdUp>
+                <Grid item container justify="flex-end">
+                  <IconButton onClick={handleMenu} color="inherit">
+                    <MenuIcon />
+                  </IconButton>
+                </Grid>
+              </Hidden>
+            </>
+          )}
         </Grid>
         <Menu
           anchorEl={anchorEl}

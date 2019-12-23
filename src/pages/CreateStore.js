@@ -7,13 +7,17 @@ import {
   DialogTitle,
   DialogActions,
   makeStyles,
+  Container,
+  Paper,
+  Typography,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { shopActions, externalActions } from '../redux/actions';
-import StoreBasicInfo from '../components/StoreBasicInfo';
-import BusinessHours from '../components/BusinessHours';
+import useMountEffect from '../helpers/useMountEffect';
+// import StoreBasicInfo from '../components/StoreBasicInfo';
+// import BusinessHours from '../components/BusinessHours';
 
 const initState = {
   storename: '',
@@ -76,6 +80,10 @@ const reducer = (state, action) => {
 };
 
 const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3),
+    marginTop: theme.spacing(5),
+  },
   buttons: {
     width: '100%',
     display: 'flex',
@@ -105,23 +113,32 @@ const CreateStorePage = ({
   getDistrict,
   getStoreType,
   addressInfo,
-  createStore,
+  types,
   postStoreData,
 }) => {
   const [open, setOpen] = useState(false);
   const [state, setState] = useReducer(reducer, initState);
   const history = useHistory();
   const classes = useStyles();
-  useEffect(() => {
-    getCounty();
-    getStoreType();
-  }, [getCounty, getStoreType]);
-
-  useEffect(() => {
-    if (state.city) {
-      getDistrict(state.city.split('-')[0]);
+  useMountEffect(() => {
+    if (addressInfo.county.length === 0) {
+      getCounty();
     }
-  }, [state.city, getDistrict]);
+
+    if (types.length === 0) {
+      getStoreType();
+    }
+  });
+  // useEffect(() => {
+  //   getCounty();
+  //   getStoreType();
+  // }, [getCounty, getStoreType]);
+
+  // useEffect(() => {
+  //   if (state.city) {
+  //     getDistrict(state.city.split('-')[0]);
+  //   }
+  // }, [state.city, getDistrict]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -138,72 +155,95 @@ const CreateStorePage = ({
     setOpen(false);
   };
 
-  return addressInfo.loading ? (
-    <CircularProgress />
-  ) : (
-    <>
-      <form onSubmit={handleSubmit} noValidate>
-        <Grid container>
-          <Grid item xs={12} sm={6}>
-            <StoreBasicInfo
-              state={state}
-              setState={setState}
-              storeInfo={addressInfo}
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <BusinessHours state={state.businessHours} setState={setState} />
-          </Grid>
-          <div className={classes.buttons}>
-            <Button variant="contained" className={classes.button}>
-              取消
-            </Button>
-            <Button
-              variant="contained"
-              className={`${classes.button} ${classes.submit}`}
-              type="submit"
-            >
-              送出
-            </Button>
-          </div>
+  return (
+    <Paper component={Container} className={classes.root} spacing={3}>
+      <Typography variant="h3" paragraph align="center">
+        新增店家
+      </Typography>
+      <Grid container>
+        <Grid item md={6}>
+          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam
+          quisquam iste dolorum dolorem perspiciatis. Porro qui nesciunt officia
+          voluptas asperiores ut reprehenderit dicta magni nostrum, iste
+          perspiciatis similique! Voluptate, eos.
         </Grid>
-      </form>
-      <Dialog open={open}>
-        {/* TODO: 建立成功繼續新增的話，欄位需清空，另需加入loading */}
-        {createStore.error ? (
-          <>
-            <DialogTitle>{createStore.error}</DialogTitle>
-            <DialogActions>
-              <Button color="primary" onClick={backToHomePage}>
-                取消建立
-              </Button>
-              <Button color="primary" autoFocus onClick={staySamePage}>
-                修改
-              </Button>
-            </DialogActions>
-          </>
-        ) : (
-          <>
-            <DialogTitle>新增成功</DialogTitle>
-            <DialogActions>
-              <Button color="primary" onClick={staySamePage}>
-                繼續新增
-              </Button>
-              <Button color="primary" autoFocus onClick={backToHomePage}>
-                返回主頁
-              </Button>
-            </DialogActions>
-          </>
-        )}
-      </Dialog>
-    </>
+        <Grid item md={6}>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
+          cupiditate mollitia natus sed hic minus reprehenderit, explicabo aut
+          eveniet, libero, necessitatibus suscipit quis doloribus fuga. Dolor,
+          deleniti consequuntur. Natus, delectus.
+        </Grid>
+      </Grid>
+    </Paper>
   );
+  // return addressInfo.loading ? (
+  //   <CircularProgress />
+  // ) : (
+  //   <>
+  //     <form onSubmit={handleSubmit} noValidate>
+  //       <Grid container>
+  //         <Grid item xs={12} sm={6}>
+  //           <StoreBasicInfo
+  //             state={state}
+  //             setState={setState}
+  //             storeInfo={addressInfo}
+  //           />
+  //         </Grid>
+  //         <Grid item xs={12} sm={6}>
+  //           <BusinessHours state={state.businessHours} setState={setState} />
+  //         </Grid>
+  //         <div className={classes.buttons}>
+  //           <Button variant="contained" className={classes.button}>
+  //             取消
+  //           </Button>
+  //           <Button
+  //             variant="contained"
+  //             className={`${classes.button} ${classes.submit}`}
+  //             type="submit"
+  //           >
+  //             送出
+  //           </Button>
+  //         </div>
+  //       </Grid>
+  //     </form>
+  //     <Dialog open={open}>
+  //       {/* TODO: 建立成功繼續新增的話，欄位需清空，另需加入loading */}
+  //       {createStore.error ? (
+  //         <>
+  //           <DialogTitle>{createStore.error}</DialogTitle>
+  //           <DialogActions>
+  //             <Button color="primary" onClick={backToHomePage}>
+  //               取消建立
+  //             </Button>
+  //             <Button color="primary" autoFocus onClick={staySamePage}>
+  //               修改
+  //             </Button>
+  //           </DialogActions>
+  //         </>
+  //       ) : (
+  //         <>
+  //           <DialogTitle>新增成功</DialogTitle>
+  //           <DialogActions>
+  //             <Button color="primary" onClick={staySamePage}>
+  //               繼續新增
+  //             </Button>
+  //             <Button color="primary" autoFocus onClick={backToHomePage}>
+  //               返回主頁
+  //             </Button>
+  //           </DialogActions>
+  //         </>
+  //       )}
+  //     </Dialog>
+  //   </>
+  // );
 };
 
 function mapStateToProp(state) {
   return {
     addressInfo: state.externalInfo,
-    createStore: state.createStore,
+    loading: state.storeType.loading,
+    types: state.storeType.types,
+    error: state.storeType.error,
   };
 }
 

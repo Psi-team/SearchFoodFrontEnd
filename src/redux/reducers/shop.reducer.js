@@ -1,4 +1,7 @@
 import {
+  GET_STORETYPE_REQUEST,
+  GET_STORETYPE_SUCCESS,
+  GET_STORETYPE_FAILURE,
   CREATE_STORE_REQUEST,
   CREATE_STORE_SUCCESS,
   CREATE_STORE_FAILURE,
@@ -11,6 +14,30 @@ import {
   CREATE_MESSAGE_REQUEST,
   CREATE_MESSAGE_SUCCESS,
 } from '../constants';
+
+export const storeType = (state = { loading: false, types: {} }, action) => {
+  switch (action.type) {
+    case GET_STORETYPE_REQUEST:
+      return {
+        ...state,
+        loading: true,
+      };
+    case GET_STORETYPE_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        types: action.payload,
+      };
+    case GET_STORETYPE_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        error: action.payload,
+      };
+    default:
+      return state;
+  }
+};
 
 export const createStore = (state = { loading: false }, action) => {
   switch (action.type) {

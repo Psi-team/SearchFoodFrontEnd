@@ -1,16 +1,39 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Route, Redirect } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { connect } from 'react-redux';
+import { Snackbar } from '@material-ui/core';
 
-const PrivateRoute = ({ children, username, ...rest }) => (
-  <Route {...rest} render={() => (
-    username ? children : <Redirect to='/login' />
-  )} />
+const MiddleRoute = () => {
+  const [open, setOpen] = useState(true);
+  const location = useLocation();
+
+  return open ? (
+    <Snackbar
+      anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+      open={open}
+      onClose={() => setOpen(false)}
+      autoHideDuration={2000}
+      message={<span id="message-id">請先登入</span>}
+    />
+  ) : (
+    <Redirect
+      to={{
+        pathname: '/login',
+        state: location.pathname,
+      }}
+    />
+  );
+};
+
+const PrivateRoute = ({ children, loggedIn, ...rest }) => (
+  <Route {...rest} render={() => (loggedIn ? children : <MiddleRoute />)} />
 );
 
 function mapStateToProp(state) {
   return {
-    username: state.user.username
-  }
+    loggedIn: state.user.loggedIn,
+  };
 }
+
 export default connect(mapStateToProp)(PrivateRoute);

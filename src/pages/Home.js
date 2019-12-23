@@ -1,23 +1,20 @@
 import React from 'react';
-import { makeStyles, Box, Typography } from '@material-ui/core';
+import { makeStyles, Container } from '@material-ui/core';
 import { connect } from 'react-redux';
 
 // import { userActions } from '../../actions';
 // import useMountEffect from '../../helpers/useMountEffect';
-const useStyles = makeStyles(() => ({
-  box: {
-    background: `linear-gradient(115deg, #8887EB 50%, transparent 50%),
-    url(${require(`../assets/images/food.png`)}) right center / cover`,
-    height: '650px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignContent: 'flex-start',
-    justifyContent: 'center',
-    paddingLeft: '15%',
+import SearchInput from '../components/SearchInput';
+const useStyles = makeStyles(theme => ({
+  root: {
+    padding: theme.spacing(3),
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: theme.spacing(1),
+      paddingRight: theme.spacing(1),
+    },
   },
-  content: {
-    fontStyle: 'italic',
-    fontWeight: '900',
+  search: {
+    margin: 'auto',
   },
 }));
 
@@ -26,11 +23,9 @@ const Home = ({ getUserLocation }) => {
   // useMountEffect(() => getUserLocation());
 
   return (
-    <Box className={classes.box}>
-      <Typography variant="h4" className={classes.content}>
-        民以食為天
-      </Typography>
-    </Box>
+    <Container className={classes.root}>
+      <SearchInput className={classes.search} />
+    </Container>
   );
 };
 

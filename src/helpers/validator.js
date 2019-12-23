@@ -19,7 +19,7 @@ const loginHandler = {
 const registerHandler = {
   set: (obj, prop, value) => {
     if (value === '') {
-      throw new ValueError('帳號或密碼不得空白');
+      throw new ValueError('欄位不得空白');
     } else if (prop === 'email' && !/@/.test(value)) {
       throw new ValueError('帳號格式錯誤');
     } else if (

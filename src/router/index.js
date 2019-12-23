@@ -9,8 +9,9 @@ import Header from '../components/Header';
 import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
 import RegisterPage from '../pages/Register';
+import ResetPasswordPage from '../pages/ResetPassword';
 import SearchPage from '../pages/Search';
-// import CreateStorePage from '../pages/CreateStore';
+import CreateStorePage from '../pages/CreateStore';
 import StorePage from '../pages/Store';
 
 const useStyles = makeStyles(() => ({
@@ -40,15 +41,18 @@ const Router = () => {
         <Route path="/register">
           <RegisterPage />
         </Route>
+        <Route path="/resetPassword">
+          <ResetPasswordPage />
+        </Route>
         <Route path="/search">
           <SearchPage />
         </Route>
         <PrivateRoute path="/storeDetail:storename">
           <StorePage />
         </PrivateRoute>
-        {/* <PrivateRoute path="/createStore">
+        <PrivateRoute path="/createStore">
           <CreateStorePage />
-        </PrivateRoute> */}
+        </PrivateRoute>
       </Container>
     </BrowserRouter>
   );

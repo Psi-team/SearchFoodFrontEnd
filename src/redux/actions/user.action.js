@@ -10,16 +10,20 @@ import {
   REGISTER_FAILURE,
   GET_LOCATION_SUCCESS,
   GET_LOCATION_FAILURE,
+  RESETPASSWORD_REQUEST,
+  RESETPASSWORD_SUCCESS,
+  RESETPASSWORD_FAILURE,
 } from '../constants';
 
 export const userActions = {
   login,
   logout,
   register,
+  resetPassword,
   getLocation,
 };
 
-function login(username, password) {
+function login(username, password, route) {
   try {
     validator({ type: 'login', data: { username, password } });
 
@@ -27,7 +31,7 @@ function login(username, password) {
       dispatch({ type: LOGIN_REQUEST });
       userService.login(username, password).then(
         user => {
-          window.location.assign('/');
+          window.location.assign(route);
           localStorage.setItem('user', JSON.stringify(user.data));
           dispatch({ type: LOGIN_SUCCESS, payload: user.data });
         },
@@ -53,27 +57,19 @@ function logout() {
   };
 }
 
-function register({ email, passwd1, passwd2, birthYear, sexual }) {
+function register({ email, nickname, passwd1, passwd2, birthYear, sexual }) {
   try {
-    validator({ type: 'register', data: { email, passwd1, passwd2 } });
+    validator({
+      type: 'register',
+      data: { email, passwd1, passwd2, nickname, birthYear },
+    });
 
     return dispatch => {
       dispatch({ type: REGISTER_REQUEST });
-      userService.register(email, passwd1, birthYear, sexual).then(
-        user => {
-          if (process.env.REACT_APP_ENV) {
-            localStorage.setItem(
-              'user',
-              JSON.stringify({ username: email, token: '1232asddsfsvfa' })
-            );
-            dispatch({
-              type: REGISTER_SUCCESS,
-              payload: { username: email, token: '1232asddsfsvfa' },
-            });
-          } else {
-            localStorage.setItem('user', JSON.stringify(user.data));
-            dispatch({ type: REGISTER_SUCCESS, payload: user.data });
-          }
+      userService.register(email, passwd1, birthYear, sexual, nickname).then(
+        data => {
+          localStorage.setItem('user', JSON.stringify(data.data));
+          dispatch({ type: REGISTER_SUCCESS, payload: data.data });
           window.location.assign('/');
         },
         error => {
@@ -87,6 +83,23 @@ function register({ email, passwd1, passwd2, birthYear, sexual }) {
   } catch ({ message }) {
     return { type: REGISTER_FAILURE, payload: message };
   }
+}
+
+function resetPassword(email) {
+  return dispatch => {
+    dispatch({ type: RESETPASSWORD_REQUEST });
+    userService.resetPassword(email).then(
+      () => {
+        dispatch({ type: RESETPASSWORD_SUCCESS });
+      },
+      error => {
+        dispatch({
+          type: RESETPASSWORD_FAILURE,
+          payload: error.response.data.message,
+        });
+      }
+    );
+  };
 }
 
 function getLocation() {

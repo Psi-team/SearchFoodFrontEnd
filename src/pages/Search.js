@@ -3,19 +3,14 @@ import { useLocation } from 'react-router';
 import { List, WindowScroller } from 'react-virtualized';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import {
-  makeStyles,
-  CircularProgress,
-  Container,
-  Grid,
-  useMediaQuery,
-} from '@material-ui/core';
+import { makeStyles, Container, Grid, useMediaQuery } from '@material-ui/core';
 
 import SettingBar from '../components/SettingBar';
 import StoreCardView from '../components/StoreCardView';
 import BottomBar from '../components/BottomBar';
 
 import 'react-virtualized/styles.css';
+import Loading from '../components/Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -95,10 +90,9 @@ const Search = ({ loading, datas }) => {
     );
   }
 
-  return loading ? (
-    <CircularProgress />
-  ) : datas.length === 0 ? null : (
+  return (
     <Container className={classes.root}>
+      <Loading loading={loading} />
       <SettingBar
         path={path}
         match={match}

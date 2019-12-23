@@ -1,8 +1,13 @@
-import { apiLogin, apiSignup, apiLogout } from '../helpers/apis';
+import {
+  apiLogin,
+  apiSignup,
+  apiLogout,
+  apiResetPassword,
+} from '../helpers/apis';
 
-export const userService = { login, logout, register };
+export const userService = { login, logout, register, resetPassword };
 
-function login(username, passwd) {
+function login(mail, passwd) {
   const browser = getUserBrowser();
 
   if (process.env.REACT_APP_ENV) {
@@ -10,21 +15,53 @@ function login(username, passwd) {
       setTimeout(() => {
         const user = { data: { username: 'test', token: 'adawrq31312eda' } };
         localStorage.setItem('user', JSON.stringify(user.data));
-        if (username !== 'admin' || passwd !== 'admin')
+        if (mail !== 'admin' || passwd !== 'admin')
           return reject({ response: { data: { message: '帳號或密碼錯誤' } } });
 
         return resolve(user);
       }, 2000);
     });
-  } else return apiLogin({ username, passwd, browser });
+  } else {
+    return apiLogin({ mail, passwd, browser });
+  }
 }
 
 function logout() {
   return apiLogout();
 }
 
-function register(username, passwd, birthyear, sexual) {
-  return apiSignup({ username, passwd, birthyear, sexual });
+function register(username, passwd, birthyear, sexual, mail) {
+  const browser = getUserBrowser();
+  if (process.env.REACT_APP_ENV) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        const user = { data: { username: username, token: '1232asddsfsvfa' } };
+        localStorage.setItem('user', JSON.stringify(user.data));
+        return resolve(user);
+      }, 2000);
+    });
+  } else {
+    return apiSignup({
+      mail,
+      passwd,
+      birthyear,
+      sexual,
+      username,
+      browser,
+    });
+  }
+}
+
+function resetPassword(email) {
+  if (process.env.REACT_APP_ENV) {
+    return new Promise(resolve => {
+      setTimeout(() => {
+        return resolve('');
+      }, 2000);
+    });
+  } else {
+    return apiResetPassword({ email });
+  }
 }
 
 function getUserBrowser() {

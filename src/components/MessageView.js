@@ -45,7 +45,7 @@ const MessageView = ({ data }) => {
   return (
     <Container className={classes.root}>
       <Typography variant="h4" paragraph>
-        看看其他評論
+        其他評論
       </Typography>
       <Paper>
         <List>

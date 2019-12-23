@@ -6,6 +6,9 @@ import {
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
+  RESETPASSWORD_REQUEST,
+  RESETPASSWORD_SUCCESS,
+  RESETPASSWORD_FAILURE,
   GET_LOCATION_SUCCESS,
   GET_LOCATION_FAILURE,
 } from '../constants';
@@ -28,6 +31,7 @@ export const user = (state = initState, action) => {
   switch (action.type) {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
+    case RESETPASSWORD_REQUEST:
       return {
         ...state,
         loading: true,
@@ -39,10 +43,17 @@ export const user = (state = initState, action) => {
         loading: false,
         ...action.user,
       };
-    case LOGIN_FAILURE:
-    case REGISTER_FAILURE:
+    case RESETPASSWORD_SUCCESS:
       return {
         ...state,
+        loading: false,
+      };
+    case LOGIN_FAILURE:
+    case REGISTER_FAILURE:
+    case RESETPASSWORD_FAILURE:
+      return {
+        ...state,
+        loading: false,
         error: action.payload,
       };
     case LOGOUT:
