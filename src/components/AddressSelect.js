@@ -46,8 +46,10 @@ const AddressSelect = ({
 }) => {
   const classes = useStyles();
   useEffect(() => {
-    getCounty();
-  }, [getCounty]);
+    if (addressInfo.county.length === 0) {
+      getCounty();
+    }
+  }, [getCounty, addressInfo.county]);
 
   useEffect(() => {
     if (city !== '') {

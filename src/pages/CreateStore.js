@@ -1,6 +1,7 @@
-import React, { useState, useReducer, useEffect } from 'react';
+import React, { useState, useReducer, useRef } from 'react';
 import {
   Grid,
+  OutlinedInput,
   CircularProgress,
   Button,
   Dialog,
@@ -16,6 +17,8 @@ import { useHistory } from 'react-router';
 
 import { shopActions, externalActions } from '../redux/actions';
 import useMountEffect from '../helpers/useMountEffect';
+import AddressSelect from '../components/AddressSelect';
+import UploadImage from '../components/UploadImage';
 // import StoreBasicInfo from '../components/StoreBasicInfo';
 // import BusinessHours from '../components/BusinessHours';
 
@@ -84,47 +87,32 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
   },
-  buttons: {
-    width: '100%',
+  container: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(5)}px`,
+  },
+  address: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  button: {
-    margin: theme.spacing(1),
+    borderRadius: 30,
+    border: '1px solid #ccc',
     backgroundColor: '#F9F9F9',
-    border: '1px solid #707070',
-    borderRadius: '30px',
-    font: 'Bold 24px/32px Microsoft JhengHei',
-    letterSpacing: '3.2px',
-    color: '#4F576D',
-  },
-  submit: {
-    backgroundColor: '#4F576D',
-    color: '#F9F9F9',
-    '&:hover': {
-      color: '#000',
+    '& fieldset': {
+      display: 'none',
     },
+  },
+  images: {
+    display: 'flex',
+    alignItems: 'center',
   },
 }));
 
-const CreateStorePage = ({
-  getCounty,
-  getDistrict,
-  getStoreType,
-  addressInfo,
-  types,
-  postStoreData,
-}) => {
+const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
   const [open, setOpen] = useState(false);
   const [state, setState] = useReducer(reducer, initState);
   const history = useHistory();
   const classes = useStyles();
-  useMountEffect(() => {
-    if (addressInfo.county.length === 0) {
-      getCounty();
-    }
 
+  useMountEffect(() => {
     if (types.length === 0) {
       getStoreType();
     }
@@ -161,11 +149,65 @@ const CreateStorePage = ({
         新增店家
       </Typography>
       <Grid container>
-        <Grid item md={6}>
-          Lorem ipsum dolor sit, amet consectetur adipisicing elit. Laboriosam
-          quisquam iste dolorum dolorem perspiciatis. Porro qui nesciunt officia
-          voluptas asperiores ut reprehenderit dicta magni nostrum, iste
-          perspiciatis similique! Voluptate, eos.
+        <Grid item md={6} className={classes.container}>
+          <OutlinedInput
+            autoComplete="off"
+            value={state.storename}
+            // onChange={handleChange}
+            name="storename"
+            placeholder="店名"
+            fullWidth
+            required
+          />
+          <OutlinedInput
+            autoComplete="off"
+            value={state.storename}
+            // onChange={handleChange}
+            name="storename"
+            placeholder="slogan"
+            fullWidth
+            required
+          />
+          <OutlinedInput
+            autoComplete="off"
+            value={state.storename}
+            // onChange={handleChange}
+            name="storename"
+            placeholder="電話"
+            fullWidth
+            required
+          />
+          <div className={classes.address}>
+            <AddressSelect
+              city={state.city}
+              district={state.district}
+              handleChange={() => {}}
+            />
+            <OutlinedInput
+              autoComplete="off"
+              value={state.storename}
+              // onChange={handleChange}
+              name="storename"
+              placeholder="地址"
+              fullWidth
+              required
+            />
+          </div>
+          <div className={classes.images}>
+            <UploadImage
+              uniqueId="logoImage"
+              btnName="Logo"
+              handleChange={() => {}}
+            />
+          </div>
+          <div className={classes.images}>
+            <UploadImage
+              uniqueId="pictureImage"
+              btnName="店家照片"
+              appendCallback={() => {}}
+              removeCallback={() => {}}
+            />
+          </div>
         </Grid>
         <Grid item md={6}>
           Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
@@ -176,71 +218,10 @@ const CreateStorePage = ({
       </Grid>
     </Paper>
   );
-  // return addressInfo.loading ? (
-  //   <CircularProgress />
-  // ) : (
-  //   <>
-  //     <form onSubmit={handleSubmit} noValidate>
-  //       <Grid container>
-  //         <Grid item xs={12} sm={6}>
-  //           <StoreBasicInfo
-  //             state={state}
-  //             setState={setState}
-  //             storeInfo={addressInfo}
-  //           />
-  //         </Grid>
-  //         <Grid item xs={12} sm={6}>
-  //           <BusinessHours state={state.businessHours} setState={setState} />
-  //         </Grid>
-  //         <div className={classes.buttons}>
-  //           <Button variant="contained" className={classes.button}>
-  //             取消
-  //           </Button>
-  //           <Button
-  //             variant="contained"
-  //             className={`${classes.button} ${classes.submit}`}
-  //             type="submit"
-  //           >
-  //             送出
-  //           </Button>
-  //         </div>
-  //       </Grid>
-  //     </form>
-  //     <Dialog open={open}>
-  //       {/* TODO: 建立成功繼續新增的話，欄位需清空，另需加入loading */}
-  //       {createStore.error ? (
-  //         <>
-  //           <DialogTitle>{createStore.error}</DialogTitle>
-  //           <DialogActions>
-  //             <Button color="primary" onClick={backToHomePage}>
-  //               取消建立
-  //             </Button>
-  //             <Button color="primary" autoFocus onClick={staySamePage}>
-  //               修改
-  //             </Button>
-  //           </DialogActions>
-  //         </>
-  //       ) : (
-  //         <>
-  //           <DialogTitle>新增成功</DialogTitle>
-  //           <DialogActions>
-  //             <Button color="primary" onClick={staySamePage}>
-  //               繼續新增
-  //             </Button>
-  //             <Button color="primary" autoFocus onClick={backToHomePage}>
-  //               返回主頁
-  //             </Button>
-  //           </DialogActions>
-  //         </>
-  //       )}
-  //     </Dialog>
-  //   </>
-  // );
 };
 
 function mapStateToProp(state) {
   return {
-    addressInfo: state.externalInfo,
     loading: state.storeType.loading,
     types: state.storeType.types,
     error: state.storeType.error,
@@ -248,8 +229,6 @@ function mapStateToProp(state) {
 }
 
 const actionCreators = {
-  getCounty: externalActions.getCounty,
-  getDistrict: externalActions.getDistrict,
   getStoreType: shopActions.getStoreType,
   postStoreData: shopActions.postStoreData,
 };

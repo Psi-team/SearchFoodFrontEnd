@@ -30,7 +30,7 @@ function logout() {
   return apiLogout();
 }
 
-function register(username, passwd, birthyear, sexual, mail) {
+function register(mail, passwd, birthyear, sexual, username) {
   const browser = getUserBrowser();
   if (process.env.REACT_APP_ENV) {
     return new Promise(resolve => {

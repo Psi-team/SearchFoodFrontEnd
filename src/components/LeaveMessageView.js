@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -10,8 +10,9 @@ import {
   CircularProgress,
 } from '@material-ui/core';
 
-import RatingBar from './RatingBar';
 import { shopActions } from '../redux/actions';
+import RatingBar from './RatingBar';
+import UploadImage from './UploadImage';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -36,34 +37,6 @@ const useStyles = makeStyles(theme => ({
     fontSize: 18,
     resize: 'none',
   },
-  uploadImgBtn: {
-    width: 150,
-  },
-  imgs: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    padding: theme.spacing(2),
-    '& > div': {
-      width: 200,
-      height: 200,
-      margin: theme.spacing(0.5),
-      position: 'relative',
-      '& > img': {
-        width: '100%',
-        height: '100%',
-      },
-      '& > button': {
-        fontSize: 24,
-        cursor: 'pointer',
-        backgroundColor: 'transparent',
-        outline: 'none',
-        border: 'none',
-        position: 'absolute',
-        top: '-7%',
-        left: '93%',
-      },
-    },
-  },
   button: {
     [theme.breakpoints.up('md')]: {
       width: 200,
@@ -87,23 +60,8 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
     comments: '',
     pic: [],
   });
-  const imgsRef = useRef(null);
 
-  function previewImg(file) {
-    const div = document.createElement('div');
-    const img = document.createElement('img');
-    const btn = document.createElement('button');
-    btn.innerHTML = 'X';
-    btn.onclick = () => removeImg(div, img);
-    img.alt = file.name;
-    img.src = URL.createObjectURL(file);
-    div.appendChild(img);
-    div.appendChild(btn);
-    imgsRef.current.appendChild(div);
-  }
-
-  function removeImg(node, img) {
-    imgsRef.current.removeChild(node);
+  function removeImg(img) {
     const newValue = commentData.pic.filter(_ => _ !== img);
     setCommentData({
       ...commentData,
@@ -122,12 +80,7 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
         break;
       case 'pic':
         newValue = e.target.files[0];
-        if (!/image/.test(newValue.type)) {
-          throw new Error('only allow image files');
-        } else {
-          previewImg(newValue);
-          newValue = [...commentData.pic, newValue];
-        }
+        newValue = [...commentData.pic, newValue];
         break;
       default:
         throw new Error(`unknown name ${e.target.name}`);
@@ -171,25 +124,12 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
           onChange={handleChange}
           name="comments"
         />
-        <input
-          id="uploadImage"
-          type="file"
-          name="pic"
-          onChange={handleChange}
-          accept="image/*"
-          hidden
+        <UploadImage
+          appendCallback={handleChange}
+          uniqueId="commentUpload"
+          btnName="上傳圖片"
+          removeCallback={removeImg}
         />
-        <Button
-          component="label"
-          htmlFor="uploadImage"
-          variant="contained"
-          color="secondary"
-          className={classes.uploadImgBtn}
-          disabled={commentData.pic.length >= 3}
-        >
-          上傳圖片
-        </Button>
-        <div className={classes.imgs} ref={imgsRef}></div>
         {loading ? (
           <CircularProgress />
         ) : (
