@@ -6,6 +6,10 @@ import {
   apiLeaveMessage,
 } from '../helpers/apis';
 
+import Datas from '../models/datas';
+
+const fakeData = Datas();
+
 export const shopService = {
   getStoreType,
   createStore,
@@ -15,7 +19,12 @@ export const shopService = {
 };
 
 function getStoreType() {
-  return apiGetStoreType();
+  // return apiGetStoreType();
+  return new Promise(resolve => {
+    setTimeout(() => {
+      return resolve({ data: fakeData.getStoreTypes });
+    }, 1000);
+  });
 }
 
 function createStore(data) {
@@ -29,11 +38,21 @@ function searchStore(data) {
     city: encodeURI(data.city),
     district: encodeURI(data.district),
   };
-  return apiGetStores(encodeData);
+  // return apiGetStores(encodeData);
+  return new Promise(resolve => {
+    setTimeout(() => {
+      return resolve({ data: fakeData.search });
+    }, 2000);
+  });
 }
 
 function fetchStore(data) {
-  return apiGetStore({ store_id: data });
+  // return apiGetStore({ store_id: data });
+  return new Promise(resolve => {
+    setTimeout(() => {
+      return resolve({ data: fakeData.storeDetail });
+    }, 2000);
+  });
 }
 
 function createMessage(data) {

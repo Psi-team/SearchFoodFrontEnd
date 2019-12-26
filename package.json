@@ -2,6 +2,7 @@
   "name": "search-food-front-end",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://psi-team.github.io/SearchFoodFrontEnd/",
   "dependencies": {
     "@material-ui/core": "^4.4.3",
     "@material-ui/icons": "^4.4.3",
@@ -9,6 +10,7 @@
     "axios": "^0.19.0",
     "css-mediaquery": "^0.1.2",
     "dotenv": "^8.0.0",
+    "gh-pages": "^2.0.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-geocode": "^0.2.1",
@@ -29,7 +31,9 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "plop": "plop",
-    "server": "json-server src/models/datas.js --port=3021"
+    "server": "json-server src/models/datas.js --port=3021",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
