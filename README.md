@@ -16,16 +16,11 @@ SearchFood is developed in Javascript, using React and Material-ui
  
  npm install
  
+ npm run envFile
+ npm run server
+ 
  npm start
  
-</code>
-</pre>
-#### It can run json file as backend server(If you do, you have to modify the .env file)
-<pre>
-<code>
-npm install -g json-server
-
-json-server --watch scr/components/model/data.json  --port=8000
 </code>
 </pre>
 
