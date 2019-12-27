@@ -29,7 +29,8 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "plop": "plop",
-    "server": "json-server src/models/datas.js --port=3021"
+    "server": "json-server src/models/datas.js --port=3021",
+    "envFile": "echo 'REACT_APP_API_URL=http://localhost:3021\nREACT_APP_ENV=true'> .env"
   },
   "eslintConfig": {
     "extends": "react-app"
