@@ -2,11 +2,6 @@ import React, { useState, useReducer, useRef } from 'react';
 import {
   Grid,
   OutlinedInput,
-  CircularProgress,
-  Button,
-  Dialog,
-  DialogTitle,
-  DialogActions,
   makeStyles,
   Container,
   Paper,
@@ -19,8 +14,7 @@ import { shopActions, externalActions } from '../redux/actions';
 import useMountEffect from '../helpers/useMountEffect';
 import AddressSelect from '../components/AddressSelect';
 import UploadImage from '../components/UploadImage';
-// import StoreBasicInfo from '../components/StoreBasicInfo';
-// import BusinessHours from '../components/BusinessHours';
+import BusinessHours from '../components/BusinessHours';
 
 const initState = {
   storename: '',
@@ -104,6 +98,12 @@ const useStyles = makeStyles(theme => ({
     display: 'flex',
     alignItems: 'center',
   },
+  businessHours: {
+    width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'stretch',
+  },
 }));
 
 const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
@@ -117,16 +117,6 @@ const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
       getStoreType();
     }
   });
-  // useEffect(() => {
-  //   getCounty();
-  //   getStoreType();
-  // }, [getCounty, getStoreType]);
-
-  // useEffect(() => {
-  //   if (state.city) {
-  //     getDistrict(state.city.split('-')[0]);
-  //   }
-  // }, [state.city, getDistrict]);
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -209,11 +199,11 @@ const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
             />
           </div>
         </Grid>
-        <Grid item md={6}>
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsa
-          cupiditate mollitia natus sed hic minus reprehenderit, explicabo aut
-          eveniet, libero, necessitatibus suscipit quis doloribus fuga. Dolor,
-          deleniti consequuntur. Natus, delectus.
+        <Grid item md={6} className={classes.businessHours}>
+          <Typography variant="h5" paragraph align="center">
+            營業時間
+          </Typography>
+          <BusinessHours state={state.businessHours} setState={setState} />
         </Grid>
       </Grid>
     </Paper>
