@@ -1,21 +1,25 @@
 import React, { useState, useReducer, useRef } from 'react';
 import {
-  Grid,
-  OutlinedInput,
+  MobileStepper,
+  Stepper,
+  Step,
+  StepLabel,
   makeStyles,
   Container,
   Paper,
   Typography,
+  useMediaQuery,
+  Button,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 
 import { shopActions, externalActions } from '../redux/actions';
 import useMountEffect from '../helpers/useMountEffect';
-import AddressSelect from '../components/AddressSelect';
-import UploadImage from '../components/UploadImage';
+import StoreBasicInfo from '../components/StoreBasicInfo';
+import StoreAdvancedInfo from '../components/StoreAdvancedInfo';
 import BusinessHours from '../components/BusinessHours';
-
+const STEPS = ['店家基本資料', '店家照片', '店家營業時間'];
 const initState = {
   storename: '',
   tel: '',
@@ -80,43 +84,54 @@ const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3),
     marginTop: theme.spacing(5),
-  },
-  container: {
-    padding: `${theme.spacing(2)}px ${theme.spacing(5)}px`,
-  },
-  address: {
-    display: 'flex',
-    alignItems: 'center',
-    borderRadius: 30,
-    border: '1px solid #ccc',
-    backgroundColor: '#F9F9F9',
-    '& fieldset': {
-      display: 'none',
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 0,
+      paddingRight: 0,
+      marginBottom: theme.spacing(7),
     },
   },
-  images: {
-    display: 'flex',
-    alignItems: 'center',
-  },
-  businessHours: {
-    width: '100%',
+
+  content: {
+    padding: `${theme.spacing(2)}px ${theme.spacing(5)}px`,
+    [theme.breakpoints.down('xs')]: {
+      paddingLeft: 0,
+      paddingRight: 0,
+    },
     display: 'flex',
     flexDirection: 'column',
-    alignItems: 'stretch',
+  },
+  btns: {
+    display: 'flex',
+    justifyContent: 'center',
+    '& > button': {
+      margin: theme.spacing(2),
+    },
   },
 }));
 
 const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
   const [open, setOpen] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
   const [state, setState] = useReducer(reducer, initState);
+  const match = useMediaQuery('(min-width: 600px)');
   const history = useHistory();
   const classes = useStyles();
 
   useMountEffect(() => {
-    if (types.length === 0) {
+    if (Object.keys(types).length === 0) {
       getStoreType();
     }
   });
+
+  const backStep = () => {
+    setActiveStep(activeStep - 1);
+  };
+
+  const nextStep = () => {
+    if (activeStep < 2) {
+      setActiveStep(activeStep + 1);
+    }
+  };
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -124,88 +139,70 @@ const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
     postStoreData({ ...state, city: state.city.split('-')[1] });
   };
 
-  const backToHomePage = e => {
-    setOpen(false);
-    history.push('/');
-  };
-
-  const staySamePage = e => {
-    setOpen(false);
-  };
-
   return (
     <Paper component={Container} className={classes.root} spacing={3}>
       <Typography variant="h3" paragraph align="center">
         新增店家
       </Typography>
-      <Grid container>
-        <Grid item md={6} className={classes.container}>
-          <OutlinedInput
-            autoComplete="off"
-            value={state.storename}
-            // onChange={handleChange}
-            name="storename"
-            placeholder="店名"
-            fullWidth
-            required
-          />
-          <OutlinedInput
-            autoComplete="off"
-            value={state.storename}
-            // onChange={handleChange}
-            name="storename"
-            placeholder="slogan"
-            fullWidth
-            required
-          />
-          <OutlinedInput
-            autoComplete="off"
-            value={state.storename}
-            // onChange={handleChange}
-            name="storename"
-            placeholder="電話"
-            fullWidth
-            required
-          />
-          <div className={classes.address}>
-            <AddressSelect
-              city={state.city}
-              district={state.district}
-              handleChange={() => {}}
-            />
-            <OutlinedInput
-              autoComplete="off"
-              value={state.storename}
-              // onChange={handleChange}
-              name="storename"
-              placeholder="地址"
-              fullWidth
-              required
-            />
+      <Container>
+        {match ? (
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {STEPS.map(label => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+        ) : (
+          <MobileStepper
+            activeStep={activeStep}
+            steps={3}
+            variant="text"
+            backButton={
+              <Button
+                onClick={backStep}
+                variant="outlined"
+                color="primary"
+                disabled={activeStep === 0}
+              >
+                上一步
+              </Button>
+            }
+            nextButton={
+              <Button onClick={nextStep} variant="outlined" color="primary">
+                下一步
+              </Button>
+            }
+          >
+            {STEPS.map(label => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </MobileStepper>
+        )}
+        <Container className={classes.content}>
+          {activeStep === 0 ? (
+            <StoreBasicInfo state={state} />
+          ) : activeStep === 1 ? (
+            <StoreAdvancedInfo match={match} types={types} />
+          ) : (
+            <BusinessHours state={state.businessHours} setState={() => {}} />
+          )}
+        </Container>
+        {match && (
+          <div className={classes.btns}>
+            {activeStep !== 0 && (
+              <Button onClick={backStep} variant="outlined" color="primary">
+                上一步
+              </Button>
+            )}
+            <Button onClick={nextStep} variant="outlined" color="primary">
+              {activeStep === 2 ? '送出' : '下一步'}
+            </Button>
           </div>
-          <div className={classes.images}>
-            <UploadImage
-              uniqueId="logoImage"
-              btnName="Logo"
-              handleChange={() => {}}
-            />
-          </div>
-          <div className={classes.images}>
-            <UploadImage
-              uniqueId="pictureImage"
-              btnName="店家照片"
-              appendCallback={() => {}}
-              removeCallback={() => {}}
-            />
-          </div>
-        </Grid>
-        <Grid item md={6} className={classes.businessHours}>
-          <Typography variant="h5" paragraph align="center">
-            營業時間
-          </Typography>
-          <BusinessHours state={state.businessHours} setState={setState} />
-        </Grid>
-      </Grid>
+        )}
+      </Container>
     </Paper>
   );
 };

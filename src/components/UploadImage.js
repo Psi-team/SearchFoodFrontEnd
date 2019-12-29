@@ -8,10 +8,14 @@ const useStyles = makeStyles(theme => ({
   previewImg: {
     display: 'flex',
     flexWrap: 'wrap',
-    padding: theme.spacing(2),
+    padding: `${theme.spacing(2)}px ${theme.spacing(2)}px 0px`,
     '& > div': {
       width: 200,
       height: 200,
+      [theme.breakpoints.down('xs')]: {
+        width: 150,
+        height: 150,
+      },
       margin: theme.spacing(0.5),
       position: 'relative',
       '& > img': {
