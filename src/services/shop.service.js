@@ -39,11 +39,7 @@ function fetchStore(data) {
 function createMessage(data) {
   const formData = new FormData();
   Object.entries(data).forEach(([key, val]) => {
-    if (key === 'pic') {
-      formData.append(`${key}[]`, val);
-    } else {
-      formData.append(key, val);
-    }
+    formData.append(key, val);
   });
   return apiLeaveMessage(formData);
 }

@@ -80,7 +80,6 @@ instance.interceptors.response.use(
 export default (method, url, data = null) => {
   method = method.toLowerCase();
   if (url === 'createComment') {
-    console.log('tt');
     return axios({
       method: method,
       baseURL: process.env.REACT_APP_API_URL,

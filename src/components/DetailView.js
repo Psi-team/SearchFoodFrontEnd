@@ -145,7 +145,7 @@ const DetailView = ({ data }) => {
           />
           <div className={classes.items}>
             <Typography variant="body1">類別: </Typography>
-            <Typography variant="body2">{data.type.join(',')}</Typography>
+            <Typography variant="body2">{data.tags.join(',')}</Typography>
           </div>
           <div className={classes.items}>
             <Typography variant="body1">電話: </Typography>

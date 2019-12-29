@@ -32,9 +32,16 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const UploadImage = ({ uniqueId, btnName, appendCallback, removeCallback }) => {
+const UploadImage = ({
+  uniqueId,
+  btnName,
+  disabled,
+  appendCallback,
+  removeCallback,
+}) => {
   const classes = useStyles();
   const imgRef = useRef(null);
+  const inputRef = useRef(null);
 
   function previewImg(file) {
     const div = document.createElement('div');
@@ -59,6 +66,8 @@ const UploadImage = ({ uniqueId, btnName, appendCallback, removeCallback }) => {
     if (!/image/.test(files.type)) {
       throw new Error('only allow image files');
     } else {
+      // clear input value, or updloading the same file is not working
+      inputRef.current.value = null;
       previewImg(files);
       appendCallback(e);
     }
@@ -67,6 +76,7 @@ const UploadImage = ({ uniqueId, btnName, appendCallback, removeCallback }) => {
   return (
     <>
       <input
+        ref={inputRef}
         id={uniqueId}
         type="file"
         name="pic"
@@ -80,6 +90,7 @@ const UploadImage = ({ uniqueId, btnName, appendCallback, removeCallback }) => {
         variant="contained"
         color="secondary"
         className={classes.uploadImgBtn}
+        disabled={disabled}
       >
         {btnName}
       </Button>

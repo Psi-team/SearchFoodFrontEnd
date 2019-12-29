@@ -45,10 +45,9 @@ module.exports = () => {
         星期六: timeArray[Math.round(Math.random() * 2)],
         星期日: timeArray[Math.round(Math.random() * 2)],
       },
-      tags: ['R'],
+      tags: ['炒飯'],
       star: Math.random() * 5,
       tel: '0912345678',
-      type: '炒飯',
       click_week: 1000,
       storeId: i,
       createdDate: `2019-${Math.round(Math.random()) + 11}-${Math.floor(
@@ -59,7 +58,7 @@ module.exports = () => {
 
   data.storeDetail = {
     storename: '肯德基',
-    type: ['速食', '甜點'],
+    tags: ['速食', '甜點'],
     star: 3,
     slogan: '沒吃過肯德基，別說過吃過速食',
     businessHours: {

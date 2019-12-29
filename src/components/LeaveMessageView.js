@@ -7,12 +7,12 @@ import {
   TextareaAutosize,
   Typography,
   Button,
-  CircularProgress,
 } from '@material-ui/core';
 
 import { shopActions } from '../redux/actions';
 import RatingBar from './RatingBar';
 import UploadImage from './UploadImage';
+import Loading from './Loading';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -53,19 +53,18 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
+const LeaveMessageView = ({ createMessage, storeId, loading }) => {
   const classes = useStyles();
   const [commentData, setCommentData] = useState({
     star: 0,
     comments: '',
-    pic: [],
+    pic: null,
   });
 
   function removeImg(img) {
-    const newValue = commentData.pic.filter(_ => _ !== img);
     setCommentData({
       ...commentData,
-      pic: newValue,
+      pic: null,
     });
   }
 
@@ -80,12 +79,12 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
         break;
       case 'pic':
         newValue = e.target.files[0];
-        newValue = [...commentData.pic, newValue];
         break;
       default:
         throw new Error(`unknown name ${e.target.name}`);
     }
 
+    console.log(newValue);
     setCommentData({
       ...commentData,
       [e.target.name]: newValue,
@@ -94,7 +93,7 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-    createMessage({ ...commentData, storeId, username });
+    createMessage({ ...commentData, storeId });
   }
 
   return (
@@ -129,19 +128,17 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
           uniqueId="commentUpload"
           btnName="上傳圖片"
           removeCallback={removeImg}
+          disabled={Boolean(commentData.pic)}
         />
-        {loading ? (
-          <CircularProgress />
-        ) : (
-          <Button
-            type="submit"
-            variant="contained"
-            color="primary"
-            className={classes.button}
-          >
-            送出
-          </Button>
-        )}
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.button}
+        >
+          送出
+        </Button>
+        <Loading loading={loading} />
       </Container>
     </Container>
   );
@@ -149,14 +146,12 @@ const LeaveMessageView = ({ createMessage, storeId, username, loading }) => {
 
 LeaveMessageView.propTypes = {
   loading: PropTypes.bool.isRequired,
-  username: PropTypes.string.isRequired,
   storeId: PropTypes.string.isRequired,
   createMessage: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {
   return {
-    username: state.user.username,
     loading: state.createMessage.loading,
   };
 }
