@@ -10,8 +10,8 @@ import {
   makeStyles,
 } from '@material-ui/core';
 
-import AccountView from '../components/AccountView';
 import { userActions } from '../redux/actions';
+import AccountView from '../components/Users/AccountView';
 
 const useStyles = makeStyles(() => ({
   button: {

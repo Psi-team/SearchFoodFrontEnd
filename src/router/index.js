@@ -5,7 +5,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import PrivateRoute from '../helpers/PrivateRoute';
 import ScrollToTop from '../helpers/ScrollToTop';
-import Header from '../components/Header';
+import Header from '../components/Common/Header';
 import HomePage from '../pages/Home';
 import LoginPage from '../pages/Login';
 import RegisterPage from '../pages/Register';

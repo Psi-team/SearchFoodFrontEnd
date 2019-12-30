@@ -5,14 +5,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { makeStyles, Container, Grid, useMediaQuery } from '@material-ui/core';
 
-import SettingBar from '../components/SettingBar';
-import StoreCardView from '../components/StoreCardView';
-import BottomBar from '../components/BottomBar';
+import SettingBar from '../components/Stores/SettingBar';
+import StoreCardView from '../components/Stores/StoreCardView';
+import BottomBar from '../components/Stores/BottomBar';
+import Loading from '../components/Common/Loading';
 
 import 'react-virtualized/styles.css';
-import Loading from '../components/Loading';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   root: {
     height: '100%',
   },

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 
 // import { userActions } from '../../actions';
 // import useMountEffect from '../../helpers/useMountEffect';
-import SearchInput from '../components/SearchInput';
+import SearchInput from '../components/Common/SearchInput';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3),

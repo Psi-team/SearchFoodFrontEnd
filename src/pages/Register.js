@@ -14,8 +14,8 @@ import {
 import { connect } from 'react-redux';
 
 import { userActions } from '../redux/actions';
-import AccountView from '../components/AccountView';
-import Loading from '../components/Loading';
+import AccountView from '../components/Users/AccountView';
+import Loading from '../components/Common/Loading';
 
 const useStyles = makeStyles(theme => ({
   radios: {
@@ -35,7 +35,7 @@ const yearOptions = () => {
       </MenuItem>
     );
 
-  return arr;
+  return arr.reverse();
 };
 
 const Register = ({ loading, register, error }) => {

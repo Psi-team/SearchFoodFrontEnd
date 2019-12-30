@@ -6,9 +6,9 @@ import { Container, CircularProgress } from '@material-ui/core';
 
 import useMountEffect from '../helpers/useMountEffect';
 import { shopActions } from '../redux/actions';
-import DetailView from '../components/DetailView';
-import LeaveMessage from '../components/LeaveMessageView';
-import MessageView from '../components/MessageView';
+import DetailView from '../components/Stores/DetailView';
+import LeaveMessage from '../components/Stores/LeaveMessageView';
+import MessageView from '../components/Stores/MessageView';
 
 const Store = ({ store, loading, fetchStore }) => {
   const param = useParams();

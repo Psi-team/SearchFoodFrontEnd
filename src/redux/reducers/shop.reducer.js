@@ -39,7 +39,10 @@ export const storeType = (state = { loading: false, types: {} }, action) => {
   }
 };
 
-export const createStore = (state = { loading: false }, action) => {
+export const createStore = (
+  state = { loading: false, success: false },
+  action
+) => {
   switch (action.type) {
     case CREATE_STORE_REQUEST:
       return {
@@ -50,6 +53,7 @@ export const createStore = (state = { loading: false }, action) => {
       return {
         ...state,
         loading: false,
+        success: true,
       };
     case CREATE_STORE_FAILURE:
       return {

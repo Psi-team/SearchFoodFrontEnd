@@ -1,6 +1,5 @@
 import { shopService, externalService } from '../../services';
 import { validator } from '../../helpers/validator';
-import { history } from '../../helpers/history';
 import {
   GET_STORETYPE_REQUEST,
   GET_STORETYPE_SUCCESS,
@@ -42,7 +41,6 @@ function createStore(data) {
     validator({ type: 'createStore', data });
     return dispatch => {
       dispatch({ type: CREATE_STORE_REQUEST });
-      data['district'] = data['district'].join('');
       externalService
         .addressToLatLong(data.city + data.district + data.address)
         .then(
@@ -50,10 +48,8 @@ function createStore(data) {
           error => dispatch({ type: CREATE_STORE_FAILURE, error })
         )
         .then(
-          data => {
-            // TODO: there are some problem in page transfer.
-            history.push('/');
-            dispatch({ type: CREATE_STORE_SUCCESS, store: data.data });
+          () => {
+            dispatch({ type: CREATE_STORE_SUCCESS });
           },
           error =>
             dispatch({
@@ -63,7 +59,7 @@ function createStore(data) {
         );
     };
   } catch ({ message }) {
-    return { type: CREATE_STORE_FAILURE, error: message };
+    return { type: CREATE_STORE_FAILURE, payload: message };
   }
 }
 

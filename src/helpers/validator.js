@@ -47,6 +47,8 @@ const createStoreHandler = {
       !(value.toString().length === 8 || value.toString().length === 10)
     ) {
       throw new ValueError('電話長度應為八碼或十碼，請再次確認');
+    } else if (prop === 'types' && Object.keys(value).length === 0) {
+      throw new ValueError('販售種類不得空白');
     } else if (
       prop === 'businessHours' &&
       Object.values(value).some(v => v.length !== 11 && v !== 'off')

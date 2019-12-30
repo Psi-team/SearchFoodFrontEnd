@@ -1,4 +1,4 @@
-import React, { useState, useReducer, useRef } from 'react';
+import React, { useState } from 'react';
 import {
   MobileStepper,
   Stepper,
@@ -10,75 +10,22 @@ import {
   Typography,
   useMediaQuery,
   Button,
+  Dialog,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
 import { useHistory } from 'react-router';
 
-import { shopActions, externalActions } from '../redux/actions';
+import { shopActions } from '../redux/actions';
 import useMountEffect from '../helpers/useMountEffect';
-import StoreBasicInfo from '../components/StoreBasicInfo';
-import StoreAdvancedInfo from '../components/StoreAdvancedInfo';
-import BusinessHours from '../components/BusinessHours';
-const STEPS = ['店家基本資料', '店家照片', '店家營業時間'];
-const initState = {
-  storename: '',
-  tel: '',
-  businessHours: {
-    星期一: '09:30-18:30',
-    星期二: '09:30-18:30',
-    星期三: '09:30-18:30',
-    星期四: '09:30-18:30',
-    星期五: '09:30-18:30',
-    星期六: 'off',
-    星期日: 'off',
-  },
-  city: '',
-  district: '',
-  address: '',
-  type: {},
-};
+import StoreBasicInfo from '../components/Stores/StoreBasicInfo';
+import StoreAdvancedInfo from '../components/Stores/StoreAdvancedInfo';
+import BusinessHours from '../components/Stores/BusinessHours';
+import Loading from '../components/Common/Loading';
 
-const reducer = (state, action) => {
-  switch (action.type) {
-    case 'updateTime':
-      return {
-        ...state,
-        businessHours: action.payload,
-      };
-    case 'storename':
-      return {
-        ...state,
-        storename: action.payload,
-      };
-    case 'tel':
-      return {
-        ...state,
-        tel: action.payload,
-      };
-    case 'address':
-      return {
-        ...state,
-        address: action.payload,
-      };
-    case 'city':
-      return {
-        ...state,
-        city: action.payload,
-      };
-    case 'district':
-      return {
-        ...state,
-        district: action.payload,
-      };
-    case 'type':
-      return {
-        ...state,
-        type: action.payload,
-      };
-    default:
-      return state;
-  }
-};
+const STEPS = ['店家基本資料', '店家進階資料', '店家營業時間'];
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -107,21 +54,61 @@ const useStyles = makeStyles(theme => ({
       margin: theme.spacing(2),
     },
   },
+  success: {
+    fontSize: 24,
+    textAlign: 'center',
+  },
 }));
 
-const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
-  const [open, setOpen] = useState(false);
+const CreateStorePage = ({
+  getStoreType,
+  types,
+  error,
+  createStore,
+  success,
+  loading,
+}) => {
   const [activeStep, setActiveStep] = useState(0);
-  const [state, setState] = useReducer(reducer, initState);
+  const [state, setState] = useState({
+    storename: '',
+    tel: '',
+    businessHours: {
+      星期一: '09:30-18:30',
+      星期二: '09:30-18:30',
+      星期三: '09:30-18:30',
+      星期四: '09:30-18:30',
+      星期五: '09:30-18:30',
+      星期六: 'off',
+      星期日: 'off',
+    },
+    city: '',
+    district: '',
+    address: '',
+    types: {},
+    logo: null,
+    images: null,
+    slogan: '',
+  });
   const match = useMediaQuery('(min-width: 600px)');
-  const history = useHistory();
   const classes = useStyles();
+  const history = useHistory();
 
   useMountEffect(() => {
     if (Object.keys(types).length === 0) {
       getStoreType();
     }
   });
+
+  const handleChange = e => {
+    setState({
+      ...state,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleSubmit = () => {
+    createStore({ ...state, city: state.city.split('-')[1] });
+  };
 
   const backStep = () => {
     setActiveStep(activeStep - 1);
@@ -130,94 +117,123 @@ const CreateStorePage = ({ getStoreType, types, postStoreData }) => {
   const nextStep = () => {
     if (activeStep < 2) {
       setActiveStep(activeStep + 1);
+    } else if (activeStep === 2) {
+      handleSubmit();
     }
   };
 
-  const handleSubmit = e => {
-    e.preventDefault();
-    setOpen(true);
-    postStoreData({ ...state, city: state.city.split('-')[1] });
+  const backHomepage = () => {
+    history.push('/');
   };
 
   return (
-    <Paper component={Container} className={classes.root} spacing={3}>
-      <Typography variant="h3" paragraph align="center">
-        新增店家
-      </Typography>
-      <Container>
-        {match ? (
-          <Stepper activeStep={activeStep} alternativeLabel>
-            {STEPS.map(label => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </Stepper>
-        ) : (
-          <MobileStepper
-            activeStep={activeStep}
-            steps={3}
-            variant="text"
-            backButton={
-              <Button
-                onClick={backStep}
-                variant="outlined"
-                color="primary"
-                disabled={activeStep === 0}
-              >
-                上一步
-              </Button>
-            }
-            nextButton={
-              <Button onClick={nextStep} variant="outlined" color="primary">
-                下一步
-              </Button>
-            }
-          >
-            {STEPS.map(label => (
-              <Step key={label}>
-                <StepLabel>{label}</StepLabel>
-              </Step>
-            ))}
-          </MobileStepper>
+    <>
+      <Paper component={Container} className={classes.root} spacing={3}>
+        <Loading loading={loading} />
+        <Typography variant="h3" paragraph align="center">
+          新增店家
+        </Typography>
+        {error && (
+          <Typography variant="h6" color="error" align="center" paragraph>
+            {error}
+          </Typography>
         )}
-        <Container className={classes.content}>
-          {activeStep === 0 ? (
-            <StoreBasicInfo state={state} />
-          ) : activeStep === 1 ? (
-            <StoreAdvancedInfo match={match} types={types} />
+        <Container>
+          {match ? (
+            <Stepper activeStep={activeStep} alternativeLabel>
+              {STEPS.map(label => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </Stepper>
           ) : (
-            <BusinessHours state={state.businessHours} setState={() => {}} />
+            <MobileStepper
+              activeStep={activeStep}
+              steps={3}
+              variant="text"
+              backButton={
+                <Button
+                  onClick={backStep}
+                  variant="outlined"
+                  color="primary"
+                  disabled={activeStep === 0}
+                >
+                  上一步
+                </Button>
+              }
+              nextButton={
+                <Button onClick={nextStep} variant="outlined" color="primary">
+                  {activeStep === 2 ? '送出' : '下一步'}
+                </Button>
+              }
+            >
+              {STEPS.map(label => (
+                <Step key={label}>
+                  <StepLabel>{label}</StepLabel>
+                </Step>
+              ))}
+            </MobileStepper>
+          )}
+          <Container className={classes.content}>
+            {activeStep === 0 ? (
+              <StoreBasicInfo state={state} setState={handleChange} />
+            ) : activeStep === 1 ? (
+              <StoreAdvancedInfo
+                match={match}
+                types={types}
+                state={state}
+                setState={handleChange}
+              />
+            ) : (
+              <BusinessHours
+                state={state.businessHours}
+                setState={handleChange}
+              />
+            )}
+          </Container>
+          {match && (
+            <div className={classes.btns}>
+              {activeStep !== 0 && (
+                <Button onClick={backStep} variant="outlined" color="primary">
+                  上一步
+                </Button>
+              )}
+              <Button onClick={nextStep} variant="outlined" color="primary">
+                {activeStep === 2 ? '送出' : '下一步'}
+              </Button>
+            </div>
           )}
         </Container>
-        {match && (
-          <div className={classes.btns}>
-            {activeStep !== 0 && (
-              <Button onClick={backStep} variant="outlined" color="primary">
-                上一步
-              </Button>
-            )}
-            <Button onClick={nextStep} variant="outlined" color="primary">
-              {activeStep === 2 ? '送出' : '下一步'}
-            </Button>
-          </div>
-        )}
-      </Container>
-    </Paper>
+      </Paper>
+      <Dialog open={success} fullWidth>
+        <DialogContent>
+          <DialogContentText className={classes.success}>
+            新增成功
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions className={classes.btns}>
+          <Button variant="contained" color="secondary" onClick={backHomepage}>
+            確定
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   );
 };
 
 function mapStateToProp(state) {
   return {
-    loading: state.storeType.loading,
+    loading: state.createStore.loading || state.storeType.loading,
     types: state.storeType.types,
-    error: state.storeType.error,
+    error: state.createStore.error,
+    success: state.createStore.success,
   };
 }
 
 const actionCreators = {
   getStoreType: shopActions.getStoreType,
-  postStoreData: shopActions.postStoreData,
+  createStore: shopActions.createStore,
 };
 
 export default connect(mapStateToProp, actionCreators)(CreateStorePage);

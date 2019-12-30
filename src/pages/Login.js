@@ -14,8 +14,8 @@ import { Link, useHistory } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { userActions } from '../redux/actions';
-import AccountView from '../components/AccountView';
-import Loading from '../components/Loading';
+import AccountView from '../components/Users/AccountView';
+import Loading from '../components/Common/Loading';
 
 const useStyles = makeStyles(theme => ({
   divider: {
