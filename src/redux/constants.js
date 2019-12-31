@@ -16,6 +16,10 @@ export const RESETPASSWORD_FAILURE = 'RESETPASSWORD_FAILURE';
 // get user location
 export const GET_LOCATION_SUCCESS = 'GET_LOCATION_SUCCESS';
 export const GET_LOCATION_FAILURE = 'GET_LOCATION_FAILURE';
+// get user profile
+export const GET_PROFILE_REQUEST = 'GET_PROFILE_REQUEST';
+export const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS';
+export const GET_PROFILE_FAILURE = 'GET_PROFILE_FAILURE';
 /********************************user**************************************/
 
 /********************************shop**************************************/

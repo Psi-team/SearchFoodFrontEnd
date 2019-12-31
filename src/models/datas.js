@@ -1,6 +1,13 @@
 module.exports = () => {
   const data = {
     createStore: {},
+    profile: {
+      username: 'admin',
+      mail: 'admin@gmail.com',
+      password: 'admin',
+      birstyear: '2019',
+      sexual: '1',
+    },
     getStoreTypes: {
       飯: ['炒飯', '燴飯', '滷肉飯', '豬排飯', '三寶飯'],
       麵食: ['油麵', '義大利麵', '陽春麵', '粄條', '白麵', '拉麵'],

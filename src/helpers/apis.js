@@ -26,3 +26,6 @@ export const apiGetStore = data => req('get', 'storeDetail', data);
 
 // leave message
 export const apiLeaveMessage = data => req('post', 'createComment', data);
+
+// get user profile
+export const apiGetProfile = () => req('get', 'profile');

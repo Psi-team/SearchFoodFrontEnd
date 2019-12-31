@@ -13,6 +13,7 @@ import ResetPasswordPage from '../pages/ResetPassword';
 import SearchPage from '../pages/Search';
 import CreateStorePage from '../pages/CreateStore';
 import StorePage from '../pages/Store';
+import ProfilePage from '../pages/Profile';
 
 const useStyles = makeStyles(() => ({
   container: {
@@ -52,6 +53,9 @@ const Router = () => {
         </PrivateRoute>
         <PrivateRoute path="/createStore">
           <CreateStorePage />
+        </PrivateRoute>
+        <PrivateRoute path="/profile">
+          <ProfilePage />
         </PrivateRoute>
       </Container>
     </BrowserRouter>

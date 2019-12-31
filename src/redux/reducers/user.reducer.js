@@ -11,7 +11,11 @@ import {
   RESETPASSWORD_FAILURE,
   GET_LOCATION_SUCCESS,
   GET_LOCATION_FAILURE,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS,
+  GET_PROFILE_FAILURE,
 } from '../constants';
+
 const userInfo = JSON.parse(localStorage.getItem('user'));
 
 const basicState = {
@@ -32,16 +36,18 @@ export const user = (state = initState, action) => {
     case LOGIN_REQUEST:
     case REGISTER_REQUEST:
     case RESETPASSWORD_REQUEST:
+    case GET_PROFILE_REQUEST:
       return {
         ...state,
         loading: true,
       };
     case LOGIN_SUCCESS:
     case REGISTER_SUCCESS:
+    case GET_PROFILE_SUCCESS:
       return {
         ...state,
         loading: false,
-        ...action.user,
+        ...action.payload,
       };
     case RESETPASSWORD_SUCCESS:
       return {
@@ -51,6 +57,7 @@ export const user = (state = initState, action) => {
     case LOGIN_FAILURE:
     case REGISTER_FAILURE:
     case RESETPASSWORD_FAILURE:
+    case GET_PROFILE_FAILURE:
       return {
         ...state,
         loading: false,

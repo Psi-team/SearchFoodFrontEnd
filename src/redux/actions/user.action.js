@@ -13,6 +13,9 @@ import {
   RESETPASSWORD_REQUEST,
   RESETPASSWORD_SUCCESS,
   RESETPASSWORD_FAILURE,
+  GET_PROFILE_REQUEST,
+  GET_PROFILE_SUCCESS,
+  GET_PROFILE_FAILURE,
 } from '../constants';
 
 export const userActions = {
@@ -21,6 +24,7 @@ export const userActions = {
   register,
   resetPassword,
   getLocation,
+  getProfile,
 };
 
 function login(username, password, route) {
@@ -121,5 +125,22 @@ function getLocation() {
     } else {
       dispath({ type: GET_LOCATION_FAILURE });
     }
+  };
+}
+
+function getProfile() {
+  return dispatch => {
+    dispatch({ type: GET_PROFILE_REQUEST });
+    userService.getProfile().then(
+      data => {
+        dispatch({ type: GET_PROFILE_SUCCESS, payload: data.data });
+      },
+      error => {
+        dispatch({
+          type: GET_PROFILE_FAILURE,
+          payload: error.response.data.message,
+        });
+      }
+    );
   };
 }

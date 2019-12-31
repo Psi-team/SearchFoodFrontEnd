@@ -17,6 +17,7 @@ import {
 } from '@material-ui/icons';
 
 import RatingBar from './RatingBar';
+import { addData } from '../../helpers/localDataOperate';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -168,7 +169,10 @@ const DetailView = ({ data }) => {
         <Divider />
         {/* TODO: share line and fb or ig link and keep favorate */}
         <Container className={classes.bottomLinks}>
-          <IconButton aria-label="add to favorites">
+          <IconButton
+            aria-label="add to favorites"
+            onClick={() => addData('favorite', { ...data, storeId: '2' })}
+          >
             <FavoriteIcon />
           </IconButton>
           <IconButton aria-label="share">

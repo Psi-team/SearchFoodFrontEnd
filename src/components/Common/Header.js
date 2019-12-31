@@ -127,7 +127,9 @@ const Header = ({ loggedIn, username, logout }) => {
           onClose={handleClose}
           open={open}
         >
-          <MenuItem onClick={handleClose}>個人檔案</MenuItem>
+          <MenuItem onClick={handleClose} component={Link} to="/profile">
+            個人檔案
+          </MenuItem>
           <MenuItem onClick={handleClose} component={Link} to="/createStore">
             新增餐館
           </MenuItem>

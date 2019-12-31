@@ -3,9 +3,16 @@ import {
   apiSignup,
   apiLogout,
   apiResetPassword,
+  apiGetProfile,
 } from '../helpers/apis';
 
-export const userService = { login, logout, register, resetPassword };
+export const userService = {
+  login,
+  logout,
+  register,
+  resetPassword,
+  getProfile,
+};
 
 function login(mail, passwd) {
   const browser = getUserBrowser();
@@ -62,6 +69,10 @@ function resetPassword(email) {
   } else {
     return apiResetPassword({ email });
   }
+}
+
+function getProfile() {
+  return apiGetProfile();
 }
 
 function getUserBrowser() {
