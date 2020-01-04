@@ -4,6 +4,7 @@ import {
   GET_DISTRICT_SUCCESS,
   GET_DISTRICT_FAILURE,
 } from '../constants';
+
 export const externalInfo = (state = { county: [], district: [] }, action) => {
   switch (action.type) {
     case GET_COUNTY_SUCCESS:

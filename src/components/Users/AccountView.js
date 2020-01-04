@@ -35,6 +35,7 @@ const useStyles = makeStyles(theme => ({
 
 const AccountView = ({ handleSubmit, children }) => {
   const classes = useStyles();
+
   return (
     <Grid
       container

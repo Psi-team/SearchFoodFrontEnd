@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Typography,
   OutlinedInput,
@@ -10,7 +11,6 @@ import {
   Button,
   makeStyles,
 } from '@material-ui/core';
-
 import { connect } from 'react-redux';
 
 import { userActions } from '../redux/actions';
@@ -138,6 +138,12 @@ const Register = ({ loading, register, error }) => {
       <Loading loading={loading} />
     </AccountView>
   );
+};
+
+Register.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.string]),
+  register: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {

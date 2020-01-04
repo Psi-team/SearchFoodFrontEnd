@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import {
   Hidden,
@@ -138,6 +139,15 @@ const Header = ({ loggedIn, username, logout }) => {
       </Toolbar>
     </AppBar>
   );
+};
+
+Header.propTypes = {
+  loggedIn: PropTypes.bool.isRequired,
+  username: PropTypes.oneOfType([
+    PropTypes.oneOf([undefined]),
+    PropTypes.string,
+  ]),
+  logout: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {

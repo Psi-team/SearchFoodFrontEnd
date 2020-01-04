@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, Button } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -48,7 +49,7 @@ const UploadImage = ({
   const imgRef = useRef(null);
   const inputRef = useRef(null);
 
-  function previewImg(file) {
+  const previewImg = file => {
     const div = document.createElement('div');
     const img = document.createElement('img');
     const btn = document.createElement('button');
@@ -59,14 +60,14 @@ const UploadImage = ({
     div.appendChild(img);
     div.appendChild(btn);
     imgRef.current.appendChild(div);
-  }
+  };
 
-  function removeImg(node, img, targetName) {
+  const removeImg = (node, img, targetName) => {
     imgRef.current.removeChild(node);
     removeCallback(targetName, img);
-  }
+  };
 
-  function validation(e) {
+  const validation = e => {
     const files = e.target.files[0];
     if (!/image/.test(files.type)) {
       throw new Error('only allow image files');
@@ -81,7 +82,7 @@ const UploadImage = ({
         },
       });
     }
-  }
+  };
 
   return (
     <>
@@ -107,6 +108,15 @@ const UploadImage = ({
       <div className={classes.previewImg} ref={imgRef}></div>
     </>
   );
+};
+
+UploadImage.propTypes = {
+  uniqueId: PropTypes.string,
+  btnName: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
+  disabled: PropTypes.bool,
+  appendCallback: PropTypes.func.isRequired,
+  removeCallback: PropTypes.func.isRequired,
 };
 
 export default UploadImage;

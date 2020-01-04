@@ -83,7 +83,7 @@ const ResetPassword = ({ resetPassword, loading, error }) => {
 
 ResetPassword.proptTypes = {
   loading: PropTypes.bool.isRequired,
-  error: PropTypes.string.isRequired,
+  error: PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.string]),
   resetPassword: PropTypes.func.isRequired,
 };
 

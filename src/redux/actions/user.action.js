@@ -1,10 +1,13 @@
+import { push } from 'react-router-redux';
+
 import { userService } from '../../services';
 import { validator } from '../../helpers/validator';
 import {
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
   LOGIN_FAILURE,
-  LOGOUT,
+  LOGOUT_REQUEST,
+  LOGOUT_SUCCESS,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
   REGISTER_FAILURE,
@@ -16,6 +19,12 @@ import {
   GET_PROFILE_REQUEST,
   GET_PROFILE_SUCCESS,
   GET_PROFILE_FAILURE,
+  GET_FAVORITES_SUCCESS,
+  GET_FAVORITES_FAILURE,
+  ADD_FAVORITE_SUCCESS,
+  ADD_FAVORITE_FAILURE,
+  REMOVE_FAVORITE_SUCCESS,
+  REMOVE_FAVORITE_FAILURE,
 } from '../constants';
 
 export const userActions = {
@@ -25,6 +34,9 @@ export const userActions = {
   resetPassword,
   getLocation,
   getProfile,
+  getFavorites,
+  addFavorite,
+  removeFavorite,
 };
 
 function login(username, password, route) {
@@ -35,9 +47,10 @@ function login(username, password, route) {
       dispatch({ type: LOGIN_REQUEST });
       userService.login(username, password).then(
         user => {
-          window.location.assign(route);
           localStorage.setItem('user', JSON.stringify(user.data));
           dispatch({ type: LOGIN_SUCCESS, payload: user.data });
+          dispatch(getFavorites());
+          dispatch(push(route));
         },
         error => {
           dispatch({
@@ -54,10 +67,12 @@ function login(username, password, route) {
 
 function logout() {
   return dispatch => {
-    dispatch(() => ({ type: LOGOUT }));
-    userService.logout();
-    localStorage.removeItem('user');
-    window.location.assign('/');
+    dispatch({ type: LOGOUT_REQUEST });
+    userService.logout().then(() => {
+      localStorage.removeItem('user');
+      dispatch({ type: LOGOUT_SUCCESS });
+      dispatch(push('/'));
+    });
   };
 }
 
@@ -74,7 +89,7 @@ function register({ email, nickname, passwd1, passwd2, birthYear, sexual }) {
         data => {
           localStorage.setItem('user', JSON.stringify(data.data));
           dispatch({ type: REGISTER_SUCCESS, payload: data.data });
-          window.location.assign('/');
+          dispatch(push('/'));
         },
         error => {
           dispatch({
@@ -139,6 +154,54 @@ function getProfile() {
         dispatch({
           type: GET_PROFILE_FAILURE,
           payload: error.response.data.message,
+        });
+      }
+    );
+  };
+}
+
+function getFavorites() {
+  return dispatch => {
+    userService.getFavorites().then(
+      data => {
+        dispatch({ type: GET_FAVORITES_SUCCESS, payload: data });
+      },
+      error => {
+        dispatch({
+          type: GET_FAVORITES_FAILURE,
+          payload: error,
+        });
+      }
+    );
+  };
+}
+
+function addFavorite(shop) {
+  return dispatch => {
+    userService.addFavorite(shop).then(
+      data => {
+        dispatch({ type: ADD_FAVORITE_SUCCESS, payload: data });
+      },
+      error => {
+        dispatch({
+          type: ADD_FAVORITE_FAILURE,
+          payload: error,
+        });
+      }
+    );
+  };
+}
+
+function removeFavorite(shop) {
+  return dispatch => {
+    userService.removeFavorite(shop).then(
+      data => {
+        dispatch({ type: REMOVE_FAVORITE_SUCCESS, payload: data });
+      },
+      error => {
+        dispatch({
+          type: REMOVE_FAVORITE_FAILURE,
+          payload: error,
         });
       }
     );

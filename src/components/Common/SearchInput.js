@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   Paper,
   InputBase,
@@ -41,7 +42,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const SearchInput = ({ className, searchStors }) => {
+const SearchInput = ({ className, searchStores }) => {
   const history = useHistory();
   const location = useLocation();
   const classes = useStyles();
@@ -56,7 +57,7 @@ const SearchInput = ({ className, searchStors }) => {
       return;
     }
 
-    searchStors({ ...state, city: state.city.split('-')[1] || '' });
+    searchStores({ ...state, city: state.city.split('-')[1] || '' });
   };
 
   useMountEffect(() => searchData());
@@ -106,8 +107,13 @@ const SearchInput = ({ className, searchStors }) => {
   );
 };
 
+SearchInput.propTypes = {
+  className: PropTypes.string,
+  searchStores: PropTypes.func.isRequired,
+};
+
 const actionCreators = {
-  searchStors: shopActions.searchStores,
+  searchStores: shopActions.searchStores,
 };
 
 export default connect(null, actionCreators)(SearchInput);

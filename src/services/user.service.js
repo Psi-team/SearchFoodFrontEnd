@@ -5,6 +5,7 @@ import {
   apiResetPassword,
   apiGetProfile,
 } from '../helpers/apis';
+import { getDatas, addData, removeData } from '../helpers/localDataOperate';
 
 export const userService = {
   login,
@@ -12,6 +13,9 @@ export const userService = {
   register,
   resetPassword,
   getProfile,
+  getFavorites,
+  addFavorite,
+  removeFavorite,
 };
 
 function login(mail, passwd) {
@@ -21,11 +25,10 @@ function login(mail, passwd) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         const user = { data: { username: 'test', token: 'adawrq31312eda' } };
-        localStorage.setItem('user', JSON.stringify(user.data));
         if (mail !== 'admin' || passwd !== 'admin')
-          return reject({ response: { data: { message: '帳號或密碼錯誤' } } });
+          reject({ response: { data: { message: '帳號或密碼錯誤' } } });
 
-        return resolve(user);
+        resolve(user);
       }, 2000);
     });
   } else {
@@ -34,7 +37,15 @@ function login(mail, passwd) {
 }
 
 function logout() {
-  return apiLogout();
+  if (process.env.REACT_APP_ENV) {
+    return new Promise(resolve =>
+      setTimeout(() => {
+        resolve('');
+      }, 2000)
+    );
+  } else {
+    return apiLogout();
+  }
 }
 
 function register(mail, passwd, birthyear, sexual, username) {
@@ -43,8 +54,7 @@ function register(mail, passwd, birthyear, sexual, username) {
     return new Promise(resolve => {
       setTimeout(() => {
         const user = { data: { username: username, token: '1232asddsfsvfa' } };
-        localStorage.setItem('user', JSON.stringify(user.data));
-        return resolve(user);
+        resolve(user);
       }, 2000);
     });
   } else {
@@ -63,7 +73,7 @@ function resetPassword(email) {
   if (process.env.REACT_APP_ENV) {
     return new Promise(resolve => {
       setTimeout(() => {
-        return resolve('');
+        resolve('');
       }, 2000);
     });
   } else {
@@ -73,6 +83,18 @@ function resetPassword(email) {
 
 function getProfile() {
   return apiGetProfile();
+}
+
+function getFavorites() {
+  return getDatas('favorites');
+}
+
+function addFavorite(data) {
+  return addData('favorites', data);
+}
+
+function removeFavorite(data) {
+  return removeData('favorites', data);
 }
 
 function getUserBrowser() {

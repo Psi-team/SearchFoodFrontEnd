@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
+import PropTypes from 'prop-types';
 import { MenuItem, TextField, Divider, makeStyles } from '@material-ui/core';
 import { connect } from 'react-redux';
 
+import useMountEffect from '../../helpers/useMountEffect';
 import { externalActions } from '../../redux/actions';
 
 const useStyles = makeStyles(theme => ({
@@ -45,11 +47,11 @@ const AddressSelect = ({
   handleChange,
 }) => {
   const classes = useStyles();
-  useEffect(() => {
+  useMountEffect(() => {
     if (addressInfo.county.length === 0) {
       getCounty();
     }
-  }, [getCounty, addressInfo.county]);
+  });
 
   useEffect(() => {
     if (city !== '') {
@@ -107,6 +109,19 @@ const AddressSelect = ({
       </TextField>
     </>
   );
+};
+
+AddressSelect.propTypes = {
+  addressInfo: PropTypes.shape({
+    county: PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.object])
+    ),
+    district: PropTypes.arrayOf(
+      PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.object])
+    ),
+  }),
+  getCounty: PropTypes.func.isRequired,
+  getDistrict: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {

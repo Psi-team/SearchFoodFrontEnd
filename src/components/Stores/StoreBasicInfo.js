@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {
   makeStyles,
   OutlinedInput,
@@ -85,6 +86,11 @@ const StoreBasicInfo = ({ state, setState }) => {
       </div>
     </>
   );
+};
+
+StoreBasicInfo.propTypes = {
+  state: PropTypes.object.isRequired,
+  setState: PropTypes.func.isRequired,
 };
 
 export default StoreBasicInfo;

@@ -4,7 +4,8 @@ export const LOGIN_REQUEST = 'LOGIN_REQUEST';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAILURE = 'LOGIN_FAILURE';
 // logout
-export const LOGOUT = 'LOGOUT';
+export const LOGOUT_REQUEST = 'LOGOUT＿REQUEST';
+export const LOGOUT_SUCCESS = 'LOGOUT＿SUCCESS';
 // register
 export const REGISTER_REQUEST = 'REGISTER_REQUEST';
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
@@ -20,6 +21,15 @@ export const GET_LOCATION_FAILURE = 'GET_LOCATION_FAILURE';
 export const GET_PROFILE_REQUEST = 'GET_PROFILE_REQUEST';
 export const GET_PROFILE_SUCCESS = 'GET_PROFILE_SUCCESS';
 export const GET_PROFILE_FAILURE = 'GET_PROFILE_FAILURE';
+// get user favorites
+export const GET_FAVORITES_SUCCESS = 'GET_FAVORITES_SUCCESS';
+export const GET_FAVORITES_FAILURE = 'GET_FAVORITES_FAILURE';
+// add user favorite
+export const ADD_FAVORITE_SUCCESS = 'ADD_FAVORITE_SUCCESS';
+export const ADD_FAVORITE_FAILURE = 'ADD_FAVORITE_FAILURE';
+// remove user favorite
+export const REMOVE_FAVORITE_SUCCESS = 'REMOVE_FAVORITE_SUCCESS';
+export const REMOVE_FAVORITE_FAILURE = 'REMOVE_FAVORITE_FAILURE';
 /********************************user**************************************/
 
 /********************************shop**************************************/

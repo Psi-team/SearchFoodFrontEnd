@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { makeStyles, Container } from '@material-ui/core';
 import { connect } from 'react-redux';
 
@@ -27,6 +28,10 @@ const Home = ({ getUserLocation }) => {
       <SearchInput className={classes.search} />
     </Container>
   );
+};
+
+Home.propTypes = {
+  getUserLocation: PropTypes.func.isRequired,
 };
 
 const actionCreators = {

@@ -1,7 +1,5 @@
-const DATABASENAME = 'food';
 class LocalDatabase {
-  constructor(version, tableName) {
-    this.version = version;
+  constructor(tableName) {
     this.tableName = tableName;
   }
 
@@ -12,10 +10,9 @@ class LocalDatabase {
   }
 
   async open() {
-    let indexedDB = null;
     if (window.indexedDB) {
       return new Promise((resolve, reject) => {
-        const open = window.indexedDB.open(DATABASENAME, this.version);
+        const open = window.indexedDB.open('food', 1);
         open.onerror = e => {
           return reject(e);
         };
@@ -34,7 +31,7 @@ class LocalDatabase {
             return reject(e);
           };
 
-          const objectStore = db.createObjectStore(this.tableName, {
+          db.createObjectStore(this.tableName, {
             keyPath: 'storeId',
           });
         };
@@ -61,7 +58,7 @@ class LocalDatabase {
         };
 
         request.onsuccess = () => {
-          return resolve('success');
+          return resolve(datas);
         };
       } else {
         const tx = db.transaction(this.tableName, 'readwrite');
@@ -73,7 +70,7 @@ class LocalDatabase {
         }
 
         tx.oncomplete = () => {
-          return resolve('success');
+          return resolve(datas);
         };
 
         tx.onerror = () => {
@@ -107,7 +104,7 @@ class LocalDatabase {
             };
 
             request.onsuccess = () => {
-              return resolve('success');
+              return resolve(datas);
             };
           })
           .catch(e => reject(e));
@@ -126,7 +123,7 @@ class LocalDatabase {
             };
 
             tx.oncomplete = () => {
-              return resolve('success');
+              return resolve(datas);
             };
           })
           .catch(e => reject(e));
@@ -194,11 +191,7 @@ class LocalDatabase {
       };
 
       request.onsuccess = async () => {
-        const timestamp = await this.getTimestamp(db);
-        return resolve({
-          data: request.result,
-          timestamp,
-        });
+        return resolve(request.result);
       };
 
       request.onerror = () => {
@@ -243,10 +236,19 @@ class LocalDatabase {
 }
 
 export const addData = async (dataType, data) => {
-  const instance = new LocalDatabase(1, dataType);
+  const instance = new LocalDatabase(dataType);
   const db = await instance.open();
-  console.log(data);
-  instance.addData(db, data);
+  return instance.addData(db, data);
 };
 
-export const getDatas = dataType => {};
+export const getDatas = async dataType => {
+  const instance = new LocalDatabase(dataType);
+  const db = await instance.open();
+  return instance.getDatasByKey(db);
+};
+
+export const removeData = async (dataType, data) => {
+  const instance = new LocalDatabase(dataType);
+  const db = await instance.open();
+  return instance.deleteData(db, data);
+};

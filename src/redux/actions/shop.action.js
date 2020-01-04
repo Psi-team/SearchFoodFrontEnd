@@ -31,7 +31,11 @@ function getStoreType() {
     dispatch({ type: GET_STORETYPE_REQUEST });
     shopService.getStoreType().then(
       data => dispatch({ type: GET_STORETYPE_SUCCESS, payload: data.data }),
-      error => dispatch({ type: GET_STORETYPE_FAILURE, payload: error })
+      error =>
+        dispatch({
+          type: GET_STORETYPE_FAILURE,
+          payload: error.response.data.message,
+        })
     );
   };
 }
@@ -101,7 +105,7 @@ function createMessage(data) {
   return dispatch => {
     dispatch({ type: CREATE_MESSAGE_REQUEST });
     shopService.createMessage(data).then(
-      data => {
+      () => {
         dispatch({ type: CREATE_MESSAGE_SUCCESS });
         window.location.reload();
       },

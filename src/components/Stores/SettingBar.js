@@ -54,7 +54,7 @@ const SettingBar = ({
   const [favoriteName, setFavoriteName] = useState('');
   const classes = useStyles();
 
-  function handleChange(e) {
+  const handleChange = e => {
     if (e.target.value.indexOf('由高到低') !== -1) {
       sortByStar(1);
     } else {
@@ -62,13 +62,13 @@ const SettingBar = ({
     }
     setFavoriteName(e.target.value);
     setFilterTarget('star');
-  }
+  };
 
-  function handleCreatedDateClick() {
+  const handleCreatedDateClick = () => {
     setFavoriteName('');
     setFilterTarget('createdDate');
     sortByCreatedDate();
-  }
+  };
 
   return (
     <Toolbar>

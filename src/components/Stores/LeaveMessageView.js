@@ -61,14 +61,14 @@ const LeaveMessageView = ({ createMessage, storeId, loading }) => {
     pic: null,
   });
 
-  function removeImg() {
+  const removeImg = () => {
     setCommentData({
       ...commentData,
       pic: null,
     });
-  }
+  };
 
-  function handleChange(e) {
+  const handleChange = e => {
     let newValue;
     switch (e.target.name) {
       case 'star':
@@ -88,12 +88,12 @@ const LeaveMessageView = ({ createMessage, storeId, loading }) => {
       ...commentData,
       [e.target.name]: newValue,
     });
-  }
+  };
 
-  function handleSubmit(e) {
+  const handleSubmit = e => {
     e.preventDefault();
     createMessage({ ...commentData, storeId });
-  }
+  };
 
   return (
     <Container className={classes.root}>

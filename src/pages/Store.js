@@ -10,7 +10,7 @@ import DetailView from '../components/Stores/DetailView';
 import LeaveMessage from '../components/Stores/LeaveMessageView';
 import MessageView from '../components/Stores/MessageView';
 
-const Store = ({ store, loading, fetchStore }) => {
+const Store = ({ store, loading, fetchStore, favorites }) => {
   const param = useParams();
   const isFetching = loading || Object.keys(store).length === 0;
   const storeId = param.storename.split('-')[1];
@@ -18,7 +18,7 @@ const Store = ({ store, loading, fetchStore }) => {
     if (isFetching) {
       fetchStore(storeId);
     }
-  }, []);
+  });
 
   return (
     <Container>
@@ -26,7 +26,13 @@ const Store = ({ store, loading, fetchStore }) => {
         <CircularProgress />
       ) : (
         <>
-          <DetailView data={store} />
+          <DetailView
+            data={{
+              ...store,
+              storeId,
+              isFavorite: favorites.some(f => f.storeId === storeId),
+            }}
+          />
           <LeaveMessage storeId={storeId} />
           <MessageView data={store.comments} />
         </>
@@ -39,12 +45,16 @@ Store.propTypes = {
   store: PropTypes.object,
   loading: PropTypes.bool.isRequired,
   fetchStore: PropTypes.func.isRequired,
+  favorites: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.object])
+  ).isRequired,
 };
 
 function mapStateToProp(state) {
   return {
     store: state.storeDetail.store,
     loading: state.storeDetail.loading,
+    favorites: state.user.favorites || [],
   };
 }
 

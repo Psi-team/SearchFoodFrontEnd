@@ -19,9 +19,9 @@ const useStyles = makeStyles(theme => ({
 
 const BottomBar = ({ pageIndex, length, path, changePageIndex }) => {
   const classes = useStyles();
-  function handleNumberClick(num) {
+  const handleNumberClick = num => {
     changePageIndex('order', num);
-  }
+  };
 
   return (
     <Toolbar className={classes.bottomBar}>

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   makeStyles,
   Typography,
@@ -80,6 +81,7 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
   };
 
   const toggleDialog = isConfirm => {
+    setOpen(!open);
     if (isConfirm) {
       const checkedItems = getTrueTypes().split(',');
       const checkedTypes = Object.entries(checkedList).reduce(
@@ -106,8 +108,6 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
         },
       });
     }
-
-    setOpen(!open);
   };
 
   const handleParentClick = major => {
@@ -147,7 +147,7 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
     });
   };
 
-  const removeImg = (name, _) => {
+  const removeImg = name => {
     setState({
       target: {
         name: name,
@@ -274,6 +274,13 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
       </Dialog>
     </>
   );
+};
+
+StoreAdvancedInfo.propTypes = {
+  match: PropTypes.bool.isRequired,
+  types: PropTypes.objectOf(PropTypes.array).isRequired,
+  setState: PropTypes.func.isRequired,
+  state: PropTypes.object.isRequired,
 };
 
 export default StoreAdvancedInfo;

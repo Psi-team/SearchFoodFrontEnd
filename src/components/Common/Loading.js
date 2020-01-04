@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Backdrop, CircularProgress, makeStyles } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
@@ -16,6 +17,10 @@ const Loading = ({ loading }) => {
       <CircularProgress />
     </Backdrop>
   );
+};
+
+Loading.propTypes = {
+  loading: PropTypes.bool.isRequired,
 };
 
 export default Loading;

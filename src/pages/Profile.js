@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
   makeStyles,
@@ -89,6 +90,19 @@ const Profile = props => {
       </Container>
     </Paper>
   );
+};
+
+Profile.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  username: PropTypes.string.isRequired,
+  mail: PropTypes.string.isRequired,
+  birstyear: PropTypes.string.isRequired,
+  sexual: PropTypes.string.isRequired,
+  error: PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.string]),
+  favorites: PropTypes.arrayOf(
+    PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.object])
+  ).isRequired,
+  getProfile: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {

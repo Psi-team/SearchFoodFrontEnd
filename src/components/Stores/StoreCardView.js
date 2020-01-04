@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import LazyLoad from 'react-lazyload';
 import {
@@ -15,10 +16,6 @@ import red from '@material-ui/core/colors/red';
 
 import { calcBusinessHours } from '../../helpers/calcBusinessHours';
 import RatingBar from './RatingBar';
-
-function judgeIsNewOpen(createdDate) {
-  return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
-}
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -91,6 +88,10 @@ const useStyles = makeStyles(theme => ({
 
 const StoreCardView = ({ data }) => {
   const classes = useStyles();
+  const judgeIsNewOpen = createdDate => {
+    return (new Date() - new Date(createdDate)) / 1000 / 60 / 60 / 24 < 14;
+  };
+
   return (
     <Card
       className={classes.card}
@@ -129,6 +130,10 @@ const StoreCardView = ({ data }) => {
       </CardContent>
     </Card>
   );
+};
+
+StoreCardView.propTypes = {
+  data: PropTypes.object.isRequired,
 };
 
 export default StoreCardView;

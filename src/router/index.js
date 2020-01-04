@@ -1,7 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route } from 'react-router-dom';
-import { CssBaseline, Container } from '@material-ui/core';
-import { makeStyles } from '@material-ui/core/styles';
+import { Route } from 'react-router-dom';
+import { CssBaseline, Container, makeStyles } from '@material-ui/core';
+import { Router as BrowserRouter } from 'react-router';
 
 import PrivateRoute from '../helpers/PrivateRoute';
 import ScrollToTop from '../helpers/ScrollToTop';
@@ -16,22 +16,23 @@ import StorePage from '../pages/Store';
 import ProfilePage from '../pages/Profile';
 
 const useStyles = makeStyles(() => ({
-  container: {
-    padding: 0,
+  root: {
     display: 'flex',
     flexDirection: 'column',
     height: '100vh',
   },
 }));
 
-const Router = () => {
+// export const history = createBrowserHistory();
+
+const Router = ({ history }) => {
   const classes = useStyles();
 
   return (
-    <BrowserRouter>
+    <BrowserRouter history={history}>
       <CssBaseline />
       <ScrollToTop />
-      <Container className={classes.container} maxWidth="xl">
+      <Container className={classes.root} disableGutters={true} maxWidth="xl">
         <Header />
         <Route exact path="/">
           <HomePage />

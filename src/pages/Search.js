@@ -21,6 +21,7 @@ const useStyles = makeStyles(() => ({
 const Search = ({ loading, datas }) => {
   const [currentData, setCurrentData] = useState([]);
   const location = useLocation();
+  const classes = useStyles();
   const params = new URLSearchParams(location.search);
   const [pageIndex, setPageIndex] = useState(Number(params.get('page')) || 1);
   const match = useMediaQuery(theme => theme.breakpoints.down('xs'));
@@ -41,9 +42,7 @@ const Search = ({ loading, datas }) => {
     }
   }, [match, datas, pageIndex]);
 
-  const classes = useStyles();
-
-  function sortByStar(powerOperaton) {
+  const sortByStar = powerOperaton => {
     // TODO: 這邊直接對原本data做修改，不應該這樣處理，之後再回來調整
     datas.sort((a, b) =>
       a.star > b.star ? -1 * powerOperaton : 1 * powerOperaton
@@ -53,18 +52,18 @@ const Search = ({ loading, datas }) => {
     } else {
       setPageIndex(1);
     }
-  }
+  };
 
-  function sortByCreatedDate() {
+  const sortByCreatedDate = () => {
     datas.sort((a, b) => (a.createdDate > b.createdDate ? -1 : 1));
     if (pageIndex === 1) {
       setCurrentData(datas.slice(0, 24));
     } else {
       setPageIndex(1);
     }
-  }
+  };
 
-  function changePageIndex(type, page) {
+  const changePageIndex = (type, page) => {
     switch (type) {
       case 'order':
         setPageIndex(page);
@@ -80,15 +79,15 @@ const Search = ({ loading, datas }) => {
       default:
         throw new Error(`unknown type ${type}`);
     }
-  }
+  };
 
-  function rowRenderer({ key, index, style }) {
+  const rowRenderer = ({ key, index, style }) => {
     return (
       <Grid key={key} item lg={3} md={4} sm={6} xs={12} style={style}>
         <StoreCardView data={currentData[index]} />
       </Grid>
     );
-  }
+  };
 
   return (
     <Container className={classes.root}>

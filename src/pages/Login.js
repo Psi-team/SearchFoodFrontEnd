@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   OutlinedInput,
   Box,
@@ -17,7 +18,7 @@ import { userActions } from '../redux/actions';
 import AccountView from '../components/Users/AccountView';
 import Loading from '../components/Common/Loading';
 
-const useStyles = makeStyles(theme => ({
+const useStyles = makeStyles(() => ({
   divider: {
     height: 25,
     backgroundColor: grey[300],
@@ -116,6 +117,12 @@ const Login = ({ error, loading, login }) => {
       </Grid>
     </AccountView>
   );
+};
+
+Login.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  error: PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.string]),
+  login: PropTypes.func.isRequired,
 };
 
 function mapStateToProps(state) {

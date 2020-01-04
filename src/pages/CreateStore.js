@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 import {
   MobileStepper,
   Stepper,
@@ -37,7 +38,6 @@ const useStyles = makeStyles(theme => ({
       marginBottom: theme.spacing(7),
     },
   },
-
   content: {
     padding: `${theme.spacing(2)}px ${theme.spacing(5)}px`,
     [theme.breakpoints.down('xs')]: {
@@ -220,6 +220,15 @@ const CreateStorePage = ({
       </Dialog>
     </>
   );
+};
+
+CreateStorePage.propTypes = {
+  loading: PropTypes.bool.isRequired,
+  types: PropTypes.objectOf(PropTypes.array).isRequired,
+  error: PropTypes.oneOfType([PropTypes.oneOf([null]), PropTypes.string]),
+  success: PropTypes.bool.isRequired,
+  getStoreType: PropTypes.func.isRequired,
+  createStore: PropTypes.func.isRequired,
 };
 
 function mapStateToProp(state) {

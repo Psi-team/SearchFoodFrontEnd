@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import {
   makeStyles,
   Grid,
@@ -16,8 +17,8 @@ import {
   Share as ShareIcon,
 } from '@material-ui/icons';
 
+import { userActions } from '../../redux/actions';
 import RatingBar from './RatingBar';
-import { addData } from '../../helpers/localDataOperate';
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -77,21 +78,22 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-const DetailView = ({ data }) => {
+const DetailView = ({ data, addFavorite, removeFavorite }) => {
   const [imgIndex, setImgIndex] = useState(0);
   const [swipe, setSwipe] = useState(0);
+  const [isFavorite, setIsFavorite] = useState(data.isFavorite);
   const classes = useStyles();
   const match = useMediaQuery(theme => theme.breakpoints.down('xs'));
 
-  function changeMainPic(idx) {
+  const changeMainPic = idx => {
     setImgIndex(idx);
-  }
+  };
 
-  function touchStart(e) {
+  const touchStart = e => {
     setSwipe(e.touches[0].clientX);
-  }
+  };
 
-  function touchEnd(e) {
+  const touchEnd = e => {
     e.preventDefault();
     const { clientX } = e.changedTouches[0];
     if (clientX < swipe && imgIndex + 1 !== data.pictures.length) {
@@ -99,7 +101,22 @@ const DetailView = ({ data }) => {
     } else if (clientX > swipe && imgIndex !== 0) {
       changeMainPic(imgIndex - 1);
     }
-  }
+  };
+
+  const toggleFavorite = shop => {
+    setIsFavorite(!isFavorite);
+    if (isFavorite) {
+      // remove
+      removeFavorite(shop.storeId);
+    } else {
+      // add
+      const copyShop = JSON.parse(JSON.stringify(shop));
+      delete copyShop.comments;
+      copyShop.pictures = copyShop.pictures[0];
+      addFavorite(copyShop);
+    }
+  };
+
   return (
     <Grid container className={classes.root} alignItems="center">
       <Grid item lg={6} md={6} sm={12} xs={12} className={classes.mainImage}>
@@ -167,11 +184,13 @@ const DetailView = ({ data }) => {
           ))}
         </Container>
         <Divider />
-        {/* TODO: share line and fb or ig link and keep favorate */}
+        {/* TODO: share line and fb or ig link*/}
         <Container className={classes.bottomLinks}>
           <IconButton
+            className={classes.favorite}
             aria-label="add to favorites"
-            onClick={() => addData('favorite', { ...data, storeId: '2' })}
+            onClick={() => toggleFavorite(data)}
+            style={{ color: isFavorite ? '#E63F00' : '#888888' }}
           >
             <FavoriteIcon />
           </IconButton>
@@ -186,6 +205,13 @@ const DetailView = ({ data }) => {
 
 DetailView.propTypes = {
   data: PropTypes.object.isRequired,
+  addFavorite: PropTypes.func.isRequired,
+  removeFavorite: PropTypes.func.isRequired,
 };
 
-export default DetailView;
+const actionCreator = {
+  addFavorite: userActions.addFavorite,
+  removeFavorite: userActions.removeFavorite,
+};
+
+export default connect(null, actionCreator)(DetailView);
