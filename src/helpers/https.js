@@ -1,5 +1,5 @@
 import axios from 'axios';
-
+import { connect } from 'react-redux';
 /**
  * 請求失敗統一處理
  */
@@ -13,6 +13,7 @@ const errorHandle = (status, msg) => {
     //  401: backend session 過期，轉到Login判斷
     case 401:
       console.log(status, msg);
+      // localStorage.removeItem('user');
       break;
 
     //  403: 權限不足
@@ -31,15 +32,15 @@ const errorHandle = (status, msg) => {
 };
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 /**
  * 新增axios實例
  */
 const instance = axios.create();
 
-const { token } = JSON.parse(localStorage.getItem('user')) || {};
+// const { token } = JSON.parse(localStorage.getItem('user')) || {};
 
-if (token) instance.defaults.headers.common['Authorization'] = token;
+// if (token) instance.defaults.headers.common['Authorization'] = `jwt ${token}`;
 
 //  request攔截器
 instance.interceptors.request.use(
@@ -77,29 +78,46 @@ instance.interceptors.response.use(
   }
 );
 
-export default (method, url, data = null) => {
-  method = method.toLowerCase();
-  if (url === 'createComment') {
-    return axios({
-      method: method,
-      baseURL: process.env.REACT_APP_API_URL,
-      url: url,
-      headers: {
-        'Content-Type': 'multipart/form-data',
-        Authorization: token,
-      },
-      data: data,
-    });
-  } else if (method === 'post') {
-    return instance.post(url, data);
-  } else if (method === 'get') {
-    return instance.get(url, { params: data });
-  } else if (method === 'put') {
-    return instance.put(url, data);
-  } else if (method === 'delete') {
-    return instance.delete(url, { params: data });
-  } else {
-    console.log('未知的method' + method);
-    return false;
+const Https = ({ method, url, data = null, token }) => {
+  if (token) {
+    instance.defaults.headers.common['Authorization'] = `jwt ${token}`;
   }
+
+  method = method.toLowerCase();
+  if (['createComment', 'createStore'].includes(url)) {
+    instance.headers.post['Content-Type'] = 'multipart/form-data';
+    return instance[method](url, data);
+  } else {
+    instance.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
+    if (method === 'post') {
+      return instance.post(url, data);
+    } else if (method === 'get') {
+      return instance.get(url, { params: data });
+    } else if (method === 'put') {
+      return instance.put(url, data);
+    } else if (method === 'delete') {
+      return instance.delete(url, { params: data });
+    } else {
+      console.log('未知的method' + method);
+      return false;
+    }
+  }
+  // return axios({
+  //   method: method,
+  //   baseURL: process.env.REACT_APP_API_URL,
+  //   url: url,
+  //   headers: {
+  //     'Content-Type': 'multipart/form-data',
+  //     Authorization: `jwt ${token}`,
+  //   },
+  //   data: data,
+  // });
 };
+
+function mapStateToProp(state) {
+  return {
+    token: state.user.token,
+  };
+}
+
+export default connect(mapStateToProp)(Https);

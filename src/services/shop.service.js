@@ -19,15 +19,18 @@ function getStoreType() {
 }
 
 function createStore(data) {
-  if (process.env.REACT_APP_ENV) {
-    return new Promise(resolve => {
-      setTimeout(() => {
-        return resolve('');
-      }, 2000);
-    });
-  } else {
-    return apiCreateStore(data);
-  }
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, val]) => {
+    if (typeof val === 'object') {
+      for (let itemKey in val) {
+        formData.append(`${key}[${itemKey}]`, val[itemKey]);
+      }
+    } else {
+      formData.append(key, val);
+    }
+  });
+
+  return apiCreateStore(formData);
 }
 
 function searchStore(data) {
