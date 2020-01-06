@@ -13,7 +13,7 @@ import MessageView from '../components/Stores/MessageView';
 const Store = ({ store, loading, fetchStore, favorites }) => {
   const param = useParams();
   const isFetching = loading || Object.keys(store).length === 0;
-  const storeId = param.storename.split('-')[1];
+  const storeId = param.storename.split('-').pop(-1);
   useMountEffect(() => {
     if (isFetching) {
       fetchStore(storeId);

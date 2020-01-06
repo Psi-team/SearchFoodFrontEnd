@@ -109,7 +109,7 @@ const StoreCardView = ({ data }) => {
       <CardHeader
         className={classes.cardHeader}
         title={data.storename}
-        subheader="這才叫美食"
+        subheader={data.slogan}
         avatar={
           <Avatar aria-label="recipe" className={classes.avatar}>
             {data.tags[0]}

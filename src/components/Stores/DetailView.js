@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import {
@@ -81,6 +81,15 @@ const useStyles = makeStyles(theme => ({
 const DetailView = ({ data, addFavorite, removeFavorite }) => {
   const [imgIndex, setImgIndex] = useState(0);
   const [swipe, setSwipe] = useState(0);
+  const imgs = useRef(
+    data.pictures.length === 0
+      ? [
+          'https://picsum.photos/id/235/800/450',
+          'https://picsum.photos/id/236/800/450',
+          'https://picsum.photos/id/237/800/450',
+        ]
+      : data.pictures
+  );
   const [isFavorite, setIsFavorite] = useState(data.isFavorite);
   const classes = useStyles();
   const match = useMediaQuery(theme => theme.breakpoints.down('xs'));
@@ -96,7 +105,7 @@ const DetailView = ({ data, addFavorite, removeFavorite }) => {
   const touchEnd = e => {
     e.preventDefault();
     const { clientX } = e.changedTouches[0];
-    if (clientX < swipe && imgIndex + 1 !== data.pictures.length) {
+    if (clientX < swipe && imgIndex + 1 !== imgs.current.length) {
       changeMainPic(imgIndex + 1);
     } else if (clientX > swipe && imgIndex !== 0) {
       changeMainPic(imgIndex - 1);
@@ -123,20 +132,20 @@ const DetailView = ({ data, addFavorite, removeFavorite }) => {
         {match ? (
           <>
             <img
-              src={data.pictures[imgIndex]}
+              src={imgs.current[imgIndex]}
               alt="store"
               onTouchStart={touchStart}
               onTouchEnd={touchEnd}
             />
             <Typography align="right" variant="body2" color="textSecondary">
-              {imgIndex + 1}/{data.pictures.length}
+              {imgIndex + 1}/{imgs.current.length}
             </Typography>
           </>
         ) : (
           <>
-            <img src={data.pictures[imgIndex]} alt="store" />
+            <img src={imgs.current[imgIndex]} alt="store" />
             <GridList className={classes.gridList} cols={2}>
-              {data.pictures.map((tile, idx) => (
+              {imgs.current.map((tile, idx) => (
                 <GridListTile
                   key={tile.toString()}
                   onClick={() => changeMainPic(idx)}

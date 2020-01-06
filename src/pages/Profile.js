@@ -12,6 +12,7 @@ import {
   ListItemIcon,
   ListItemText,
   Grid,
+  GridList,
 } from '@material-ui/core';
 
 import {
@@ -47,9 +48,12 @@ const Profile = props => {
   return (
     <Paper className={classes.root}>
       <Loading loading={props.loading} />
+      <Typography variant="h4" component="h1">
+        基本資料
+      </Typography>
       <Grid className={classes.container} container spacing={3}>
         <Grid item md={6} container>
-          <img src="https://picsum.photos/id/232/500/300" alt="user icon" />
+          <img src="https://picsum.photos/id/232/288/162" alt="user icon" />
         </Grid>
         <Grid item md={6}>
           <List>
@@ -69,7 +73,7 @@ const Profile = props => {
               <ListItemIcon>
                 <CakeIcon />
               </ListItemIcon>
-              <ListItemText primary={props.birstyear} />
+              <ListItemText primary={props.birthyear} />
             </ListItem>
             <ListItem>
               <ListItemIcon>
@@ -81,11 +85,18 @@ const Profile = props => {
         </Grid>
       </Grid>
       <Divider />
+      <Typography variant="h4" component="h1">
+        收藏店家
+      </Typography>
       <Container className={classes.container}>
         {!props.favorites || props.favorites.length === 0 ? (
-          <Typography>尚未有收藏店家</Typography>
+          <Typography variant="body2">尚未有收藏店家</Typography>
         ) : (
-          props.favorites.map(shop => <StoreCardView data={shop} />)
+          <GridList row={3}>
+            {props.favorites.map(shop => (
+              <StoreCardView data={shop} key={shop.storeId} />
+            ))}
+          </GridList>
         )}
       </Container>
     </Paper>
@@ -96,7 +107,7 @@ Profile.propTypes = {
   loading: PropTypes.bool.isRequired,
   username: PropTypes.string.isRequired,
   mail: PropTypes.string.isRequired,
-  birstyear: PropTypes.string.isRequired,
+  birthyear: PropTypes.string.isRequired,
   sexual: PropTypes.string.isRequired,
   error: PropTypes.oneOfType([PropTypes.oneOf([undefined]), PropTypes.string]),
   favorites: PropTypes.arrayOf(
@@ -110,7 +121,7 @@ function mapStateToProp(state) {
     loading: state.user.loading,
     username: state.user.username,
     mail: state.user.mail,
-    birstyear: state.user.birstyear,
+    birthyear: state.user.birthyear,
     sexual: state.user.sexual,
     error: state.user.error,
     favorites: state.user.favorites,

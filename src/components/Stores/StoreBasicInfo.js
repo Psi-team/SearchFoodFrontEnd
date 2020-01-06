@@ -18,6 +18,9 @@ const useStyles = makeStyles(theme => ({
   address: {
     display: 'flex',
     alignItems: 'center',
+    '& > div:not(:last-child)': {
+      flexShrink: 0,
+    },
     [theme.breakpoints.down('xs')]: {
       flexWrap: 'wrap',
     },

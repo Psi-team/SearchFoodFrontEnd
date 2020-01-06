@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 import { shopService, externalService } from '../../services';
 import { validator } from '../../helpers/validator';
 import {
@@ -7,6 +9,7 @@ import {
   CREATE_STORE_REQUEST,
   CREATE_STORE_SUCCESS,
   CREATE_STORE_FAILURE,
+  CREATE_STORE_RESET,
   SEARCH_STORE_REQUEST,
   SEARCH_STORE_SUCCESS,
   SEARCH_STORE_FAILURE,
@@ -54,6 +57,10 @@ function createStore(data) {
         .then(
           () => {
             dispatch({ type: CREATE_STORE_SUCCESS });
+            setTimeout(() => {
+              dispatch({ type: CREATE_STORE_RESET });
+              dispatch(push('/'));
+            }, 2000);
           },
           error =>
             dispatch({

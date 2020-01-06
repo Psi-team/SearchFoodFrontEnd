@@ -22,6 +22,9 @@ const useStyles = makeStyles(theme => ({
     flexWrap: 'wrap',
     marginTop: theme.spacing(6),
     marginBottom: theme.spacing(2),
+    // '&:not(:first-child)': {
+    //   marginBottom: theme.spacing(10),
+    // },
     '& > h6': {
       marginRight: theme.spacing(4),
     },
@@ -49,23 +52,27 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
+function passTypesToState(types, state) {
+  return Object.entries(types).reduce((accu, [key, value]) => {
+    const items = value.reduce(
+      (accu, curr) => ({
+        ...accu,
+        [curr]: Boolean(
+          state['types'][key] && state['types'][key].includes(curr)
+        ),
+      }),
+      {}
+    );
+    return { ...accu, [key]: items };
+  }, {});
+}
+
 const StoreAdvancedInfo = ({ match, types, setState, state }) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [parent, setParent] = useState(null);
   const [checkedList, setCheckedList] = useState(
-    Object.entries(types).reduce((accu, [key, value]) => {
-      const items = value.reduce(
-        (accu, curr) => ({
-          ...accu,
-          [curr]: Boolean(
-            state['types'][key] && state['types'][key].includes(curr)
-          ),
-        }),
-        {}
-      );
-      return { ...accu, [key]: items };
-    }, {})
+    passTypesToState(types, state)
   );
 
   const getTrueTypes = () => {
@@ -107,6 +114,8 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
           value: checkedTypes,
         },
       });
+    } else {
+      setCheckedList(passTypesToState(types, state));
     }
   };
 
@@ -179,21 +188,25 @@ const StoreAdvancedInfo = ({ match, types, setState, state }) => {
       <div className={classes.item}>
         <Typography variant="h6">店家封面</Typography>
         <UploadImage
+          value={state.logo}
           uniqueId="logoImage"
           name="logo"
           btnName="選擇"
           appendCallback={appendImg}
           removeCallback={removeImg}
+          disabled={Boolean(state.logo)}
         />
       </div>
       <div className={classes.item}>
         <Typography variant="h6">其他照片</Typography>
         <UploadImage
+          value={state.images}
           uniqueId="pictureImage"
           name="images"
           btnName="選擇"
           appendCallback={appendImg}
           removeCallback={removeImg}
+          disabled={Boolean(state.images)}
         />
       </div>
       <Dialog

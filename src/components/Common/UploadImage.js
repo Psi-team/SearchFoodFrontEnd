@@ -2,6 +2,8 @@ import React, { useRef } from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles, Button } from '@material-ui/core';
 
+import useMountEffect from '../../helpers/useMountEffect';
+
 const useStyles = makeStyles(theme => ({
   uploadImgBtn: {
     width: 150,
@@ -38,6 +40,7 @@ const useStyles = makeStyles(theme => ({
 }));
 
 const UploadImage = ({
+  value,
   uniqueId,
   btnName,
   name,
@@ -48,6 +51,10 @@ const UploadImage = ({
   const classes = useStyles();
   const imgRef = useRef(null);
   const inputRef = useRef(null);
+
+  useMountEffect(() => {
+    value && previewImg(value);
+  });
 
   const previewImg = file => {
     const div = document.createElement('div');
@@ -111,6 +118,7 @@ const UploadImage = ({
 };
 
 UploadImage.propTypes = {
+  value: PropTypes.object,
   uniqueId: PropTypes.string,
   btnName: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,

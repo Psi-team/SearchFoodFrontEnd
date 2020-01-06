@@ -23,8 +23,6 @@ const useStyles = makeStyles(() => ({
   },
 }));
 
-// export const history = createBrowserHistory();
-
 const Router = ({ history }) => {
   const classes = useStyles();
 

@@ -8,6 +8,7 @@ import {
   SEARCH_STORE_REQUEST,
   SEARCH_STORE_SUCCESS,
   SEARCH_STORE_FAILURE,
+  CREATE_STORE_RESET,
   FETCH_STORE_REQUEST,
   FETCH_STORE_SUCCESS,
   FETCH_STORE_FAILURE,
@@ -46,20 +47,24 @@ export const createStore = (
   switch (action.type) {
     case CREATE_STORE_REQUEST:
       return {
-        ...state,
+        success: false,
         loading: true,
       };
     case CREATE_STORE_SUCCESS:
       return {
-        ...state,
         loading: false,
         success: true,
       };
     case CREATE_STORE_FAILURE:
       return {
-        ...state,
         loading: false,
+        success: false,
         error: action.payload,
+      };
+    case CREATE_STORE_RESET:
+      return {
+        loading: false,
+        success: false,
       };
     default:
       return state;

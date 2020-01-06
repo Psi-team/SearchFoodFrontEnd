@@ -1,5 +1,7 @@
 import axios from 'axios';
-import { connect } from 'react-redux';
+
+import { store } from '../redux/store';
+import { userActions } from '../redux/actions';
 /**
  * 請求失敗統一處理
  */
@@ -13,7 +15,7 @@ const errorHandle = (status, msg) => {
     //  401: backend session 過期，轉到Login判斷
     case 401:
       console.log(status, msg);
-      // localStorage.removeItem('user');
+      store.dispatch(userActions.logout());
       break;
 
     //  403: 權限不足
@@ -32,15 +34,10 @@ const errorHandle = (status, msg) => {
 };
 
 axios.defaults.baseURL = process.env.REACT_APP_API_URL;
-// axios.defaults.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
 /**
  * 新增axios實例
  */
 const instance = axios.create();
-
-// const { token } = JSON.parse(localStorage.getItem('user')) || {};
-
-// if (token) instance.defaults.headers.common['Authorization'] = `jwt ${token}`;
 
 //  request攔截器
 instance.interceptors.request.use(
@@ -78,46 +75,34 @@ instance.interceptors.response.use(
   }
 );
 
-const Https = ({ method, url, data = null, token }) => {
+export default (method, url, data = null) => {
+  const token = store.getState().user.token;
   if (token) {
     instance.defaults.headers.common['Authorization'] = `jwt ${token}`;
   }
 
   method = method.toLowerCase();
+
+  let contentType = '';
+
   if (['createComment', 'createStore'].includes(url)) {
-    instance.headers.post['Content-Type'] = 'multipart/form-data';
-    return instance[method](url, data);
+    contentType = 'multipart/form-data';
   } else {
-    instance.headers.post['Content-Type'] = 'application/json;charset=UTF-8';
-    if (method === 'post') {
-      return instance.post(url, data);
-    } else if (method === 'get') {
-      return instance.get(url, { params: data });
-    } else if (method === 'put') {
-      return instance.put(url, data);
-    } else if (method === 'delete') {
-      return instance.delete(url, { params: data });
-    } else {
-      console.log('未知的method' + method);
-      return false;
-    }
+    contentType = 'application/json;charset-UTF-8';
   }
-  // return axios({
-  //   method: method,
-  //   baseURL: process.env.REACT_APP_API_URL,
-  //   url: url,
-  //   headers: {
-  //     'Content-Type': 'multipart/form-data',
-  //     Authorization: `jwt ${token}`,
-  //   },
-  //   data: data,
-  // });
+
+  instance.defaults.headers.common['Content-Type'] = contentType;
+
+  if (method === 'post') {
+    return instance.post(url, data);
+  } else if (method === 'get') {
+    return instance.get(url, { params: data });
+  } else if (method === 'put') {
+    return instance.put(url, data);
+  } else if (method === 'delete') {
+    return instance.delete(url, { params: data });
+  } else {
+    console.log('未知的method' + method);
+    return false;
+  }
 };
-
-function mapStateToProp(state) {
-  return {
-    token: state.user.token,
-  };
-}
-
-export default connect(mapStateToProp)(Https);

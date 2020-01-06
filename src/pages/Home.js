@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 
 // import { userActions } from '../../actions';
 // import useMountEffect from '../../helpers/useMountEffect';
-import SearchInput from '../components/Common/SearchInput';
+// import SearchInput from '../components/Common/SearchInput';
 const useStyles = makeStyles(theme => ({
   root: {
     padding: theme.spacing(3),
@@ -25,7 +25,8 @@ const Home = ({ getUserLocation }) => {
 
   return (
     <Container className={classes.root}>
-      <SearchInput className={classes.search} />
+      {/* <SearchInput className={classes.search} /> */}
+      <h1>民以食為天</h1>
     </Container>
   );
 };

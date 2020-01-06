@@ -70,18 +70,10 @@ const LeaveMessageView = ({ createMessage, storeId, loading }) => {
 
   const handleChange = e => {
     let newValue;
-    switch (e.target.name) {
-      case 'star':
-        newValue = Number(e.target.value);
-        break;
-      case 'comments':
-        newValue = e.target.value;
-        break;
-      case 'pic':
-        newValue = e.target.files[0];
-        break;
-      default:
-        throw new Error(`unknown name ${e.target.name}`);
+    if (e.target.name === 'star') {
+      newValue = Number(e.target.value);
+    } else {
+      newValue = e.target.value;
     }
 
     setCommentData({

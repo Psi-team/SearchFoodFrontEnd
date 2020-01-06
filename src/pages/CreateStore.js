@@ -11,13 +11,9 @@ import {
   Typography,
   useMediaQuery,
   Button,
-  Dialog,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
+  Snackbar,
 } from '@material-ui/core';
 import { connect } from 'react-redux';
-import { useHistory } from 'react-router';
 
 import { shopActions } from '../redux/actions';
 import useMountEffect from '../helpers/useMountEffect';
@@ -91,7 +87,6 @@ const CreateStorePage = ({
   });
   const match = useMediaQuery('(min-width: 600px)');
   const classes = useStyles();
-  const history = useHistory();
 
   useMountEffect(() => {
     if (Object.keys(types).length === 0) {
@@ -120,10 +115,6 @@ const CreateStorePage = ({
     } else if (activeStep === 2) {
       handleSubmit();
     }
-  };
-
-  const backHomepage = () => {
-    history.push('/');
   };
 
   return (
@@ -206,18 +197,11 @@ const CreateStorePage = ({
           )}
         </Container>
       </Paper>
-      <Dialog open={success} fullWidth>
-        <DialogContent>
-          <DialogContentText className={classes.success}>
-            新增成功
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions className={classes.btns}>
-          <Button variant="contained" color="secondary" onClick={backHomepage}>
-            確定
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <Snackbar
+        anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+        open={success}
+        message={<span>新增成功</span>}
+      />
     </>
   );
 };
@@ -233,10 +217,10 @@ CreateStorePage.propTypes = {
 
 function mapStateToProp(state) {
   return {
-    loading: state.createStore.loading || state.storeType.loading,
     types: state.storeType.types,
-    error: state.createStore.error,
+    loading: state.createStore.loading || state.storeType.loading,
     success: state.createStore.success,
+    error: state.createStore.error,
   };
 }
 

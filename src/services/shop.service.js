@@ -21,10 +21,8 @@ function getStoreType() {
 function createStore(data) {
   const formData = new FormData();
   Object.entries(data).forEach(([key, val]) => {
-    if (typeof val === 'object') {
-      for (let itemKey in val) {
-        formData.append(`${key}[${itemKey}]`, val[itemKey]);
-      }
+    if (typeof val === 'object' && !['logo', 'images'].includes(key)) {
+      formData.append(key, JSON.stringify(val));
     } else {
       formData.append(key, val);
     }

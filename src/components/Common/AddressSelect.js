@@ -12,6 +12,9 @@ const useStyles = makeStyles(theme => ({
     '& div': {
       padding: theme.spacing(0.5),
     },
+    '& .MuiSelect-outlined': {
+      paddingRight: 0,
+    },
     '& label': {
       transform: 'translate(50%, 50%)',
     },
