@@ -5,7 +5,7 @@
 ## Motivation
 Do you have a hard time deciding what to consume for lunch on working day? Do you have a hard time selecting what to eat for dinner after school?<br> Search Food Application is born for solving such a annoying troubles that you have to face every day to make you a better day. 
 
-### introduction
+### Introduction
 
 This repository is the frontend of the project SearchFood.
 The backend repository is [HERE](https://github.com/Psi-team/SearchFoodBackEnd)
